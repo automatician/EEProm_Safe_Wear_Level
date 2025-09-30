@@ -1,0 +1,18 @@
+# EEProm_Safe_Wear_Level Keywords
+# Format: KEYWORD_NAME<TAB>KEYWORD_TYPE
+
+# Class Name
+EEProm_Safe_Wear_Level	KEYWORD1
+EEPRWL	KEYWORD1
+
+# Public Methods (Functions)
+config	KEYWORD2
+write	KEYWORD2
+read	KEYWORD2
+setVersion	KEYWORD2
+getVersion	KEYWORD2
+getNumSectors	KEYWORD2
+getNextWriteSector	KEYWORD2
+getMaxSectorNumber	KEYWORD2
+getSectorNumber	KEYWORD2
+loadRelativeSector	KEYWORD2
