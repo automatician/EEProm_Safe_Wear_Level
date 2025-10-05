@@ -1,7 +1,5 @@
-/* 
- * EEProm_Safe_Wear_Level.h
- ******************************************************************************
- * EEProm_Safe_Wear_Level Library v25.09.30
+/*****************************************************************************************************
+ * EEProm_Safe_Wear_Level Library v25.10.5
  * Copyright (C) 2025, Torsten Frieser / automatician
  *
  * This library is free software: you can redistribute it and/or modify
@@ -16,194 +14,202 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ *****************************************************************************************************
+ *
+ * --- GLOSSARY OF ABBREVIATIONS (Internal Variables & Constants) ---
+ *
+ * MEMBER VARIABLES (State):
+ * _startAddr  : startAddress
+ * _totalBytesUsed : totalLength
+ * _numSecs    : numSectors (Number of physical sectors)
+ * _secSize    : sectorSize (Size of one sector including overhead)
+ * _pldSize    : payloadSize (Size of the pure user data/payload)
+ * _nextPhSec  : nextWriteSector (Next physical sector to write to)
+ * _maxLgcCnt  : maxSectorNumber (Maximum logical counter value)
+ * _curLgcCnt  : currentCounter (Current logical counter value)
+ * _ioBuf      : ioBuffer (Data cache in RAM)
+ * _EEPRWL_VER : _EEPRWL_VERSION
+ *
+ * STATIC CONSTANTS:
+ * DEFAULT_PLD_SIZE : DEFAULT_PAYLOAD_SIZE
+ * _cntLen          : counterLength (Number of counter bytes)
+ * _ctlLen          : controlDataLength (Number of control data bytes)
+ *
+ * EEPROM MACROS:
+ * e_r	: read
+ * e_w	: write
+ * e_c	: commit
+ * -------------------------------------------------------------
+ */
 #ifndef EEPROM_WEAR_LEVEL_H
 #define EEPROM_WEAR_LEVEL_H
 
-// --- INCLUDES ---
-#ifndef __AVR__
-  #include <EEPROM.h>
-  #define EEPROMWL_USING_STANDARD_LIB 
-#else
-  #include <avr/io.h>         
-  #include <avr/interrupt.h>  
-#endif
-#include <Arduino.h>      
-#include <stddef.h>       
-#include <string.h>       
+// ----------------------------------------------------------------------------------------------------
+// --- INCLUDES & MACROS ---
+// ----------------------------------------------------------------------------------------------------
+#include <EEPROM.h>
+#include <Arduino.h>
+#include <stddef.h>
+#include <string.h>
 #include <stdint.h>
-
-#ifdef __AVR__
-#define eeprom_write eeprwl_write
-#define eeprom_read eeprwl_read
-#else
-#define eeprom_write EEPROM.write
-#define eeprom_read EEPROM.read
-#endif
-
-
-
+#include <util/crc16.h>
+#include <EEProm_Safe_Wear_Level_Macros.h>
+// ----------------------------------------------------------------------------------------------------
+// --- CLASS DEFINITION ---
+// ----------------------------------------------------------------------------------------------------
 class EEProm_Safe_Wear_Level {
-public:
-    // Standard-Konstruktor
-    EEProm_Safe_Wear_Level();
+    public:
+      // Standard Constructor
+      EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr);
+
+      // --- PUBLIC API (Implementation in .cpp) ---
+      // Parameter names (startAddress, totalBytesUsed, PayloadSize) are deliberately NOT abbreviated.
+      uint16_t config(uint16_t startAddress, uint16_t totalBytesUsed, uint16_t PayloadSize, uint8_t cntLengthBytes, uint8_t handle);
+      uint16_t getVersion(uint8_t handle);
+      bool setVersion(uint16_t value, uint8_t handle);
+      
+      // Remaining cycles
+      uint32_t healthCycles(uint8_t handle);
+      
+      // Remaining cycles in percent
+      uint8_t healthPercent(uint8_t handle);
+      
+      // Loads sector into the cache (Implementation in .cpp)
+      uint32_t loadPhysSector(uint16_t physSector, uint8_t handle);
+      
+      // --- GENERIC TEMPLATE FUNCTIONS ---
+      
+      template <typename T>
+      bool write(const T& value, uint8_t handle);
+      template <typename T>
+      bool read(T& value, uint8_t handle, size_t maxSize);
+      template <typename T>
+      uint32_t getCtrlData(int offs, int handle);
+      
+      // --- EXPLICIT OVERLOADS FOR C-STRINGS (Implementation in .cpp) ---
+      
+      bool write(const char* value, uint8_t handle);
+      bool read(char* value, uint8_t handle);
+      bool read(char* value, uint8_t handle, size_t maxSize);
+      uint32_t getCtrlData(int offs, int handle);
 
 
-    // --- �FFENTLICHE API (Implementierung in .cpp) ---
-    byte config(int startAddress, int totalBytesUsed, size_t PayloadSize);
-    uint8_t getVersion();	
-    bool setVersion(uint8_t value);
-    
-    // Sektoren/Datens�tze in Partition 	
-    uint16_t getNumSectors() const { 
-        return _numSectors; 
-    }
-    // n�chster ph. Sektor zum Schreiben
-    uint16_t getNextWriteSector() const {
-        return nextWriteSector;
-    }
-    //max. logische Sektornummer 
-    uint32_t getMaxSectorNumber() const {
-        return maxSectorNumber;
-    }
-    //aktuelle logische Sektornummer 
-    uint32_t getSectorNumber() const {
-        return currentCounter;  //aktuelle logische Sektornummer
-    }
+    private:
+      // --- INTERNAL STATE VARIABLES (Names adapted) ---      
+      uint8_t * _ioBuf = nullptr;
+      ControlData* _controlCache;            
+      // Version control
+      uint8_t _EEPRWL_VER = 0;
+      bool _start(uint8_t handle);
+      void _end();
+      void _read(uint8_t handle);
 
-    uint32_t healthCycles();
-    uint8_t healthPercent();
-    bool loadRelativeSector(uint16_t physSector);
-
-    /**
-     * @brief Generischer Template-Prototyp.
-     */
-    template <typename T>
-    uint16_t write(const T& value);
-
-    /**
-     * @brief Generischer Template-Prototyp.
-     */
-    template <typename T>
-    bool read(T& value);
-
-    // --- Explizite �berladung f�r C-Strings/Char-Arrays (Implementierung MUSS in .cpp erfolgen) ---
-    // Diese Funktionen verursachten den Fehler, da ihre Implementierung f�lschlicherweise in einem Header war.
-    // Sie bleiben als normale Prototypen, M�SSEN aber in die EEProm_Safe_Wear_Level.cpp verschoben werden.
-    uint16_t write(const char* value); 
-    bool read(char* value); 
-    bool read(char* value, size_t maxSize); // Bleibt, da es nicht sauber ins generische Template passt.
-
-
-private:
-    // --- INTERNE ZUSTANDSVARIABLEN ---
-    int _startAddress = 0;
-    int _totalLength = 0;
-    int _numSectors = 0;
-    size_t _sectorSize = 0;
-    size_t _payloadSize = 0;
-    uint16_t nextWriteSector = 0;  //aktueller n�chster physikalischer Sektor
-    uint32_t maxSectorNumber = 0;  //max. logische Sektornummer
-    uint32_t currentCounter = 0;  //aktuelle logische Sektornummer
-
-    uint8_t* _ioBuffer = nullptr; 
-    
-    // Zaehler-Logik
-    uint32_t _currentCounter = 0;
-    uint8_t _currentCounterSize_Bytes = 0;
-    
-    // Versionskontrolle
-    uint8_t _EEPRWL_VERSION = 0; 
-
-    // --- PRIVATE HELFER (Implementierung in .cpp) ---
-    bool findLatestSector();
-    uint8_t calculateCRC(const uint8_t* buffer, size_t length);
-    uint8_t getMinBytesNeeded(uint32_t maxValue);
-    void performCommit();
-    void formatInternal();
-#ifdef __AVR_ATmega328P__
-    void eeprwl_write(unsigned int Address, unsigned char Data);
-    unsigned char eeprwl_read(unsigned int Address);
-#endif
-    // --- INTERNE KONSTANTEN (Statisch, m�ssen in .cpp definiert werden) ---
-    static const size_t CRC_OVERHEAD; 
-    static const uint16_t MAGIC_ID; 
-    static const size_t METADATA_SIZE; 
-    static const size_t DEFAULT_PAYLOAD_SIZE; 
+      // Static inline function to encapsulate byte reconstruction
+      // and allow the compiler to deduplicate the code.
+      // 1. Little-Endian read logic (for 3x redundancy: load, find, getCtrlData)
+        static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
+        uint32_t value = 0;
+        for (uint8_t i = 0; i < length; i++) {
+            value |= (uint32_t)buffer[i] << (i * 8);
+        }
+        return value;
+      }
+      // 2. Little-Endian write logic (for 1x redundancy: _write)
+      static inline void writeLE(uint8_t* buffer, uint32_t value, uint8_t length) {
+        for (uint8_t i = 0; i < length; i++) {
+            buffer[i] = (uint8_t)(value >> (i * 8));
+        }
+      }
+     // 3. We calculate the addition checksum over all bytes of the ControlData cache
+     // from offset 0 up to the byte before the checksum (Byte 13: status).
+     inline uint16_t chkSum() {
+        const size_t CHECKSUM_RANGE = 13; uint8_t check = 0, check1 = 0;
+        // We cast _controlCache (ControlData*) to uint8_t* to access byte by byte
+        uint8_t* controlDataPtr = (uint8_t*)_controlCache;
+        // 2. Calculate addition checksum
+        for (size_t i = 0; i < CHECKSUM_RANGE; i++) {
+            check += controlDataPtr[i];
+            check1 += check;
+        }
+        return uint16_t (check << 8) | check1;
+     }
+      
+      // --- PRIVATE HELPERS (Implementation in .cpp) ---
+      bool findLatestSector(uint8_t handle);
+      uint8_t calculateCRC(const uint8_t * buffer, size_t length);
+      void formatInternal(uint8_t handle);
+      bool _write(uint16_t i, uint8_t handle);
+      
+      // --- INTERNAL CONSTANTS (Static, declaration adapted) ---
+      // CRC_OVERHEAD, MAGIC_ID, and METADATA_SIZE remain for readability.
+      static const size_t CRC_OVERHEAD;
+      static const uint16_t MAGIC_ID;
+      static const size_t METADATA_SIZE;
+      static const size_t DEFAULT_PLD_SIZE;
+      uint8_t  _ctlLen;     
+      uint8_t* _ramStart;
+      uint16_t _ioBufSize;
+      uint16_t _secSize; 
+      uint32_t _maxLgcCnt;
+      uint8_t  _handle;
+      uint8_t  _handle1;
 };
 
-// ----------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+// --- TEMPLATE IMPLEMENTATIONS (Names adapted) ---
+// ----------------------------------------------------------------------------------------------------
+
 template <typename T>
-uint16_t EEProm_Safe_Wear_Level::write(const T& value) {
+bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle = 0) {     
+      _START_
+      bool success;
+      // Consistency check
+      if (_numSecs < 2 || _curLgcCnt >= _maxLgcCnt){
+         success = 0;
+         if(_curLgcCnt >= _maxLgcCnt) _status = 3;
+      }else success = 1;
+      if (success == 1){
+         if (sizeof(T) > _pldSize) _status = 2;
 
-    uint16_t success = true;
-    
-    // Konsistenzpr�fung
-    if (_numSectors < 2 || currentCounter >= maxSectorNumber) {
-        return false;
+         uint8_t * valuePtr = (uint8_t *)&value;
+         uint16_t i;
+
+         for(i = 0; i < _pldSize; i++){
+              if(i < sizeof(T)) _ioBuf[i] = valuePtr[i];
+              else _ioBuf[i] = 0;
+         }
+         success = _write(i, handle);
     }
-
-	currentCounter++; const uint8_t* valuePtr = (const uint8_t*)&value;
-
-	int i; int c;
-	for(i=0; i < _payloadSize; i++){
-		if(i < sizeof(T)) _ioBuffer[i]=valuePtr[i];
-		else _ioBuffer[i]=0;
-	}
-	for (c=0; c < _currentCounterSize_Bytes; c++) {
-   		_ioBuffer[i+c] = (uint8_t)(_currentCounter >> (c * 8));
-	}
-	_ioBuffer[i+c] = calculateCRC(_ioBuffer,_sectorSize-1);
-
-	// Daten schreiben
-	for(int x=0; x < _sectorSize; x++){
-		eeprom_write(_startAddress+METADATA_SIZE+(nextWriteSector*_sectorSize)+x, _ioBuffer[x]);
-	}
-	
-	uint16_t sek = nextWriteSector;
-	nextWriteSector++;
-	if(nextWriteSector > _numSectors) nextWriteSector = 0;
-
-	// Daten vergleichen
-	uint8_t bufByte;
-	for(i=0; i < _sectorSize; i++){
-		bufByte = eeprom_read(_startAddress+METADATA_SIZE+(sek*_sectorSize)+i);
-		if(bufByte != _ioBuffer[i]){ success = false; break; }
-	}
-
-	if(success == true) {
-		_ioBuffer[_sectorSize-1] = 1;
-		success = nextWriteSector; 
-		if(success==0)success=1;
-	}
-	else _ioBuffer[_sectorSize-1] = 0;
-
+    _END_
     return success;
 }
-// ----------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------------------
+
 template <typename T>
-bool EEProm_Safe_Wear_Level::read(T& value) {
-    
-    // Pr�fe den Status des Caches
-    // Nur wenn das Status-Byte 1 ist, sind die Daten gueltig.
-    if (_ioBuffer[_payloadSize + _currentCounterSize_Bytes] == 0) {
-        return false;
-    }
-    
-    // Daten aus dem _ioBuffer in die Zielvariable kopieren
-    uint8_t* valuePtr = (uint8_t*)&value;
-    int size = sizeof(T);
-    if(size > _payloadSize) size = _payloadSize;
-    int i;
+bool EEProm_Safe_Wear_Level::read(T& value, uint8_t handle = 0, size_t maxSize = 0) {
+    _START_
+      
+    _read(handle);
 
-    for (i = 0; i < size; i++) {
-        // Kopiere nur die Groesse des Zieltyps
-        valuePtr[i] = _ioBuffer[i]; 
-    }
+      // Check the cache status
+      // Only if the status uint8_t is 1, the data is valid.
+      if (_ioBuf[_secSize - 1] == 0) return false;
+      
+      // Copy data from _ioBuf to the target variable
+      uint8_t * valuePtr = (uint8_t *)&value;
+      uint16_t size = sizeof(T);
+      if (maxSize > _pldSize) {
+         maxSize = _pldSize;
+      }
+      if(maxSize>0) size = maxSize;
+      if(size > _pldSize) size = _pldSize;
+      
+      memcpy(valuePtr, _ioBuf, size); 
 
-    return true;
+     _END_
+      return true;
 }
-
-
+// ----------------------------------------------------------------------------------------------------
 #endif // EEPROM_WEAR_LEVEL_H
 
