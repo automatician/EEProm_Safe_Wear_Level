@@ -45,11 +45,11 @@ critical conditions.
 * **FAILURE SAFETY:** Each data record is secured with a checksum.
   Corrupted sectors are ignored.
 
-* **WRITE SAFETY: ** Checking and error feedback for write operations.
+* **WRITE SAFETY:** Checking and error feedback for write operations.
 
 * **LONG LIFESPAN:** Wear-Leveling via a **Ring Buffer**.
 
-* **CONFIGURABLE COUNTERS: ** Precisely adapt the health functionality
+* **CONFIGURABLE COUNTERS:** Precisely adapt the health functionality
   to your program requirements and control the data overhead in the EEPROM,
   between 2 bytes and 5 bytes.
 
@@ -59,10 +59,10 @@ critical conditions.
 * **DIAGNOSTICS:** Detailed error codes (0x01 to 0x05) allow a
   targeted response.
 
-* **LOGGING FUNCTIONALITY: ** Loading physical data records (sectors) and their
+* **LOGGING FUNCTIONALITY:** Loading physical data records (sectors) and their
   control possibility (log end, log beginning).
 
-* **MEMORY-SAVING DATA MIGRATION: ** Transfer of log entries to a
+* **MEMORY-SAVING DATA MIGRATION:** Transfer of log entries to a
   second partition, in case of logical saturation of the original partition, so
   that it can be reset (no log loss).
 
