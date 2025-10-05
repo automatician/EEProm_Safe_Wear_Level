@@ -41,8 +41,9 @@ critical conditions.
 2. KEY FEATURES OF v25.10.5
 -------------------------------------------------------------------------------
 
-* **TYPE-SAFE I/O:** Templated Write/Read for **Structs** and primitive
-  types in a single call.
+* **TYPE-SAFE I/O:** Generic templates for structs and all primitive types. 
+C-Strings are additionally supported via a dedicated overload
+(write(const char*)).
 
 * **FAILURE SAFETY:** Each data record is secured with a checksum.
   Corrupted sectors are ignored.
