@@ -15,7 +15,7 @@
 * Meets the high requirements for robustness and failure safety
   needed in commercial or critical projects:
 
-  * * Detection of data corruption / security within the EEPROM itself.
+  *  Detection of data corruption / security within the EEPROM itself.
 
   * * Prevention of overwriting program memory in case of faulty
     application.
