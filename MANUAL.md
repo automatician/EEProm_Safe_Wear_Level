@@ -18,5 +18,29 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |PayloadSize|uint16_t|The size (in bytes) of the actual payload data to be stored. This determines the overall sector size.|
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
 |handle|uint8_t|Partition handle (use 0).|
-|Return|uint16_t|Status code: 0 (Error), > 0 Partition Version / Override Counter 1 to 65535.|
+|Return|uint16_t|Status code: =0 Error, >0 Partition Version / Override Counter 1 to 65535|
+## 2. Reading and Writing Data (Templated Functions)
+These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
+### write(const T& value, uint8_t handle)
+Description: Writes a structured data type (T) to the EEPROM. The wear-level counters are automatically incremented.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|value|const T&|A reference to the data structure or variable to be stored. sizeof(T) must be less than or equal to the configured PayloadSize.|
+|handle|uint8_t|Partition handle (use 0).|
+|Return|bool|*true* on success, *false* on error (e.g., logical counter limit reached, internal error).
+### read(T& value, uint8_t handle, size_t maxSize)
+Description: Reads the latest available data from the IO-Buffer into a variable or data structure (T).
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|value|T&|A reference to the target variable or structure where the data will be loaded.|
+|handle|uint8_t|Partition handle.|
+|maxSize|size_t|Optional parameter to limit the number of bytes read (default is sizeof(T)). Can be used to read partial data.|
+|Return|bool|*true* if valid data was successfully read and loaded, otherwise *false* (e.g., if the IO-Buffer is empty or invalid).|
+### Explicit Overloads for C-Strings
+For character arrays (char*), specific, non-templated overloads are available to correctly handle null termination:
+ * bool write(const char* value, uint8_t handle)
+ * bool read(char* value, uint8_t handle)
+ * bool read(char* value, uint8_t handle, size_t maxSize)
+
+
 
