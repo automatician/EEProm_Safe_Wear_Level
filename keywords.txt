@@ -1,18 +1,33 @@
+#######################################
 # EEProm_Safe_Wear_Level Keywords
 # Format: KEYWORD_NAME<TAB>KEYWORD_TYPE
+#######################################
 
-# Class Name
+# Class Name (KEYWORD1 - Orange/Bold)
 EEProm_Safe_Wear_Level	KEYWORD1
 EEPRWL	KEYWORD1
+EEProm_Safe_Wear_Level	KEYWORD1
+EEPRWL	KEYWORD1
+EEPRWL_Main	KEYWORD1
+administrative_control_structure	KEYWORD1
+PARTITIONS_DATA	KEYWORD1
 
-# Public Methods (Functions)
+# Public Methods (KEYWORD2 - Orange/Brown)
 config	KEYWORD2
 write	KEYWORD2
 read	KEYWORD2
 setVersion	KEYWORD2
 getVersion	KEYWORD2
-getNumSectors	KEYWORD2
-getNextWriteSector	KEYWORD2
-getMaxSectorNumber	KEYWORD2
-getSectorNumber	KEYWORD2
-loadRelativeSector	KEYWORD2
+healthCycles	KEYWORD2
+healthPercent	KEYWORD2
+loadPhysSector	KEYWORD2
+getCtrlData	KEYWORD2
+
+# Utility Keywords (LITERAL2 - Blue)
+handle	LITERAL2
+PARTITIONS	LITERAL2
+ADDR_START	LITERAL2
+PART_LENGTH	LITERAL2
+COUNTER_LEN	LITERAL2
+HANDLE1	LITERAL2
+PAYLOAD_SIZE	LITERAL2
