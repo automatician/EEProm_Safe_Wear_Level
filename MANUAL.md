@@ -43,13 +43,13 @@ For character arrays (char*), specific, non-templated overloads are available to
  * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize is recommended
 ## 3. Versioning and Health Monitoring
 ### getVersion(uint8_t handle)
-Description: Retrieves the user-defined version number stored in the control data.
+Description: Retrieves the user-defined version number / override counter stored in the control data.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|The current version number of the stored data (the current override counter 0-65535)
 ### setVersion(uint16_t value, uint8_t handle)
-Description: Sets a new user-defined version number. Caution: This operation does not trigger wear-leveling (it is a small internal write operation).
+Description: Sets a new user-defined version number.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |value|uint16_t|The new version number to store.|
