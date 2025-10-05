@@ -13,9 +13,9 @@ The complete manual for using all public functions, parameters, and return value
 
 ## **WHAT IT IS**
 
-### * A complete data management subsystem with integrated error handling,
-###  multi-partition support, logging functionality, and comprehensive
-###  auditability.
+ * A complete data management subsystem with integrated error handling,
+  multi-partition support, logging functionality, and comprehensive
+  auditability.
 
 * Meets the high requirements for robustness and failure safety
   needed in commercial or critical projects:
