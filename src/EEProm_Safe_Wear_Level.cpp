@@ -290,9 +290,9 @@ void EEProm_Safe_Wear_Level::_read(uint8_t handle = 0) {
 }
 // ----------------------------------------------------------------------------------------------------
 
-uint32_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t handle = 0) {
+uint16_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t handle = 0) {
     _START_
-    uint32_t success;  uint16_t x;
+    uint16_t success;  uint16_t x;
 
     if (physSector > _numSecs) {
         physSector = 1;
@@ -301,7 +301,7 @@ uint32_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t han
 
     physSector--;
 
-    uint32_t i = physSector;
+    uint16_t i = physSector;
     i *= _secSize;
     i += _startAddr + METADATA_SIZE;
 
