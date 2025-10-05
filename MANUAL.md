@@ -9,3 +9,14 @@ Description: The standard constructor for the class. It requires a pointer to a 
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |ramHandlePtr |uint8_t* | Pointer to the beginning of the RAM buffer/cache. The required size is determined by PayloadSize and internal metadata.|
+### config(uint16_t startAddress, uint16_t totalBytesUsed, uint16_t PayloadSize, uint8_t cntLengthBytes, uint8_t handle)
+Description: Initializes and configures the EEPROM wear-leveling partition. This function must be called once before any read/write operations. It automatically finds the latest valid data or reformats the partition if necessary.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|startAddress|uint16_t|The starting address of the partition in the physical EEPROM.|
+|totalBytesUsed|uint16_t|The total number of EEPROM bytes allocated to this partition (must be large enough for at least two sectors).|
+|PayloadSize|uint16_t|The size (in bytes) of the actual payload data to be stored. This determines the overall sector size.|
+|cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
+|handle|uint8_t|Partition handle (use 0).|
+|Return|uint16_t|Status code: 0 (Success), 1 (Error: Configuration), 2 (Error: RAM/Payload Conflict), 3 (Error: EEPROM too small).|
+
