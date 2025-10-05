@@ -18,5 +18,5 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |PayloadSize|uint16_t|The size (in bytes) of the actual payload data to be stored. This determines the overall sector size.|
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
 |handle|uint8_t|Partition handle (use 0).|
-|Return|uint16_t|Status code: 0 (Success), 1 (Error: Configuration), 2 (Error: RAM/Payload Conflict), 3 (Error: EEPROM too small).|
+|Return|uint16_t|Status code: 0 (Error), > 0 Partition Version / Override Counter 1 to 65535.|
 
