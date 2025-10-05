@@ -1,13 +1,12 @@
-*******************************************************************************
-* EEProm_Safe_Wear_Level Library v25.10.5 
-* Copyright (C) 2025, Torsten Frieser / automatician
-*******************************************************************************
-* This library is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published
-* by the Free Software Foundation, either version 2.1 of the License.
+ **EEProm_Safe_Wear_Level Library v25.10.5** 
+ **Copyright (C) 2025, Torsten Frieser / automatician**
+ 
+ ***This library is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Lesser General Public License as published
+ by the Free Software Foundation, either version 2.1 of the License.***
 *******************************************************************************
 
-WHAT IT IS
+**WHAT IT IS**
 
 * A complete data management subsystem with integrated error handling,
   multi-partition support, logging functionality, and comprehensive
@@ -16,15 +15,15 @@ WHAT IT IS
 * Meets the high requirements for robustness and failure safety
   needed in commercial or critical projects:
 
-  * Detection of data corruption / security within the EEPROM itself.
+  * * Detection of data corruption / security within the EEPROM itself.
 
-  * Prevention of overwriting program memory in case of faulty
+  * * Prevention of overwriting program memory in case of faulty
     application.
 
-  * Securing control data structures (RAM Handle Structure)
+  * * Securing control data structures (RAM Handle Structure)
     against corruption (overwriting / data modification).
 
-  * CRC checksums with an increased detection rate.
+  * * CRC checksums with an increased detection rate.
 
 -------------------------------------------------------------------------------
 1. PURPOSE & KEY FEATURES (ROBUSTNESS)
