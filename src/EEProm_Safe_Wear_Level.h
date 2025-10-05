@@ -19,21 +19,21 @@
  * --- GLOSSARY OF ABBREVIATIONS (Internal Variables & Constants) ---
  *
  * MEMBER VARIABLES (State):
- * _startAddr  : startAddress
+ * _startAddr  : startAddress
  * _totalBytesUsed : totalLength
- * _numSecs    : numSectors (Number of physical sectors)
- * _secSize    : sectorSize (Size of one sector including overhead)
- * _pldSize    : payloadSize (Size of the pure user data/payload)
- * _nextPhSec  : nextWriteSector (Next physical sector to write to)
- * _maxLgcCnt  : maxSectorNumber (Maximum logical counter value)
- * _curLgcCnt  : currentCounter (Current logical counter value)
- * _ioBuf      : ioBuffer (Data cache in RAM)
+ * _numSecs    : numSectors (Number of physical sectors)
+ * _secSize    : sectorSize (Size of one sector including overhead)
+ * _pldSize    : payloadSize (Size of the pure user data/payload)
+ * _nextPhSec  : nextWriteSector (Next physical sector to write to)
+ * _maxLgcCnt  : maxSectorNumber (Maximum logical counter value)
+ * _curLgcCnt  : currentCounter (Current logical counter value)
+ * _ioBuf      : ioBuffer (Data cache in RAM)
  * _EEPRWL_VER : _EEPRWL_VERSION
  *
  * STATIC CONSTANTS:
  * DEFAULT_PLD_SIZE : DEFAULT_PAYLOAD_SIZE
- * _cntLen          : counterLength (Number of counter bytes)
- * _ctlLen          : controlDataLength (Number of control data bytes)
+ * _cntLen          : counterLength (Number of counter bytes)
+ * _ctlLen          : controlDataLength (Number of control data bytes)
  *
  * EEPROM MACROS:
  * e_r	: read
@@ -75,7 +75,7 @@ class EEProm_Safe_Wear_Level {
       uint8_t healthPercent(uint8_t handle);
       
       // Loads sector into the cache (Implementation in .cpp)
-      uint32_t loadPhysSector(uint16_t physSector, uint8_t handle);
+      uint16_t loadPhysSector(uint16_t physSector, uint8_t handle);
       
       // --- GENERIC TEMPLATE FUNCTIONS ---
       
@@ -146,13 +146,13 @@ class EEProm_Safe_Wear_Level {
       static const uint16_t MAGIC_ID;
       static const size_t METADATA_SIZE;
       static const size_t DEFAULT_PLD_SIZE;
-      uint8_t  _ctlLen;     
+      uint8_t  _ctlLen;     
       uint8_t* _ramStart;
       uint16_t _ioBufSize;
-      uint16_t _secSize; 
+      uint16_t _secSize; 
       uint32_t _maxLgcCnt;
-      uint8_t  _handle;
-      uint8_t  _handle1;
+      uint8_t  _handle;
+      uint8_t  _handle1;
 };
 
 // ----------------------------------------------------------------------------------------------------
@@ -160,7 +160,7 @@ class EEProm_Safe_Wear_Level {
 // ----------------------------------------------------------------------------------------------------
 
 template <typename T>
-bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle = 0) {     
+bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle = 0) {     
       _START_
       bool success;
       // Consistency check
@@ -205,11 +205,10 @@ bool EEProm_Safe_Wear_Level::read(T& value, uint8_t handle = 0, size_t maxSize =
       if(maxSize>0) size = maxSize;
       if(size > _pldSize) size = _pldSize;
       
-      memcpy(valuePtr, _ioBuf, size); 
+      memcpy(valuePtr, _ioBuf, size); 
 
      _END_
       return true;
 }
 // ----------------------------------------------------------------------------------------------------
 #endif // EEPROM_WEAR_LEVEL_H
-
