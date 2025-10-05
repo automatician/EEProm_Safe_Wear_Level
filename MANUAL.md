@@ -93,5 +93,14 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |8|2|uint16_t|PAYLOAD SIZE IN BYTES|
 |10|2|uint16_t|NUMBER OF SECTORS IN THIS PARTITION|
 |12|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
-|13|1|uint8_t|### STATUS FLAG (0x00=OK, etc.)|
+|13|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
 |14|2|uint16_t|CHECKSUM (of this Control Block)|
+### Status Flag at Offset 13
+| Code | Enum Class Name | Meaning |
+| :--- | :--- | :--- |
+|0|OK| All OK. Partition is valid and ready for operation.|
+|1|EEPRWL_STATUS_CRC_ERROR|CRC checksum of the last read sector was invalid.|
+|2|EEPRWL_STATUS_STRING_TOO_LONG|Write attempt: The passed string is > payload size.|
+|3|EEPRWL_STATUS_MAX_CYCLES_REACHED| Write attempt rejected: Maximum logical counter reached.|
+|4|EEPRWL_STATUS_CONFIG_ERROR|Initialization error (e.g., Magic ID/Version missing).|
+|5|EEPRWL_STATUS_CTRL_DATA_CORRUPT| Critical error: Control data corrupted (CRC fails).|
