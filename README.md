@@ -31,7 +31,7 @@ The complete manual for using all public functions, parameters, and return value
   *  CRC checksums with an increased detection rate.
 
 -------------------------------------------------------------------------------
-1. PURPOSE & KEY FEATURES (ROBUSTNESS)
+## 1. PURPOSE & KEY FEATURES (ROBUSTNESS)
 -------------------------------------------------------------------------------
 
 The EEProm_Safe_Wear_Level library serves as a **complete DATA MANAGEMENT
@@ -40,7 +40,7 @@ EEPROM (**WEAR-LEVELING**), but also to GUARANTEE **data integrity** under
 critical conditions.
 
 -------------------------------------------------------------------------------
-2. KEY FEATURES OF v25.10.5
+## 2. KEY FEATURES OF v25.10.5
 -------------------------------------------------------------------------------
 
 * **TYPE-SAFE I/O:** Generic templates for structs and all primitive types. 
@@ -71,7 +71,7 @@ C-Strings are additionally supported via a dedicated overload: write(const char*
   that it can be reset (no log loss).
 
 -------------------------------------------------------------------------------
-3. INSTALLATION
+## 3. INSTALLATION
 -------------------------------------------------------------------------------
 
 Installation is done manually by downloading the release archive.
@@ -85,7 +85,7 @@ Manual Installation Method:
 5. Restart the Arduino IDE.
 
 -------------------------------------------------------------------------------
-4. COMPLETE MANUAL
+## 4. README.TXT
 -------------------------------------------------------------------------------
 
 The complete instructions can be found in readme.txt in the root directory.
