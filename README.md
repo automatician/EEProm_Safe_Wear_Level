@@ -17,13 +17,13 @@
 
   *  Detection of data corruption / security within the EEPROM itself.
 
-  * * Prevention of overwriting program memory in case of faulty
+  *  Prevention of overwriting program memory in case of faulty
     application.
 
-  * * Securing control data structures (RAM Handle Structure)
+  *  Securing control data structures (RAM Handle Structure)
     against corruption (overwriting / data modification).
 
-  * * CRC checksums with an increased detection rate.
+  *  CRC checksums with an increased detection rate.
 
 -------------------------------------------------------------------------------
 1. PURPOSE & KEY FEATURES (ROBUSTNESS)
