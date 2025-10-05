@@ -42,8 +42,7 @@ critical conditions.
 -------------------------------------------------------------------------------
 
 * **TYPE-SAFE I/O:** Generic templates for structs and all primitive types. 
-C-Strings are additionally supported via a dedicated overload
-(write(const char*)).
+C-Strings are additionally supported via a dedicated overload: write(const char*)
 
 * **FAILURE SAFETY:** Each data record is secured with a checksum.
   Corrupted sectors are ignored.
