@@ -40,7 +40,59 @@ Description: Reads the latest available data from the IO-Buffer into a variable 
 For character arrays (char*), specific, non-templated overloads are available to correctly handle null termination:
  * bool write(const char* value, uint8_t handle)
  * bool read(char* value, uint8_t handle)
- * bool read(char* value, uint8_t handle, size_t maxSize)
-
-
-
+ * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize is recommended
+## 3. Versioning and Health Monitoring
+### getVersion(uint8_t handle)
+Description: Retrieves the user-defined version number stored in the control data.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|handle|uint8_t|Partition handle.|
+|Return|uint16_t|The current version number of the stored data (the current override counter 0-65535)
+### setVersion(uint16_t value, uint8_t handle)
+Description: Sets a new user-defined version number. Caution: This operation does not trigger wear-leveling (it is a small internal write operation).
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|value|uint16_t|The new version number to store.|
+|handle|uint8_t|Partition handle.|
+|Return|bool|*true* on success.|
+If the version number / counter number passed is different from the one already stored, the partition will be formatted (all data will be lost) and the sector counters will be set to 0.
+### healthCycles(uint8_t handle)
+Description: Calculates the number of remaining write cycles based on the maximum logical counter capacity (_maxLgcCnt) and the current counter value (_curLgcCnt) (is set in *config()*).
+This function returns the remaining write cycles. To achieve this, the counter width in bytes must be selected so that the logical sector number covers the entire lifetime of the EEPROM. You can interpret the value differently by limiting the logical sector number to fewer bytes (e.g., 1 byte or 2 bytes) to reduce overhead. Three or four bytes are recommended to track the entire lifetime of the EEPROM. The maximum is four bytes.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|handle|uint8_t|Partition handle.|
+|Return|uint32_t|The estimated number of remaining write cycles.|
+### healthPercent(uint8_t handle)
+Description: Calculates the remaining EEPROM health as a percentage.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|handle|uint8_t|Partition handle.|
+|Return|uint8_t|The remaining health percentage (0-100).|
+## 4. Log-Function (Advanced)
+### loadPhysSector(uint16_t physSector, uint8_t handle)
+Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|physSector|uint16_t|The index of the physical sector to be loaded.|
+|handle|uint8_t|Partition handle.|
+|Return|uint16_t|The physical index of the sector that will be used in the next write operation (write()). This value reflects the internal subsequent state of the wear-leveling mechanism after loading.|
+## 5. Controll Data (Advanced)
+### getCtrlData(int offs, int handle)
+Description: Reads a 32-bit value (4 bytes) from a specific offset within the ControlData structure of the currently loaded partition data.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|offs|int|The byte offset within the control data (e.g., 0 for curLgcCnt).|
+|handle|int|Partition handle.|
+|Return|uint32_t|The 32-bit value at the specified offset.|
+### Offset table
+| Offset | Size | Type | Description |
+| :--- | :--- | :--- | :--- |
+|0|4|uint32_t|ACT. LOGICAL SECTOR (Dynamic)|
+|4|2|uint16_t|NEXT PHYSICAL SECTOR (Dynamic) FOR WRITING|
+|6|2|uint16_t|THIS PARTITION START ADDRESS IN EEPROM|
+|8|2|uint16_t|PAYLOAD SIZE IN BYTES|
+|10|2|uint16_t|NUMBER OF SECTORS IN THIS PARTITION|
+|12|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
+|13|1|uint8_t|STATUS FLAG (0x00=OK, etc.)|
+|14|2|uint16_t|CHECKSUM (of this Control Block)|
