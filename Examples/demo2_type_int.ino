@@ -1,10 +1,14 @@
-// #############################################
-// ############ Demo2: Datatype INT ############
-// #############################################
+// ##############################################
+// ############ Demo2: Datatype INT #############
+// ##############################################
 // EEProm_Safe_Wear_Level Library v25.10.5
-// #############################################
+// ##############################################
 // Store the >int loopCounter< in the EEPROM and 
 // read the counter when the Arduino is restarted.
+// ----------------------------------------------
+// For simple applications that store pure states 
+// or measured values ​​(numbers, Booleans), you can 
+// safely use the same pattern as with the int.
 
 #include "EEProm_Safe_Wear_Level.h"
 
