@@ -85,11 +85,3 @@ Manual Installation Method:
    (`Documents/Arduino/libraries/`).
 5. Restart the Arduino IDE.
 
--------------------------------------------------------------------------------
-## 4. README.TXT
--------------------------------------------------------------------------------
-
-The complete instructions can be found in readme.txt in the root directory.
-This file contains sample code, explanations, and some tables in ASCII format 
-for easy reference.
-
