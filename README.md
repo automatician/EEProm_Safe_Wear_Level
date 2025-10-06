@@ -6,19 +6,14 @@
  by the Free Software Foundation, either version 2.1 of the License.***
 
  ## It covers the full spectrum of use, from simple storage to auditability at a commercial level.
+| 📖 API Documentation | 📖 Quick Start |
 | :--- | :--- |
-|📖 API Documentation
-
-The complete manual for using all public functions, parameters, and return values ​​can be found
-in the dedicated [API Manual (MANUAL.md)](MANUAL.md) file.
-|
-|📖 Quick Start
-
-Starts directly with detailed example codes that will get you to your goal quickly.
+|The complete manual for using all public functions, parameters, and return values ​​can be found
+in the dedicated [API Manual (MANUAL.md)](MANUAL.md) file.|
+|Starts directly with detailed example codes that will get you to your goal quickly.
  * [Demo1: String in an array](Examples/demo1_type_char_array.ino)
  * [Demo2: Store pure states or measured values ​​(numbers, Booleans)](Examples/demo2_type_int.ino)
- * [Demo3: Store logical grouping of different but related data in structures](Examples/demo3_type_struct.ino)
-|
+ * [Demo3: Store logical grouping of different but related data in structures](Examples/demo3_type_struct.ino)|
 
 ## **WHAT IT IS**
 
