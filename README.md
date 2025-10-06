@@ -6,7 +6,7 @@
  by the Free Software Foundation, either version 2.1 of the License.***
 
  ## It covers the full spectrum of use, from simple storage to auditability at a commercial level.
-📖 API Documentation: The complete manual with public functions, parameters and return values in [API Manual)](MANUAL.md).
+📖 API Documentation: The complete manual with public functions, parameters and return values in [API Manual](MANUAL.md).
 
 📖 Quick Start: Starts directly with detailed example codes that will get you to your goal quickly.
  * [Demo1: String in an array](Examples/demo1_type_char_array.ino)
