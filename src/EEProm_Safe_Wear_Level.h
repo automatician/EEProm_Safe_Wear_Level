@@ -52,7 +52,6 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdint.h>
-#include <util/crc16.h>
 #include <EEProm_Safe_Wear_Level_Macros.h>
 // ----------------------------------------------------------------------------------------------------
 // --- CLASS DEFINITION ---
@@ -138,7 +137,7 @@ class EEProm_Safe_Wear_Level {
       bool findLatestSector(uint8_t handle);
       uint8_t calculateCRC(const uint8_t * buffer, size_t length);
       void formatInternal(uint8_t handle);
-      bool _write(uint16_t i, uint8_t handle);
+      bool _write(uint8_t handle);
       
       // --- INTERNAL CONSTANTS (Static, declaration adapted) ---
       // CRC_OVERHEAD, MAGIC_ID, and METADATA_SIZE remain for readability.
@@ -178,7 +177,7 @@ bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle = 0) {
               if(i < sizeof(T)) _ioBuf[i] = valuePtr[i];
               else _ioBuf[i] = 0;
          }
-         success = _write(i, handle);
+         success = _write(handle);
     }
     _END_
     return success;
