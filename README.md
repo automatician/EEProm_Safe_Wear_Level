@@ -9,7 +9,13 @@
 
 ### 📖 API Documentation
 
-The complete manual for using all public functions, parameters, and return values ​​can be found in the dedicated [API Manual (MANUAL.md)](MANUAL.md) file.
+The complete manual for using all public functions, parameters, and return values ​​can be found
+in the dedicated [API Manual (MANUAL.md)](MANUAL.md) file.
+
+### 📖 Quick Start
+
+Starts directly with detailed example codes that will get you to your goal quickly.
+[Demo1](src/MANUAL.md)
 
 ## **WHAT IT IS**
 
