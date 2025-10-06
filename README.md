@@ -66,9 +66,9 @@ C-Strings are additionally supported via a dedicated overload: write(const char*
 * **LOGGING FUNCTIONALITY:** Loading physical data records (sectors) and their
   control possibility (log end, log beginning).
 
-* **MEMORY-SAVING DATA MIGRATION:** Transfer of log entries to a
-  second partition, in case of logical saturation of the original partition, so
-  that it can be reset (no log loss).
+* **MEMORY-SAVING DATA MIGRATION:** Transfer of log entries to a second partition
+   in case of logical saturation of the original partition so that it can be reset
+   (no log loss) in just a few steps.
 
 -------------------------------------------------------------------------------
 ## 3. INSTALLATION
