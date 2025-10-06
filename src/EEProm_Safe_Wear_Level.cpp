@@ -133,7 +133,7 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
 
     // Ensures that the rollout is triggered exactly after a full number of
     // rotations. With adjustment for the sector counter size.
-    uint64_t maxCapacity = (1ULL << (_cntLen * 8)) - 1;
+    uint32_t maxCapacity = (1UL << (_cntLen * 8)) - 1;
     _maxLgcCnt = (maxCapacity / _numSecs) * _numSecs;
 
     // Calculate the exact sector size
@@ -142,12 +142,8 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
     // Write address initially unknown
     _nextPhSec = 0;
 
-    if (_ioBuf == nullptr) {
-        delete[] _ioBuf;
-        _ioBufSize = 0;
-    }
     if(_ioBufSize<_secSize){
-        delete[] _ioBuf;
+        if(_ioBuf != nullptr) delete[] _ioBuf;
 	_ioBuf = new uint8_t [_secSize];
         _ioBufSize = _secSize;
     }
@@ -339,19 +335,21 @@ bool EEProm_Safe_Wear_Level::write(const char* value, uint8_t handle = 0) {
         if(_curLgcCnt > _maxLgcCnt) _status = 3;
     }else success = 1;
 
+    uint16_t slen = strlen(value);
+
     if (success == 1){
-    	if (strlen(value) > _pldSize) _status = 2;
+    	if (slen > _pldSize) _status = 2;
     	uint16_t i;
 
     	for (i = 0; i < _pldSize; i++) {
-    	    if (i < strlen(value)) {
+    	    if (i < slen) {
     	        _ioBuf[i] = value[i];
     	    } else {
     	        _ioBuf[i] = 0;
     	    }
     	}
 
-    	success = _write(i, handle);
+    	success = _write(handle);
     }
 	_END_
     return success;
@@ -359,7 +357,7 @@ bool EEProm_Safe_Wear_Level::write(const char* value, uint8_t handle = 0) {
 
 // ----------------------------------------------------------------------------------------------------
 
-bool EEProm_Safe_Wear_Level::_write(uint16_t i, uint8_t handle = 0) {
+bool EEProm_Safe_Wear_Level::_write(uint8_t handle = 0) {
     uint16_t c; bool success = 1;
     if(_curLgcCnt == _maxLgcCnt){
     	_status = 3;
@@ -369,9 +367,9 @@ bool EEProm_Safe_Wear_Level::_write(uint16_t i, uint8_t handle = 0) {
     if(success == 1){
     	_curLgcCnt += 1; _handle1 = handle;
 
-    	writeLE(&_ioBuf[i], _curLgcCnt, _cntLen);
+    	writeLE(&_ioBuf[_pldSize], _curLgcCnt, _cntLen);
 
-    	_ioBuf[i + _cntLen] = calculateCRC(_ioBuf, _secSize - 1);
+    	_ioBuf[_secSize - 1] = calculateCRC(_ioBuf, _secSize - 1);
 
     	// Write data
     	uint32_t Adress = _startAddr + METADATA_SIZE + (_nextPhSec * _secSize);
@@ -387,9 +385,9 @@ bool EEProm_Safe_Wear_Level::_write(uint16_t i, uint8_t handle = 0) {
 
     	// Compare data
     	Adress = _startAddr + METADATA_SIZE + (sek * _secSize);
-    	for (i = 0; i < _secSize; i++) {
-    	    uint8_t buf = e_r(Adress + i);
-    	    if (buf != _ioBuf[i]) {
+    	for (c = 0; c < _secSize; c++) {
+    	    uint8_t buf = e_r(Adress + c);
+    	    if (buf != _ioBuf[c]) {
     	        success = false;
     	        break;
     	    }
@@ -514,9 +512,18 @@ bool EEProm_Safe_Wear_Level::findLatestSector(uint8_t handle = 0) {
 // ----------------------------------------------------------------------------------------------------
 
 uint8_t EEProm_Safe_Wear_Level::calculateCRC(const uint8_t *data, size_t length) {
-    uint8_t crc = 0;
+    uint8_t crc = 0x00; // Initialwert 0 (Oft auch 0xFF, hier 0x00 für Einfachheit/Kompaktheit)
     for (size_t i = 0; i < length; i++) {
-        crc = _crc_ibutton_update(crc, data[i]);
+        crc ^= data[i]; // XOR mit dem nächsten Daten-Byte
+        for (uint8_t j = 0; j < 8; j++) {
+            if (crc & 0x80) { // Prüfen, ob das MSB gesetzt ist
+                // Shift und XOR mit dem Polynom
+                crc = (crc << 1) ^ 7; // Standard CRC-8 Polynom x^8 + x^2 + x^1 + 1 (0x07)
+            } else {
+                // Nur Shift
+                crc <<= 1;
+            }
+        }
     }
     return crc;
 }
