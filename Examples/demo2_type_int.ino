@@ -84,7 +84,7 @@ void loop() {
   // Write the int value directly from loopCounter into the partition (HANDLE1).
   // The library automatically determines the size via overloading, 
   // but we provide the value as an int.
-  bool error = EEPRWL_Main.write(loopCounter, HANDLE1);
+  bool error = EEPRWL_Main.write(&loopCounter, HANDLE1);
 
   if (error == 0) {
     Serial.print(F("WRITE ERROR. Code: 0x"));
