@@ -51,7 +51,7 @@ Description: Sets a new user-defined version number. If the version number / cou
 | :--- | :--- | :--- |
 |value|uint16_t|The new version number to store.|
 |handle|uint8_t|Partition handle.|
-|Return|bool|*true* on success.|
+|Return|bool|*true* latest sector found / *false* no latest sector found|
 ### healthCycles(uint8_t handle)
 Description: Calculates the number of remaining write cycles based on the maximum logical counter capacity (_maxLgcCnt) and the current counter value (_curLgcCnt) (is set in *config()*).
 This function returns the remaining write cycles. To achieve this, the counter width in bytes must be selected so that the logical sector number covers the entire lifetime of the EEPROM. You can interpret the value differently by limiting the logical sector number to fewer bytes (e.g., 1 byte or 2 bytes) to reduce overhead. Three or four bytes are recommended to track the entire lifetime of the EEPROM. The maximum is four bytes.
