@@ -359,7 +359,7 @@ void loop() {
   snprintf(MY_DATA, PAYLOAD_SIZE, "MSG_%03d", loopCounter);
 
   // --- 4. Write Data (Char* Array) ---
-  // The correct signature is: (data buffer, size, handle ID)
+  // The correct signature is: (data buffer, handle ID)
   bool error = EEPRWL_Main.write(MY_DATA, HANDLE1);
 
   if (error == 0) {
