@@ -1,6 +1,6 @@
  # **EEProm_Safe_Wear_Level Library v25.10.5** 
 * **💎 EEProm_Safe_Wear_Level: Gold Standard for Industrial Data Integrity**<br>
-This library is a **fool-proof solution** for the persistent storage of critical data on microcontrollers. It has been developed to meet the strict requirements for reliability and robustness demanded by the industry.
+This library is a **fool-proof solution** for the persistent storage of critical data on ATmega microcontrollers. It has been developed to meet the strict requirements for reliability and robustness demanded by the industry.
 * **📖 Design Conformity with Industry Standards**
 The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
 * **IEC 61508 / ISO 26262 (Functional Safety):** The design ensures the safety of critical data through **automatic error skipping** (Status Code 1) and comprehensive **CRC validation**. The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase reliability.
