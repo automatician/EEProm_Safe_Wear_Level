@@ -1,4 +1,4 @@
-# EEProm_Safe_Wear_Level API Manual
+# EEProm_Safe_Wear_Level - API Manual
 This document provides a concise reference for all public functions of the EEProm_Safe_Wear_Level library, which was developed to manage wear-leveling in EEPROM memory.
 ## 1. Initialization and Configuration
 ### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr)
