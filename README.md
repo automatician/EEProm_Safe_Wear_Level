@@ -1,4 +1,4 @@
-# 💎 EEProm_Safe_Wear_Level: Gold Standard for Industrial Data Integrity
+# 💎 EEProm_Safe_Wear_Level: for Industrial Data Integrity
 
 **Library Version: v25.10.5**
 
