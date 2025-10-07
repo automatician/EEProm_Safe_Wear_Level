@@ -67,7 +67,11 @@ Description: Calculates the remaining EEPROM health as a percentage.
 |Return|uint8_t|The remaining health percentage (0-100).|
 ## 4. Log-Function (Advanced)
 ### loadPhysSector(uint16_t physSector, uint8_t handle)
-Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example. Physical sector must be specified here with +1 in addition. This corresponds to the physical sector that will be written next (stored in the control data structure) and can be determined. *loadPhysSector()* ensures that the sector number is correctly overflowed.This is the simplest way to handle the physical sector number when using this API.
+Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example. 
+ * The *loadPhysSector()* function always requires the next physical sector to be written to derive the sector to be read. It achieves this by decrementing the passed sector index by 1.
+ * The *loadPhysSector()* function checks the passed sector for an overflow and handles this overflow correctly, meaning the user does not have to deal with it.
+ * If any arbitrary, freely determined physical sector must be read, it must be passed to the *loadPhysSector()* function incremented by +1.
+ * The *loadPhysSector()* function calculates the correct value for the next sector to be written from the handed over sector number (taking sector overflow into account). This function can therefore also be used to restore the next sector to be written (Ring Buffer).
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |physSector|uint16_t|The physical sector to be loaded + 1|
