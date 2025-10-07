@@ -10,7 +10,7 @@ This library provides a **fool-proof solution** for the persistent, reliable sto
 The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
 
 ### IEC 61508 / ISO 26262 (Functional Safety Principles)
-The design ensures the safety of critical data through **comprehensive CRC validation** and **automatic error skipping** (Status Code 1). The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
+The design ensures the safety of critical data through **comprehensive CRC validation** and **error reporting**. The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
 
 ### ISO/IEC 5055 (Reliability & Maintainability)
 The library achieves maximum transparency and maintainability. The internal encapsulation of complexity and the **clear separation of logical reading and physical error skipping** ensure maximum transparency, which are the cornerstones of this quality standard.
