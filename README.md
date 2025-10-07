@@ -11,8 +11,7 @@ The architecture of this library follows the highest design requirements from th
  
  ***This library is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published
- by the Free Software Foundation, either version 2.1 of the License.***<br>
--------------------------------------------------------------------------------
+ by the Free Software Foundation, either version 2.1 of the License.***
 
 📖 The complete manual with public functions, parameters and return values in [API Manual](MANUAL.md).
 
@@ -20,6 +19,7 @@ The architecture of this library follows the highest design requirements from th
  * [Demo1: String in an array](Examples/demo1_type_char_array.ino)
  * [Demo2: Store pure states or measured values ​​(numbers, Booleans)](Examples/demo2_type_int.ino)
  * [Demo3: Store logical grouping of different but related data in structures](Examples/demo3_type_struct.ino)
+   
 ## **WHAT IT IS**
 
  * A complete data management subsystem with integrated error handling,
