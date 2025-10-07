@@ -4,7 +4,8 @@ The architecture of this library follows the highest design requirements from th
 * **IEC 61508 / ISO 26262 (Functional Safety):** The design ensures the safety of critical data through **automatic error skipping** (Status Code 1) and comprehensive **CRC validation**. The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase reliability.<br>
 * **ISO/IEC 5055 (Reliability & Maintainability):** The internal encapsulation of complexity, the clear `read(0)/read(1)` API pattern, and the **8 detailed status codes** (e.g., Code 7 for Log End) ensure maximum transparency and maintainability, which are the cornerstones of this quality standard.
 
-**Conclusion:** If you are looking for a library that **guarantees data integrity** and **longevity** across the entire lifecycle of your embedded system, this is the **Gold Standard**.<br>
+**Conclusion:** If you are looking for a library that **guarantees data integrity** and **longevity** across the entire lifecycle of your embedded system, this is the **Gold Standard**.
+
 **Copyright (C) 2025, Torsten Frieser / automatician**
  
  ***This library is free software: you can redistribute it and/or modify
