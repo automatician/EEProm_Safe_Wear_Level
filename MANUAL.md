@@ -97,7 +97,7 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |13|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
 |14|2|uint16_t|CHECKSUM (of this Control Block)|
 ### Status Flag at Offset 13
-| Code | Enum Class Name | Meaning |
+| Code | Meaning |
 | :--- | :--- |
 |0|OK| All OK. Partition is valid and ready for operation.|
 |1|CRC checksum of the last read sector was invalid.|
