@@ -1,4 +1,4 @@
-# 💎 EEProm_Safe_Wear_Level: for Industrial Data Integrity
+# EEProm_Safe_Wear_Level: for Industrial Data Integrity
 
 **Library Version: v25.10.5**
 
@@ -6,16 +6,27 @@ This library provides a **fool-proof solution** for the persistent, reliable sto
 
 ---
 
-## 💡 What It Is
+## 💡 What It Is: Complete Data Management Subsystem
 
-`EEProm_Safe_Wear_Level` is a **complete data management subsystem** with integrated error handling, multi-partition support, logging functionality, and comprehensive auditability.
+`EEProm_Safe_Wear_Level` is a **complete data management subsystem** with integrated error handling, multi-partition support, logging functionality, and comprehensive auditability. Its strategic goal is to **GUARANTEE data integrity** under critical conditions while maximizing the lifespan of the EEPROM (WEAR-LEVELING).
 
-It meets the high requirements for **robustness and failure safety** needed in commercial or critical projects:
+It meets the high requirements for **robustness and failure safety** needed in commercial or critical projects.
 
-* Detection of data corruption/security within the EEPROM itself.
-* Prevention of overwriting program memory in case of faulty application.
-* Securing control data structures (RAM Handle Structure) against corruption (overwriting / data modification).
-* CRC checksums with an increased detection rate.
+---
+
+## ✨ Key Features of v25.10.5
+
+| Feature | Benefit |
+| :--- | :--- |
+| **FAILURE SAFETY** | Each data record is secured with a checksum. Corrupted sectors are ignored (automatic error skipping). |
+| **CRC with High Detection Rate** | Enhanced CRC checksums for robust detection of data corruption within the EEPROM itself. |
+| **LONG LIFESPAN (Wear-Leveling)**| Utilizes a **Ring Buffer** to spread write cycles evenly, significantly increasing EEPROM endurance. |
+| **TYPE-SAFE I/O** | Generic templates for structs, all primitive types, and C-Strings via dedicated overloads. |
+| **MULTI-PARTITION** | Independent management of multiple logical data areas (Handles 0, 1, 2, ...). |
+| **RAM Handle Protection** | Securing control data structures (RAM Handle Structure) against corruption. |
+| **CONFIGURABLE COUNTERS** | Adapt health functionality and control data overhead (between 2 and 5 bytes). |
+| **DATA MIGRATION** | Memory-saving transfer of log entries to a second partition to prevent log loss upon saturation. |
+| **DIAGNOSTICS** | Detailed **8 Status Codes** (0x00 to 0x07) allow a targeted response to errors and log states. |
 
 ---
 
@@ -27,7 +38,7 @@ The architecture of this library follows the highest design requirements from th
 The design ensures the safety of critical data through **comprehensive CRC validation** and **automatic error skipping** (Status Code 1). The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
 
 ### ISO/IEC 5055 (Reliability & Maintainability)
-The library achieves maximum transparency and maintainability. The internal encapsulation of complexity, the clear **`read(0)`/`read(1)` API pattern**, and the **8 detailed status codes** (e.g., Code 7 for Log End) ensure maximum transparency and maintainability, which are the cornerstones of this quality standard.
+The library achieves maximum transparency and maintainability. The internal encapsulation of complexity and the **clear separation of logical reading and physical error skipping** ensure maximum transparency, which are the cornerstones of this quality standard.
 
 ---
 
@@ -39,6 +50,13 @@ The library achieves maximum transparency and maintainability. The internal enca
     * Demo2: Store pure states or measured values (numbers, Booleans)
     * Demo3: Store logical grouping of different but related data in structures
 
+### Manual Installation Method:
+1. Download the repository's release ZIP file.
+2. Unzip the file (e.g., `EEProm_Safe_Wear_Level-vX.X.X`).
+3. Rename the folder to `EEProm_Safe_Wear_Level`.
+4. Copy the folder to your **Arduino Library Directory** (`Documents/Arduino/libraries/`).
+5. Restart the Arduino IDE.
+
 ---
 
 ## 📜 License and Copyright
@@ -47,58 +65,3 @@ The library achieves maximum transparency and maintainability. The internal enca
 
 * Copyright (C) 2025, Torsten Frieser / automatician
 * This library is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 2.1 of the License.
-  
--------------------------------------------------------------------------------
-## 1. PURPOSE & KEY FEATURES (ROBUSTNESS)
--------------------------------------------------------------------------------
-
-The EEProm_Safe_Wear_Level library serves as a **complete DATA MANAGEMENT
-SUBSYSTEM**. Its strategic goal is not only to maximize the lifespan of the
-EEPROM (**WEAR-LEVELING**), but also to GUARANTEE **data integrity** under
-critical conditions.
-
--------------------------------------------------------------------------------
-## 2. KEY FEATURES OF v25.10.5
--------------------------------------------------------------------------------
-
-* **TYPE-SAFE I/O:** Generic templates for structs and all primitive types. 
-C-Strings are additionally supported via a dedicated overload: write(const char*)
-
-* **FAILURE SAFETY:** Each data record is secured with a checksum.
-  Corrupted sectors are ignored.
-
-* **WRITE SAFETY:** Checking and error feedback for write operations.
-
-* **LONG LIFESPAN:** Wear-Leveling via a **Ring Buffer**.
-
-* **CONFIGURABLE COUNTERS:** Precisely adapt the health functionality
-  to your program requirements and control the data overhead in the EEPROM,
-  between 2 bytes and 5 bytes.
-
-* **MULTI-PARTITION:** Independent management of multiple logical
-  data areas (Handles 0, 1, 2, ...).
-
-* **DIAGNOSTICS:** Detailed error codes (0x01 to 0x05) allow a
-  targeted response.
-
-* **LOGGING FUNCTIONALITY:** Loading physical data records (sectors) and their
-  control possibility (log end, log beginning).
-
-* **MEMORY-SAVING DATA MIGRATION:** Transfer of log entries to a second partition
-   in case of logical saturation of the original partition so that it can be reset
-   (no log loss) in just a few steps.
-
--------------------------------------------------------------------------------
-## 3. INSTALLATION
--------------------------------------------------------------------------------
-
-Installation is done manually by downloading the release archive.
-
-Manual Installation Method:
-1. Download the repository's release ZIP file.
-2. Unzip the file (e.g., `EEProm_Safe_Wear_Level`).
-3. Rename the folder to `EEProm_Safe_Wear_Level`.
-4. Copy the folder to your **Arduino Library Directory**
-   (`Documents/Arduino/libraries/`).
-5. Restart the Arduino IDE.
-
