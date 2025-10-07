@@ -31,7 +31,7 @@ Description: Reads the latest available data from the IO-Buffer into a variable 
 | :--- | :--- | :--- |
 |value|T&|A reference to the target variable or structure where the data will be loaded.|
 |handle|uint8_t|Partition handle.|
-|maxSize|size_t|Optional parameter to limit the number of bytes read (default is sizeof(T)). Can be used to read partial data.|
+|maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
 |Return|bool|*true* if valid data was successfully read and loaded, otherwise *false* (e.g., if the IO-Buffer is empty or invalid).|
 ### Explicit Overloads for C-Strings
 For character arrays (char*), specific, non-templated overloads are available to correctly handle null termination:
