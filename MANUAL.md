@@ -14,7 +14,7 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |totalBytesUsed|uint16_t|The total number of EEPROM bytes allocated to this partition (must be large enough for at least two sectors).|
 |PayloadSize|uint16_t|The size (in bytes) of the actual payload data to be stored. This determines the overall sector size.|
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
-|handle|uint8_t|Partition handle (use 0).|
+|handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Override Counter 1 to 65535|
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
@@ -23,7 +23,7 @@ Description: Writes a structured data type (T) to the EEPROM. The wear-level cou
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |value|const T&|A reference to the data structure or variable to be stored. sizeof(T) must be less than or equal to the configured PayloadSize.|
-|handle|uint8_t|Partition handle (use 0).|
+|handle|uint8_t|Partition handle.|
 |Return|bool|*true* on success, *false* on error (e.g., logical counter limit reached, internal error).
 ### read(T& value, uint8_t handle, size_t maxSize)
 Description: Reads the latest available data from the IO-Buffer into a variable or data structure (T).
