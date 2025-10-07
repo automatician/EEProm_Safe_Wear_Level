@@ -11,7 +11,7 @@ The architecture of this library follows the highest design requirements from th
  
  ***This library is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published
- by the Free Software Foundation, either version 2.1 of the License.***
+ by the Free Software Foundation, either version 2.1 of the License.***<br>
 -------------------------------------------------------------------------------
 
 📖 The complete manual with public functions, parameters and return values in [API Manual](MANUAL.md).
