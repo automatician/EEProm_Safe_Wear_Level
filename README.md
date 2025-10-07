@@ -1,48 +1,53 @@
-💎 EEProm_Safe_Wear_Level: for Industrial Data Integrity
-Library Version: v25.10.5
+# 💎 EEProm_Safe_Wear_Level: Gold Standard for Industrial Data Integrity
 
-This library provides a fool-proof solution for the persistent, reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the μC to verifiable data logging required at a commercial level.
+**Library Version: v25.10.5**
 
-💡 What It Is
-EEProm_Safe_Wear_Level is a complete data management subsystem with integrated error handling, multi-partition support, logging functionality, and comprehensive auditability.
+This library provides a **fool-proof solution** for the persistent, reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the $\mu\text{C}$ to verifiable data logging required at a commercial level.
 
-It meets the high requirements for robustness and failure safety needed in commercial or critical projects:
+---
 
-Detection of data corruption/security within the EEPROM itself.
+## 💡 What It Is
 
-Prevention of overwriting program memory in case of faulty application.
+`EEProm_Safe_Wear_Level` is a **complete data management subsystem** with integrated error handling, multi-partition support, logging functionality, and comprehensive auditability.
 
-Securing control data structures (RAM Handle Structure) against corruption (overwriting/data modification).
+It meets the high requirements for **robustness and failure safety** needed in commercial or critical projects:
 
-CRC checksums with an increased detection rate.
+* Detection of data corruption/security within the EEPROM itself.
+* Prevention of overwriting program memory in case of faulty application.
+* Securing control data structures (RAM Handle Structure) against corruption (overwriting / data modification).
+* CRC checksums with an increased detection rate.
 
-🛡️ Design Conformity with Industry Standards
+---
+
+## 🛡️ Design Conformity with Industry Standards
+
 The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
 
-IEC 61508 / ISO 26262 (Functional Safety Principles)
-The design ensures the safety of critical data through comprehensive CRC validation and automatic error skipping (Status Code 1). The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
+### IEC 61508 / ISO 26262 (Functional Safety Principles)
+The design ensures the safety of critical data through **comprehensive CRC validation** and **automatic error skipping** (Status Code 1). The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
 
-ISO/IEC 5055 (Reliability & Maintainability)
-The library achieves maximum transparency and maintainability. The internal encapsulation of complexity, the clear read(0)/read(1) API pattern, and the 8 detailed status codes (e.g., Code 7 for Log End) ensure maximum transparency and maintainability, which are the cornerstones of this quality standard.
+### ISO/IEC 5055 (Reliability & Maintainability)
+The library achieves maximum transparency and maintainability. The internal encapsulation of complexity, the clear **`read(0)`/`read(1)` API pattern**, and the **8 detailed status codes** (e.g., Code 7 for Log End) ensure maximum transparency and maintainability, which are the cornerstones of this quality standard.
 
-🚀 Get Started
-The complete manual with public functions, parameters, and return values can be found in the API Manual.
+---
 
-Starts directly with detailed example codes that will get you to your goal quickly:
+## 🚀 Get Started
 
-Demo1: String in an array
+* The complete manual with public functions, parameters, and return values can be found in the **API Manual**.
+* Starts directly with detailed example codes that will get you to your goal quickly:
+    * Demo1: String in an array
+    * Demo2: Store pure states or measured values (numbers, Booleans)
+    * Demo3: Store logical grouping of different but related data in structures
 
-Demo2: Store pure states or measured values (numbers, Booleans)
+---
 
-Demo3: Store logical grouping of different but related data in structures
+## 📜 License and Copyright
 
-📜 License and Copyright
-Conclusion: If you are looking for a library that guarantees data integrity and longevity across the entire lifecycle of your embedded system, this is the Gold Standard.
+**Conclusion:** If you are looking for a library that **guarantees data integrity** and **longevity** across the entire lifecycle of your embedded system, this is the **Gold Standard**.
 
-Copyright (C) 2025, Torsten Frieser / automatician
-
-This library is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 2.1 of the License.
-
+* Copyright (C) 2025, Torsten Frieser / automatician
+* This library is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 2.1 of the License.
+  
 -------------------------------------------------------------------------------
 ## 1. PURPOSE & KEY FEATURES (ROBUSTNESS)
 -------------------------------------------------------------------------------
