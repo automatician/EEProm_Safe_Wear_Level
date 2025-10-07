@@ -72,6 +72,7 @@ Description: Loads the payload and control data of a specific physical EEPROM se
  * The *loadPhysSector()* function checks the passed sector for an overflow and handles this overflow correctly, meaning the user does not have to deal with it.
  * If any arbitrary, freely determined physical sector must be read, it must be passed to the *loadPhysSector()* function incremented by +1.
  * The *loadPhysSector()* function calculates the correct value for the next sector to be written from the handed over sector number (taking sector overflow into account). This function can therefore also be used to restore the next sector to be written (Ring Buffer).
+   
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |physSector|uint16_t|The physical sector to be loaded + 1|
