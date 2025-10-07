@@ -105,5 +105,5 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |3|EEPRWL_STATUS_MAX_CYCLES_REACHED| Write attempt rejected: Maximum logical counter reached.|
 |4|EEPRWL_STATUS_CONFIG_ERROR|Initialization error (e.g., Magic ID/Version missing).|
 |5|EEPRWL_STATUS_CTRL_DATA_CORRUPT| Critical error: Control data corrupted (CRC fails).|
-|6|EEPRWL_STATUS_STRING_TOO_LONG|Write attempt: missing *maxSize* for reading string.|
+|6|EEPRWL_STATUS_MISSING_MAXSIZE__READING_STRING|Write attempt: missing *maxSize* for reading string.|
 
