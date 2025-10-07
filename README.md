@@ -1,18 +1,15 @@
  # **EEProm_Safe_Wear_Level Library v25.10.5** 
-* **💎 EEProm_Safe_Wear_Level: Gold Standard for Industrial Data Integrity**<br>
-This library is a **fool-proof solution** for the persistent storage of critical data on Arduino-compatible microcontrollers. It has been developed to meet the strict requirements for reliability and robustness demanded by the industry.
-* **📖 Design Conformity with Industry Standards**
+### It covers the entire application spectrum, from simple storage in the EEPROM in the Arduino µC to verifiability data at the commercial level.**Design Conformity with Industry Standards**
 The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
-* **📖 IEC 61508 / ISO 26262 (Functional Safety):** The design ensures the safety of critical data through **automatic error skipping** (Status Code 1) and comprehensive **CRC validation**. The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase reliability.
-* **📖 ISO/IEC 5055 (Reliability & Maintainability):** The internal encapsulation of complexity, the clear `read(0)/read(1)` API pattern, and the **8 detailed status codes** (e.g., Code 7 for Log End) ensure maximum transparency and maintainability, which are the cornerstones of this quality standard.
+**IEC 61508 / ISO 26262 (Functional Safety):** The design ensures the safety of critical data through **automatic error skipping** (Status Code 1) and comprehensive **CRC validation**. The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase reliability.
+**ISO/IEC 5055 (Reliability & Maintainability):** The internal encapsulation of complexity, the clear `read(0)/read(1)` API pattern, and the **8 detailed status codes** (e.g., Code 7 for Log End) ensure maximum transparency and maintainability, which are the cornerstones of this quality standard.
 **Conclusion:** If you are looking for a library that **guarantees data integrity** and **longevity** across the entire lifecycle of your embedded system, this is the **Gold Standard**.
 **Copyright (C) 2025, Torsten Frieser / automatician**
  
  ***This library is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation, either version 2.1 of the License.***
-
- ### It covers the entire application spectrum, from simple storage in the EEPROM in the Arduino µC to verifiability data at the commercial level.
+ 
 📖 The complete manual with public functions, parameters and return values in [API Manual](MANUAL.md).
 
 📖 Starts directly with detailed example codes that will get you to your goal quickly:
