@@ -36,8 +36,7 @@ Description: Reads the latest available data from the IO-Buffer into a variable 
 ### Explicit Overloads for C-Strings
 For character arrays (char*), specific, non-templated overloads are available to correctly handle null termination:
  * bool write(const char* value, uint8_t handle)
- * bool read(char* value, uint8_t handle)
- * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize is recommended
+ * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
 ## 3. Versioning and Health Monitoring
 ### getVersion(uint8_t handle)
 Description: Retrieves the user-defined version number / override counter stored in the control data.
