@@ -6,7 +6,7 @@ This library provides a **fool-proof solution** for the persistent, reliable sto
 
 ---
 
-## 💡 What It Is: Complete Data Management Subsystem
+## What It Is: Complete Data Management Subsystem
 
 `EEProm_Safe_Wear_Level` is a **complete data management subsystem** with integrated error handling, multi-partition support, logging functionality, and comprehensive auditability. Its strategic goal is to **GUARANTEE data integrity** under critical conditions while maximizing the lifespan of the EEPROM (WEAR-LEVELING).
 
@@ -14,7 +14,7 @@ It meets the high requirements for **robustness and failure safety** needed in c
 
 ---
 
-## ✨ Key Features of v25.10.5
+## Key Features of v25.10.5
 
 | Feature | Benefit |
 | :--- | :--- |
