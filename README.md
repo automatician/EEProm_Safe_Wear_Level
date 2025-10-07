@@ -5,6 +5,17 @@
 This library provides a **fool-proof solution** for the persistent, reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the $\mu\text{C}$ to verifiable data logging required at a commercial level.
 
 ---
+## 🛡️ Design Conformity with Industry Standards
+
+The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
+
+### IEC 61508 / ISO 26262 (Functional Safety Principles)
+The design ensures the safety of critical data through **comprehensive CRC validation** and **automatic error skipping** (Status Code 1). The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
+
+### ISO/IEC 5055 (Reliability & Maintainability)
+The library achieves maximum transparency and maintainability. The internal encapsulation of complexity and the **clear separation of logical reading and physical error skipping** ensure maximum transparency, which are the cornerstones of this quality standard.
+
+---
 
 ## What It Is: Complete Data Management Subsystem
 
@@ -27,18 +38,6 @@ It meets the high requirements for **robustness and failure safety** needed in c
 | **CONFIGURABLE COUNTERS** | Adapt health functionality and control data overhead (between 2 and 5 bytes). |
 | **DATA MIGRATION** | Memory-saving transfer of log entries to a second partition to prevent log loss upon saturation. |
 | **DIAGNOSTICS** | Detailed **8 Status Codes** (0x00 to 0x07) allow a targeted response to errors and log states. |
-
----
-
-## 🛡️ Design Conformity with Industry Standards
-
-The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
-
-### IEC 61508 / ISO 26262 (Functional Safety Principles)
-The design ensures the safety of critical data through **comprehensive CRC validation** and **automatic error skipping** (Status Code 1). The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.
-
-### ISO/IEC 5055 (Reliability & Maintainability)
-The library achieves maximum transparency and maintainability. The internal encapsulation of complexity and the **clear separation of logical reading and physical error skipping** ensure maximum transparency, which are the cornerstones of this quality standard.
 
 ---
 
