@@ -6,12 +6,13 @@ The architecture of this library follows the highest design requirements from th
 
 **Conclusion:** If you are looking for a library that **guarantees data integrity** and **longevity** across the entire lifecycle of your embedded system, this is the **Gold Standard**.
 
+-------------------------------------------------------------------------------
 **Copyright (C) 2025, Torsten Frieser / automatician**
  
  ***This library is free software: you can redistribute it and/or modify
  it under the terms of the GNU Lesser General Public License as published
  by the Free Software Foundation, either version 2.1 of the License.***
- 
+-------------------------------------------------------------------------------
 📖 The complete manual with public functions, parameters and return values in [API Manual](MANUAL.md).
 
 📖 Starts directly with detailed example codes that will get you to your goal quickly:
