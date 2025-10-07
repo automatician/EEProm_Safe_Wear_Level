@@ -31,6 +31,7 @@ It meets the high requirements for **robustness and failure safety** needed in c
 | :--- | :--- |
 | **FAILURE SAFETY** | Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics). |
 | **CRC with High Detection Rate** | Enhanced CRC checksums for robust detection of data corruption within the EEPROM itself. |
+| **LOGGING FUNCTIONALITY** | Enables secure chronological data logging with API access to the newest/oldest entries and with record navigation. | 
 | **LONG LIFESPAN (Wear-Leveling)**| Utilizes a **Ring Buffer** to spread write cycles evenly, significantly increasing EEPROM endurance. |
 | **TYPE-SAFE I/O** | Generic templates for structs, all primitive types, and C-Strings via dedicated overloads. |
 | **MULTI-PARTITION** | Independent management of multiple logical data areas (Handles 0, 1, 2, ...). |
