@@ -18,7 +18,7 @@ It meets the high requirements for **robustness and failure safety** needed in c
 
 | Feature | Benefit |
 | :--- | :--- |
-| **FAILURE SAFETY** | Each data record is secured with a checksum. Corrupted sectors are ignored (automatic error skipping). |
+| **FAILURE SAFETY** | Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics). |
 | **CRC with High Detection Rate** | Enhanced CRC checksums for robust detection of data corruption within the EEPROM itself. |
 | **LONG LIFESPAN (Wear-Leveling)**| Utilizes a **Ring Buffer** to spread write cycles evenly, significantly increasing EEPROM endurance. |
 | **TYPE-SAFE I/O** | Generic templates for structs, all primitive types, and C-Strings via dedicated overloads. |
