@@ -3,6 +3,8 @@ This document provides a concise reference for all public functions of the EEPro
 The functions **migrateData()** and **getCtrlData()** are optional functions. They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
 * Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
+
+The Log Manager can be found under point **4. Advanced functions**.
 ## 1. Initialization and Configuration
 ### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr)
 Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information.
@@ -68,7 +70,7 @@ Description: Calculates the remaining EEPROM health as a percentage.
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint8_t|The remaining health percentage (0-100).|
-## 4. Advanced Functions
+## 4. Advanced Functions - Log Manager
 ### read(uint8_t readMode, T& value, uint8_t handle, size_t maxSize)
 Description: Reads data into a variable or data structure (T). The function uses the readMode parameter to control the read destination within the ring buffer. While readMode = 0 always returns the most recent status (the default mode), modes 1, 2, and 3 are used to read the data sequentially or from the beginning of the ring buffer. In this context, the wear leveling structure can be utilized as a cyclic, readable data logger. These extended readMode options allow you to use the wear leveling structure not only to store the latest state, but also to function as a fully navigable log file data buffer.
 | Parameter | Type | Description |
