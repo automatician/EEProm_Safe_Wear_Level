@@ -46,9 +46,10 @@ It meets the high requirements for **robustness and failure safety** needed in c
 
 * The complete manual with public functions, parameters, and return values can be found in the **API Manual**.
 * Starts directly with detailed example codes that will get you to your goal quickly:
-    * Demo1: String in an array
-    * Demo2: Store pure states or measured values (numbers, Booleans)
-    * Demo3: Store logical grouping of different but related data in structures
+    * [Demo1](/Examples/demo1_type_char_array.ino): String in an array
+    * [Demo2](/Examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
+    * [Demo3](/Examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
+    * [Demo4](/Examples/demo4_multi_partition.ino): Multi-partition reading and writing
 
 ### Manual Installation Method:
 1. Download the repository's release ZIP file.
