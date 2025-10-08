@@ -1,33 +1,22 @@
-#######################################
+#########################################
 # EEProm_Safe_Wear_Level Keywords
-# Format: KEYWORD_NAME<TAB>KEYWORD_TYPE
-#######################################
+#########################################
 
-# Class Name (KEYWORD1 - Orange/Bold)
+# CLASS (KEYWORD1)
 EEProm_Safe_Wear_Level	KEYWORD1
-EEPRWL	KEYWORD1
-EEProm_Safe_Wear_Level	KEYWORD1
-EEPRWL	KEYWORD1
-EEPRWL_Main	KEYWORD1
-administrative_control_structure	KEYWORD1
-PARTITIONS_DATA	KEYWORD1
+EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level	KEYWORD1
 
-# Public Methods (KEYWORD2 - Orange/Brown)
+# PUBLIC API METHODS (KEYWORD2)
 config	KEYWORD2
-write	KEYWORD2
-read	KEYWORD2
-setVersion	KEYWORD2
 getVersion	KEYWORD2
+setVersion	KEYWORD2
 healthCycles	KEYWORD2
 healthPercent	KEYWORD2
 loadPhysSector	KEYWORD2
+migrateData	KEYWORD2
 getCtrlData	KEYWORD2
+write	KEYWORD2
+read	KEYWORD2
 
-# Utility Keywords (LITERAL2 - Blue)
-handle	LITERAL2
-PARTITIONS	LITERAL2
-ADDR_START	LITERAL2
-PART_LENGTH	LITERAL2
-COUNTER_LEN	LITERAL2
-HANDLE1	LITERAL2
-PAYLOAD_SIZE	LITERAL2
+# READ MODES (LITERAL1) - Assuming these are constants defined elsewhere
+ReadMode	LITERAL1
