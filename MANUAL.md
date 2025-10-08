@@ -4,7 +4,7 @@ The functions **migrateData()** and **getCtrlData()** are optional functions. Th
 * Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
 
-The Log Manager Functions can be found under point **4. Advanced functions**.
+The Log Management Functions can be found under point **4. Advanced functions**.
 ## 1. Initialization and Configuration
 ### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr)
 Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information.
