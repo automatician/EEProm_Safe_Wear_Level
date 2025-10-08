@@ -132,7 +132,7 @@ void setup() {
 
   // 3. Read the last valid int value from the partition and store it in loopCounter.
   // read() is overloaded to process the int value directly.
-  if (EEPRWL_Main.read(0, mySettings, HANDLE1, PAYLOAD_SIZE)) {
+  if (EEPRWL_Main.read(0, mySettings, HANDLE1)) {
     Serial.println(F("Valid data read: ")); 
     Serial.print(F("mySettings.counter: "));Serial.println(mySettings.counter);
     Serial.print(F("mySettings.value: "));Serial.println(mySettings.value);
