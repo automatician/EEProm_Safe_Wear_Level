@@ -44,7 +44,7 @@ It meets the high requirements for **robustness and failure safety** needed in c
 
 ## 🚀 Get Started
 
-* The complete manual with public functions, parameters, and return values can be found in the **API Manual**.
+* The complete manual with public functions, parameters, and return values can be found in the **API Manual** [klick](/MANUAL.md).
 * Starts directly with detailed example codes that will get you to your goal quickly:
     * [Demo1](/Examples/demo1_type_char_array.ino): String in an array
     * [Demo2](/Examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
