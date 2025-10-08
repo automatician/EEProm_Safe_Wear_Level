@@ -29,8 +29,8 @@ Description: Writes a structured data type (T) to the EEPROM. The wear-level cou
 Description: Reads the latest available data from the IO-Buffer into a variable or data structure (T).
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-|readMode|uint8_t|0: reads data from the current sector, <br> 1: reads data from the next sector, <br> 2: reads data from the 
-previous sector, <br> 3: reads the oldest sector (log beginning)|
+|readMode|uint8_t|0: reads data from the current sector <br> 1: reads data from the next sector <br> 2: reads data from the 
+previous sector <br> 3: reads the oldest sector (log beginning) |
 |value|T&|A reference to the target variable or structure where the data will be loaded.|
 |handle|uint8_t|Partition handle.|
 |maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
