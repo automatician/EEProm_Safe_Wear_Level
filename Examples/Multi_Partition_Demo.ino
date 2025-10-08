@@ -1,22 +1,16 @@
-/*
- ******************************************************************************
- * EEProm_Safe_Wear_Level Library v25.10.5 (Multi-Partition, Single Instance)
- * Copyright (C) 2025, Torsten Frieser / automatician
- *
- * This library is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation, either version 2.1 of the License, or
- * (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this library. If not, see <http://www.gnu.org/licenses/>.
- *****************************************************************************
- */
+// #############################################
+// ########## Demo4: multi partition ###########
+// #############################################
+// EEProm_Safe_Wear_Level Library v25.10.5
+// #############################################
+// 
+// This demo illustrates the use of multiple partitions with a single 
+// instance of the library. Different data types are used for each 
+// artition. This demo is kept simple to allow an easy introduction 
+// to the topic.
+// This demo builds on previous ones. Please understand that a basic
+// understanding from those other demos is a prerequisite.
+//
 
 #include <EEProm_Safe_Wear_Level.h>
 #include <Arduino.h>
