@@ -95,7 +95,8 @@ EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr)
       _secSize(0),
       _maxLgcCnt(0),
       _handle(0xFF),
-      _handle1(0xFF)
+      _handle1(0xFF),
+      _usedSector(0)
 {}
 // ----------------------------------------------------------------------------------------------------
 // --- PUBLIC API ---
@@ -314,7 +315,7 @@ bool EEProm_Safe_Wear_Level::migrateData(uint8_t handle, uint8_t targetHandle, u
 
 uint16_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t handle) {
     _START_
-    uint16_t success;  uint16_t x;
+    uint16_t success;  uint16_t x; _usedSector = 0;
 
     if (physSector == -1) {
         physSector = _numSecs-1;
@@ -346,6 +347,7 @@ uint16_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t han
         success = _nextPhSec;
     } else {
         _status = 1;
+        if (_usedSector == 0)_status = 7;
         success = 0;
     }
 
@@ -538,6 +540,7 @@ bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) 
 uint8_t EEProm_Safe_Wear_Level::calculateCRC(const uint8_t *data, size_t length) {
     uint8_t crc = 0x00; // Initialwert 0 (Oft auch 0xFF, hier 0x00 für Einfachheit/Kompaktheit)
     for (size_t i = 0; i < length; i++) {
+        if (data[i] > 0) _usedSector = 1;
         crc ^= data[i]; // XOR mit dem nächsten Daten-Byte
         for (uint8_t j = 0; j < 8; j++) {
             if (crc & 0x80) { // Prüfen, ob das MSB gesetzt ist
@@ -610,4 +613,7 @@ void EEProm_Safe_Wear_Level::_end(){
 }
 
 // ----------------------------------------------------------------------------------------------------
+
 // END OF CODE
+
+
