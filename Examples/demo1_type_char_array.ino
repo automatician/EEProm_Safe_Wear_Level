@@ -193,7 +193,7 @@ void setup() {
   // 3. Read the last valid value
   // Returns TRUE (1) on success.
   
-  if (EEPRWL_Main.read(MY_DATA, HANDLE1, PAYLOAD_SIZE)) {
+  if (EEPRWL_Main.read(0, MY_DATA, HANDLE1, PAYLOAD_SIZE)) {
     Serial.print(F("Valid data read: "));
     Serial.println(MY_DATA);
   }else{
