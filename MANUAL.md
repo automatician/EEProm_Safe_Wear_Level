@@ -70,7 +70,7 @@ Description: Calculates the remaining EEPROM health as a percentage.
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint8_t|The remaining health percentage (0-100).|
-## 4. Advanced Functions - Log Manager
+## 4. Advanced Functions - Log Management
 ### read(uint8_t readMode, T& value, uint8_t handle, size_t maxSize)
 Description: Reads data into a variable or data structure (T). The function uses the readMode parameter to control the read destination within the ring buffer. While readMode = 0 always returns the most recent status (the default mode), modes 1, 2, and 3 are used to read the data sequentially or from the beginning of the ring buffer. In this context, the wear leveling structure can be utilized as a cyclic, readable data logger. These extended readMode options allow you to use the wear leveling structure not only to store the latest state, but also to function as a fully navigable log file data buffer.
 | Parameter | Type | Description |
