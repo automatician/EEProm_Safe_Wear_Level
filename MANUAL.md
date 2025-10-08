@@ -25,10 +25,12 @@ Description: Writes a structured data type (T) to the EEPROM. The wear-level cou
 |value|const T&|A reference to the data structure or variable to be stored. sizeof(T) must be less than or equal to the configured PayloadSize.|
 |handle|uint8_t|Partition handle.|
 |Return|bool|*true* on success, *false* on error (e.g., logical counter limit reached, internal error).
-### read(T& value, uint8_t handle, size_t maxSize)
+### read(uint8_t readMode, T& value, uint8_t handle, size_t maxSize)
 Description: Reads the latest available data from the IO-Buffer into a variable or data structure (T).
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
+|readMode|uint8_t|0: reads data from the current sector, 1: reads data from the next sector, 2: reads data from the 
+previous sector, 3: reads the oldest sector (log beginning)|
 |value|T&|A reference to the target variable or structure where the data will be loaded.|
 |handle|uint8_t|Partition handle.|
 |maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
