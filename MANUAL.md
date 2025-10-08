@@ -26,10 +26,10 @@ Description: Writes a structured data type (T) to the EEPROM. The wear-level cou
 |handle|uint8_t|Partition handle.|
 |Return|bool|*true* on success, *false* on error (e.g., logical counter limit reached, internal error).
 ### read(uint8_t readMode, T& value, uint8_t handle, size_t maxSize)
-Description: Reads the latest available data from the IO-Buffer into a variable or data structure (T).
+Description: Reads data into a variable or data structure (T). If the readMode parameter is set to the default value 0, the function reads the data from the currently valid sector (Current Sector). This mode is used for normal operation to always retrieve the last saved state of the current data from a partition.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-|readMode|uint8_t|0: reads data from the current sector <br> 1: reads data from the next sector <br> 2: reads data from the previous sector <br> 3: reads the oldest sector (log beginning) |
+|readMode|uint8_t|0: reads data from the current sector|
 |value|T&|A reference to the target variable or structure where the data will be loaded.|
 |handle|uint8_t|Partition handle.|
 |maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
@@ -65,9 +65,35 @@ Description: Calculates the remaining EEPROM health as a percentage.
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint8_t|The remaining health percentage (0-100).|
-## 4. Log-Function (Advanced)
+## 4. Advanced Functions
+### read(uint8_t readMode, T& value, uint8_t handle, size_t maxSize)
+Description: Reads data into a variable or data structure (T). The function uses the readMode parameter to control the read destination within the ring buffer. While readMode = 0 always returns the most recent status (the default mode), modes 1, 2, and 3 are used to read the data sequentially or from the beginning of the ring buffer. In this context, the wear leveling structure can be utilized as a cyclic, readable data logger. These extended readMode options allow you to use the wear leveling structure not only to store the latest state, but also to function as a fully navigable log file data buffer.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|readMode|uint8_t| 1: reads data from the next sector <br> 2: reads data from the previous sector <br> 3: reads the oldest sector (log beginning) |
+|value|T&|A reference to the target variable or structure where the data will be loaded.|
+|handle|uint8_t|Partition handle.|
+|maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
+|Return|bool|*true* if valid data was successfully read and loaded, otherwise *false* (e.g., if the IO-Buffer is empty or invalid).|migrateData(uint8_t handle, uint8_t targetHandle, uint16_t count)
+### migrateData(uint8_t source, uint8_t target, uint16_t count)
+Google Search
+The migrateData() function is a special tool for data transfer and maintenance between two separate storage areas (partitions) of your wear-leveling structure. It allows you to copy a specific amount of data from one defined partition (source handle) to another partition (destination handle). The main purpose of this function is to consolidate data and handle version updates in the EEPROM.
+#### Backup and Restore
+In more complex systems, this function could serve as the basis for a manual backup routine, copying the contents of a critical handle to a separate, less frequently used handle.
+#### Logically Exhausted Partitions
+The *migrateData()* function addresses the issue where a partition's logical counter has reached its maximum, making the partition logically "full" or "exhausted" from the wear-leveling algorithm's perspective, thus preventing further writes.
+#### 1. Releasing the Partition
+The function works by reading the last valid data record (the current state) from the logically exhausted partition (sourceHandle) and writing it to a new, freshly configured partition (targetHandle).
+#### 2. Restoring Write Cycles
+The new partition (target handle) immediately regains its maximum available number of write cycles (e.g., 65,535+) because its logical counter starts at zero. This process effectively allows the user to retire the old, exhausted partition, and potentially reuse or reformat the underlying EEPROM memory space, significantly extending the overall endurance and longevity of the EEPROM storage.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| source | uint8_t | Handle of the source partition. | 
+| target | uint8_t | Handle of the target partition. | 
+| count | uint16_t | The counter, how many last log entries (newest sectors) are transferred to the target partition. |
+**WARNING:** The migrateData() function does not automatically format the source partition (sourceHandle) upon successful migration, as this is a deliberate design choice to prevent the immediate deletion of data, thus supporting backup and data recovery strategies.
 ### loadPhysSector(uint16_t physSector, uint8_t handle)
-Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example. 
+Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example. This function does not deliver the data directly to a user variable, but makes it accessible in the cache for subsequent internal operations (e.g., for checking the metadata or a subsequent read() operation).
  * The *loadPhysSector()* function always requires the next physical sector to be written to derive the sector to be read. It achieves this by decrementing the passed sector index by 1.
  * The *loadPhysSector()* function checks the passed sector for an overflow and handles this overflow correctly, meaning the user does not have to deal with it.
  * If any arbitrary, freely determined physical sector must be read, it must be passed to the *loadPhysSector()* function incremented by +1.
