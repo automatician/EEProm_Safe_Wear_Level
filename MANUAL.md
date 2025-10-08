@@ -107,7 +107,7 @@ Description: Loads the payload and control data of a specific physical EEPROM se
 | :--- | :--- | :--- |
 |physSector|uint16_t|The physical sector to be loaded + 1|
 |handle|uint8_t|Partition handle.|
-|Return|uint16_t|The physical index of the sector that will be used in the next write operation (write()), additionally increases +1. This value reflects the internal subsequent state of the wear-leveling mechanism after loading.|
+|Return|uint16_t| 0: error / 1: ok (false or true) |
 ## 5. Controll Data (Advanced)
 ### getCtrlData(int offs, int handle)
 Description: Reads a 32-bit value (4 bytes) from a specific offset within the ControlData structure of the currently loaded partition data.
