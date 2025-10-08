@@ -164,6 +164,7 @@ class EEProm_Safe_Wear_Level {
       uint32_t _maxLgcCnt;
       uint8_t  _handle;
       uint8_t  _handle1;
+      uint8_t  _usedSector;
 };
 
 // ----------------------------------------------------------------------------------------------------
