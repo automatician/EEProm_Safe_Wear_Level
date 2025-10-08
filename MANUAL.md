@@ -76,7 +76,6 @@ Description: Reads data into a variable or data structure (T). The function uses
 |maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
 |Return|bool|*true* if valid data was successfully read and loaded, otherwise *false* (e.g., if the IO-Buffer is empty or invalid).|migrateData(uint8_t handle, uint8_t targetHandle, uint16_t count)
 ### migrateData(uint8_t source, uint8_t target, uint16_t count)
-Google Search
 The migrateData() function is a special tool for data transfer and maintenance between two separate storage areas (partitions) of your wear-leveling structure. It allows you to copy a specific amount of data from one defined partition (source handle) to another partition (destination handle). The main purpose of this function is to consolidate data and handle version updates in the EEPROM.
 #### Backup and Restore
 In more complex systems, this function could serve as the basis for a manual backup routine, copying the contents of a critical handle to a separate, less frequently used handle.
