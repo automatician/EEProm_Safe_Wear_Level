@@ -110,7 +110,7 @@ void setup() {
   // (1 byte logical counter and 1 byte checksum). In addition, each
   // partition has 4 bytes at the beginning for identification and for an
   // additional counter (2 bytes = 16 bit). This counter is set with
-  // setVersion(). 
+  // setVersion(). getVersion() returns this counter.
 
   // The Counter Length in bytes determines how large the Logical Counter
   // for sectors can become:
@@ -135,13 +135,14 @@ void setup() {
   // The config() method does NOT store an error status in the RAM handle, but
   // it returns a success status: TRUE or FALSE (1 or 0)
 
-  int STATUS = EEPRWL_Main.config(ADDR_START, PART_LENGTH, PAYLOAD_SIZE,
-                                    COUNTER_LEN, HANDLE1);
+  int STATUS = EEPRWL_Main.config(ADDR_START, PART_LENGTH, PAYLOAD_SIZE, COUNTER_LEN, HANDLE1);
 
   // The config() method calculates various values and, if necessary, sets up
   // a partition in the EEPROM. The calculated values are stored in the
   // administrative data structure. This saves time and memory space for
-  // redundant code calls during subsequent function calls. 
+  // redundant code calls during subsequent function calls.
+  // config() also searches for the latest valid data record/sector
+  // in a partition. This can then be read.
 
   // Corrected if/else block:
   if(STATUS > 0){ // Status > 0 means the version number is set
@@ -152,24 +153,9 @@ void setup() {
     Serial.println(F("Configuration not successful!"));
   }
 
-
-  // 2. Restore state / reformat
-  
-  EEPRWL_Main.setVersion(1, HANDLE1);
-
-  // The Handle ID (partition number) to which the operation refers.
-  // It must match the ID previously used in the config() function
-  // for this partition (e.g., HANDLE1).
-  // The version number that is written to the partition must be specified.
-  // Changing this number reformats the partition, overwriting all old data,
-  // and logically declaring it invalid.
-  // setVersion() also searches for the latest valid data record/sector
-  // in a partition. This can then be read.
-  //
   // Function of the version number during formatting:
   // The version number (which you set via setVersion()) is the
-  // master counter of the partition. It controls when a partition is logically
-  // considered "empty" or "new".
+  // master counter of the partition.
   //
   // Reactivation and Reset:
   // If a partition enters the state of logical saturation (Error 0x03),
@@ -224,14 +210,13 @@ void setup() {
   // EEPROM and transferred to the target buffer (Function 2 and 1).
   // Role: This serves as an explicit upper limit and is the primary
   // safety mechanism to prevent RAM buffer overflows in the
-  // target array.
-  // Ensure that the buffer is large enough to hold the specified
+  // target array. For char* (String-Arrays) you need PAYLOAD_SIZE for
+  // reading. Ensure that the buffer is large enough to hold the specified
   // PAYLOAD_SIZE!
-  // This function: read(MY_DATA, PAYLOAD_SIZE, HANDLE1) cannot
-  // process string objects (std::string)!
+  // This function: read() cannot process string objects (std::string)!
   // It is optimized for the safe management of **structs** (Plain Old
-  // Data) and **C-Arrays** (char*), as these offer the best basis to
-  // plan the data volume at design time and to hard-code it.   
+  // Data) and **C-String-Arrays** (char*), as these offer the best basis 
+  // to plan the data volume at design time and to hard-code it.   
 }
 
 void loop() {
@@ -258,6 +243,4 @@ void loop() {
 
   delay(5000);
 }
-
-
 // END OF CODE
