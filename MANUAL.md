@@ -12,7 +12,7 @@ Description: The standard constructor for the class. It requires a pointer to a 
 | :--- | :--- | :--- |
 |ramHandlePtr |uint8_t* | Pointer to the beginning of the RAM buffer/cache. The required size is determined by PayloadSize and internal metadata.|
 ### config(uint16_t startAddress, uint16_t totalBytesUsed, uint16_t PayloadSize, uint8_t cntLengthBytes, uint8_t handle)
-Description: Initializes and configures the EEPROM wear-leveling partition. This function must be called once before any read/write operations. It automatically finds the latest valid data or reformats the partition if necessary.
+Description: Initializes and configures the EEPROM wear-leveling partition. This function must be called when the microcontroller is rebooted to create a partition. It formats the partition if the configuration data has changed.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |startAddress|uint16_t|The starting address of the partition in the physical EEPROM.|
