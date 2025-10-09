@@ -71,7 +71,7 @@ void setup() {
   }
 }
 
-// --- 4. Main Loop (Writing) ---
+// --- 3. Main Loop (Writing) ---
 
 void loop() {
   loopCounter++;
