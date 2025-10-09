@@ -125,12 +125,7 @@ void setup() {
     Serial.println(F("Configuration unsuccessful or partition is empty!")); // Konfiguration nicht erfolgreich oder Partition leer!
   }
 
-  // 2. Set/update the Partition Version.
-  // Incrementing the version resets the partition (Reset/Formatting for wear-leveling).
-  // We use a fixed number: 3
-  EEPRWL_Main.setVersion(3, HANDLE1);
-
-  // 3. Read the last valid int value from the partition and store it in loopCounter.
+  // 2. Read the last valid int value from the partition and store it in loopCounter.
   // read() is overloaded to process the int value directly.
   if (EEPRWL_Main.read(0, mySettings, HANDLE1)) {
     Serial.println(F("Valid data read: ")); 
@@ -144,7 +139,7 @@ void setup() {
   }
 }
 
-// --- 4. Main Loop (Writing) ---
+// --- 3. Main Loop (Writing) ---
 
 void loop() {
   loopCounter++;
