@@ -15,7 +15,7 @@ The library implements a three-level security policy to ensure the structural in
 * Configuration Integrity (Control Hash)
   * The 1-byte Control Hash (CRC-8) checks the physical properties of this specific partition.
 ### Automatic Reformatting and Partial Advantage
-Automatic reformatting is triggered if one of the three stages fails:
+If any of the three previously mentioned checks fail, the automatic partial reformat is triggered.
 * Corruption Prevention: The CRC-8 control hash ensures that any change to the partition's configuration parameters (made in the ino code) is detected. This prevents old data from conflicting with the incorrect, new structure.
 * Partial Advantage: Because each partition stores and verifies its own control hash and magic ID, a configuration change is limited to the affected partition. All other correctly configured partitions in the EEPROM remain unaffected and functional.
   
