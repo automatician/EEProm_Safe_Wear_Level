@@ -5,6 +5,20 @@ The functions **migrateData()** and **getCtrlData()** are optional functions. Th
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
 
 The **Log Management Functions** can be found under point **4. Advanced functions**.
+
+## Security, Integrity and Partial Reformatting
+The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.
+Level 1: Library Compatibility (Magic ID)
+* The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
+* Version Control (Partition Version / Overwrite Counter)
+* * The version number defined in the code is higher than the one stored in the EEPROM. This is required for planned data structure updates (migration path).
+* Configuration Integrity (Control Hash)
+* * The 1-byte Control Hash (CRC-8) checks the physical properties of this specific partition.
+### Automatic Reformatting and Partial Advantage
+Automatic reformatting is triggered if one of the three stages fails:
+* Corruption Prevention: The CRC-8 control hash ensures that any change to the partition's configuration parameters (made in the ino code) is detected. This prevents old data from conflicting with the incorrect, new structure.
+* Partial Advantage: Because each partition stores and verifies its own control hash and magic ID, a configuration change is limited to the affected partition. All other correctly configured partitions in the EEPROM remain unaffected and functional.
+  
 ## 1. Initialization and Configuration
 ### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr)
 Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information.
@@ -20,7 +34,7 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |PayloadSize|uint16_t|The size (in bytes) of the actual payload data to be stored. This determines the overall sector size.|
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
 |handle|uint8_t|Partition handle.|
-|Return|uint16_t|Status code: =0 Error, >0 Partition Version / Override Counter 1 to 65535|
+|Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
@@ -45,11 +59,11 @@ For character arrays (char*), specific, non-templated overloads are available to
  * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
 ## 3. Versioning and Health Monitoring
 ### getVersion(uint8_t handle)
-Description: Retrieves the user-defined version number / override counter stored in the control data.
+Description: Retrieves the user-defined version number / Overwrite counter stored in the control data.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
-|Return|uint16_t|The current version number of the stored data (the current override counter 0-65535)
+|Return|uint16_t|The current version number of the stored data (the current Overwrite counter 0-65535)
 ### setVersion(uint16_t value, uint8_t handle)
 Description: Sets a new user-defined version number. If the version number / counter number passed is different from the one already stored, the partition will be formatted (all data will be lost) and the sector counters will be set to 0.
 | Parameter | Type | Description |
