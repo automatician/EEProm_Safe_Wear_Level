@@ -8,8 +8,8 @@ The **Log Management Functions** can be found under point **4. Advanced function
 
 ## Security, Integrity and Partial Reformatting
 The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.
-Level 1: Library Compatibility (Magic ID)
-* The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
+* Library Compatibility (Magic ID)
+* * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
 * Version Control (Partition Version / Overwrite Counter)
 * * The version number defined in the code is higher than the one stored in the EEPROM. This is required for planned data structure updates (migration path).
 * Configuration Integrity (Control Hash)
