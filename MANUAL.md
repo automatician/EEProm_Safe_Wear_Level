@@ -11,7 +11,7 @@ The library implements a three-level security policy to ensure the structural in
 * Library Compatibility (Magic ID)
   * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
 * Version Control (Partition Version / Overwrite Counter)
-  * The version number defined in the code is higher than the one stored in the EEPROM. This is required for planned data structure updates (migration path).
+  * The version number defined in the code is different than the one stored in the EEPROM. This is required for planned data structure updates (migration path).
 * Configuration Integrity (Control Hash)
   * The 1-byte Control Hash (CRC-8) checks the physical properties of this specific partition.
 ### Automatic Reformatting and Partial Advantage
