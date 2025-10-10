@@ -59,7 +59,7 @@ For character arrays (char*), specific, non-templated overloads are available to
  * bool write(const char* value, uint8_t handle)
  * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
 ## 3. Versioning and Health Monitoring
-### getVersion(uint8_t handle)
+### getOverwCounter(uint8_t handle)
 Description: Retrieves the user-defined version number / Overwrite counter stored in the control data.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
