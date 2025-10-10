@@ -65,11 +65,11 @@ Description: Retrieves the user-defined version number / Overwrite counter store
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|The current version number of the stored data (the current Overwrite counter 0-65535)
-### setVersion(uint16_t value, uint8_t handle)
-Description: Sets a new user-defined version number. If the version number / counter number passed is different from the one already stored, the partition will be formatted (all data will be lost) and the sector counters will be set to 0.
+### initialize(bool forceFormat, uint8_t handle)
+Description: The partition will be formatted, if forceFormat = 1 (all data will be lost) and the sector counters will be set to 0. Otherwise, the function checks the format or version of the partitions and only formats them if there are deviations to ensure the data structure.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-|value|uint16_t|The new version number to store.|
+|forceFormat|bool| *1 / true* forces formatting of the partition specified by handle|
 |handle|uint8_t|Partition handle.|
 |Return|bool|*true* = latest sector found / *false* = no latest sector found|
 ### healthCycles(uint8_t handle)
