@@ -36,6 +36,19 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
+## 1.5 Write Budgeting
+Stellt die notwendige Zeitbasis bereit, um ein Schreibbudget zu akkumulieren. Verhindert eine Überlastung des Mikrocontrollers durch zu häufige Schreibzugriffe auf das EEPROM und stärkt somit die Lebensdauergarantie des Gesamtsystems. Eine von beiden folgenden Funktionen müssen sie benutzen, damit das Wear Leveling Subsystem funktioniert.
+### oneTickPassed()
+Beschreibung: Diese Funktion muss bei Nutzung regelmäßig vom externen Timer oder Interrupt-Handler in Intervallen (Sekunden, wie im Konstruktor konfiguriert) aufgerufen werden. Sie ist für eine präzise Zeiterfassung konzipiert und verwendet einen logischen Zähler und einen Restakkumulator, um sicherzustellen, dass selbst bei großen Überläufen (≥3600 s) keine Sekunde in der Zeiterfassung verloren geht. Sie nutzen diese Funktion alternativ zu der Funktion idle(), eine gemeinsame Nutzung ist redundant und unnötig. Der Compiler integriert den Code der Funktion nur, wenn er von Ihnen genutzt wird.
+Warnung: Wenn diese Funktion unkontrolliert, außerhalb eines festen Interval aufgerufen wird, geht die Sicherheit durch die Budgetierung verloren.
+| Rückgabe | Typ | Beschreibung |
+| :--- | :--- | :--- |
+| void | | |
+### idle()
+Beschreibung: Dies ist eine alternative Funktion zu oneTickPassed(), die bei Nutzung innerhalb der Hauptschleife aufgerufen werden soll. Die häufigkeit des Aufrufs ist nicht kritisch, sollte aber mehr als ein Mal pro Stunde erfolgen. Sie nutzt aus kompatibilitätsgründen die interne millis()-Zeitbasis, ist damit nicht hardwareabhängig und belegt keine wertvollen Interrupts in Ihrem Code. Sie nutzen diese Funktion alternativ zu der Funktion oneTickPassed(), eine gemeinsame Nutzung ist redundant und unnötig. Der Compiler integriert den Code der Funktion nur, wenn er von Ihnen genutzt wird.
+| Rückgabe | Typ | Beschreibung |
+| :--- | :--- | :--- |
+| void | | |
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
