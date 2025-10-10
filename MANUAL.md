@@ -141,7 +141,7 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |11|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
 |12|2|uint16_t|for internal use|
 |13|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
-|14|2|uint16_t|CHECKSUM (of this Control Block)|
+|15|2|uint8_t|CHECKSUM (of this Control Block)|
 ### Status Flag at Offset 13
 | Code | Meaning |
 | :--- | :--- |
