@@ -136,9 +136,10 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |0|4|uint32_t|ACT. LOGICAL SECTOR (Dynamic)|
 |4|2|uint16_t|NEXT PHYSICAL SECTOR (Dynamic) FOR WRITING|
 |6|2|uint16_t|THIS PARTITION START ADDRESS IN EEPROM|
-|8|2|uint16_t|PAYLOAD SIZE IN BYTES|
-|10|2|uint16_t|NUMBER OF SECTORS IN THIS PARTITION|
-|12|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
+|8|2|uint16_t|NUMBER OF SECTORS IN THIS PARTITION|
+|10|1|uint8_t|PAYLOAD SIZE IN BYTES|
+|11|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
+|12|2|uint16_t|for internal use|
 |13|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
 |14|2|uint16_t|CHECKSUM (of this Control Block)|
 ### Status Flag at Offset 13
