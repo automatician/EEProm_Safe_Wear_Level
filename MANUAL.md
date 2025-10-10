@@ -37,12 +37,7 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
 ## 1.5 Integrated Time-Based Longevity Governance
-This library assumes responsibility for the time guarantee by actively monitoring and managing the physical limit. It enables lifetime governance (regulation and monitoring) by projecting the physical limit onto the economically important time axis. The following functions provide the necessary time base to maintain a lifetime guarantee for the overall system. For the wear-leveling subsystem to function, one of the two functions must be used. 
-### Features
-* Continuous, verifiable time forecasting.
-* Automatic longevity compliance.
-### 
-
+The manufacturer-guaranteed EEPROM write cycles are converted into a monitorable, preconfigurable guaranteed operating time. This allows the physical limit to be projected onto the economically relevant time axis. The following functions provide the necessary time base to maintain a lifetime guarantee for the entire system. One of the two functions must be used for the wear-leveling subsystem to function.
 ### oneTickPassed()
 Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
 **Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
