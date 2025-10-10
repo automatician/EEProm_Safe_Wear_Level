@@ -36,8 +36,14 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
-## 1.5 Write Budgeting
-Provides the necessary time base to accumulate a write budget. Prevents overloading the microcontroller due to excessive write accesses to the EEPROM, thus strengthening the lifetime guarantee of the entire system. You must use one of the following two functions for the wear leveling subsystem to function.
+## 1.5 Integrated Time-Based Longevity Governance
+This library assumes responsibility for the time guarantee by actively monitoring and managing the physical limit. It enables lifetime governance (regulation and monitoring) by projecting the physical limit onto the economically important time axis. The following functions provide the necessary time base to maintain a lifetime guarantee for the overall system. For the wear-leveling subsystem to function, one of the two functions must be used. 
+### Features
+* Continuous, verifiable time forecasting.
+* Emergency reserve.
+* Automatic longevity compliance.
+### 
+
 ### oneTickPassed()
 Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
 **Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
