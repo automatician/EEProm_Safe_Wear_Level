@@ -10,8 +10,8 @@ The **Log Management Functions** can be found under point **4. Advanced function
 The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.
 * Library Compatibility (Magic ID)
   * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
-* Version Control (Partition Version / Overwrite Counter)
-  * The version number defined in the code is different than the one stored in the EEPROM. This is required for planned data structure updates (migration path).
+* Overwrite Counter
+  * Indicates how many times a partition has been formatted. If the logical counter is lower, it can be reset by formatting. The write cycles can be calculated as follows: **Total write cycles = (Overwrite counter × Logical counter capacity) + Logical counter**. Logical counter capacity is the maximum value (e.g., 255 or 65535) that the logical counter can reach before overflow forces the system to move to the next physical sector.
 * Configuration Integrity (Control Hash)
   * The 1-byte Control Hash (CRC-8) checks the physical properties of this specific partition.
 ### Automatic Reformatting and Partial Advantage
