@@ -140,8 +140,8 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |10|1|uint8_t|PAYLOAD SIZE IN BYTES|
 |11|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
 |12|2|uint16_t|for internal use|
-|13|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
-|15|2|uint8_t|CHECKSUM (of this Control Block)|
+|14|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
+|15|1|uint8_t|CHECKSUM (of this Control Block)|
 ### Status Flag at Offset 13
 | Code | Meaning |
 | :--- | :--- |
