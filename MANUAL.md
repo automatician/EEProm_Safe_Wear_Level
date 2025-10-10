@@ -39,7 +39,7 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 ## 1.5 Write Budgeting
 Provides the necessary time base to accumulate a write budget. Prevents overloading the microcontroller due to excessive write accesses to the EEPROM, thus strengthening the lifetime guarantee of the entire system. You must use one of the following two functions for the wear leveling subsystem to function.
 ### oneTickPassed()
-Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it.
+Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
 **Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
