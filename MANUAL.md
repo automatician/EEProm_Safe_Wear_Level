@@ -40,7 +40,6 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 This library assumes responsibility for the time guarantee by actively monitoring and managing the physical limit. It enables lifetime governance (regulation and monitoring) by projecting the physical limit onto the economically important time axis. The following functions provide the necessary time base to maintain a lifetime guarantee for the overall system. For the wear-leveling subsystem to function, one of the two functions must be used. 
 ### Features
 * Continuous, verifiable time forecasting.
-* Emergency reserve.
 * Automatic longevity compliance.
 ### 
 
