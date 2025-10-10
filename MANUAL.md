@@ -37,18 +37,18 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
 ## 1.5 Write Budgeting
-Stellt die notwendige Zeitbasis bereit, um ein Schreibbudget zu akkumulieren. Verhindert eine Überlastung des Mikrocontrollers durch zu häufige Schreibzugriffe auf das EEPROM und stärkt somit die Lebensdauergarantie des Gesamtsystems. Eine von beiden folgenden Funktionen müssen sie benutzen, damit das Wear Leveling Subsystem funktioniert.
+Provides the necessary time base to accumulate a write budget. Prevents overloading the microcontroller due to excessive write accesses to the EEPROM, thus strengthening the lifetime guarantee of the entire system. You must use one of the following two functions for the wear leveling subsystem to function.
 ### oneTickPassed()
-Beschreibung: Diese Funktion muss bei Nutzung regelmäßig vom externen Timer oder Interrupt-Handler in Intervallen (Sekunden, wie im Konstruktor konfiguriert) aufgerufen werden. Sie ist für eine präzise Zeiterfassung konzipiert und verwendet einen logischen Zähler und einen Restakkumulator, um sicherzustellen, dass selbst bei großen Überläufen (≥3600 s) keine Sekunde in der Zeiterfassung verloren geht. Sie nutzen diese Funktion alternativ zu der Funktion idle(), eine gemeinsame Nutzung ist redundant und unnötig. Der Compiler integriert den Code der Funktion nur, wenn er von Ihnen genutzt wird.
-Warnung: Wenn diese Funktion unkontrolliert, außerhalb eines festen Interval aufgerufen wird, geht die Sicherheit durch die Budgetierung verloren.
-| Rückgabe | Typ | Beschreibung |
+Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it.
+**Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
+| Parameter | Type | Description |
 | :--- | :--- | :--- |
-| void | | |
+| | void | no return value |
 ### idle()
-Beschreibung: Dies ist eine alternative Funktion zu oneTickPassed(), die bei Nutzung innerhalb der Hauptschleife aufgerufen werden soll. Die häufigkeit des Aufrufs ist nicht kritisch, sollte aber mehr als ein Mal pro Stunde erfolgen. Sie nutzt aus kompatibilitätsgründen die interne millis()-Zeitbasis, ist damit nicht hardwareabhängig und belegt keine wertvollen Interrupts in Ihrem Code. Sie nutzen diese Funktion alternativ zu der Funktion oneTickPassed(), eine gemeinsame Nutzung ist redundant und unnötig. Der Compiler integriert den Code der Funktion nur, wenn er von Ihnen genutzt wird.
-| Rückgabe | Typ | Beschreibung |
+Description: This is an **alternative function to oneTickPassed()**, which should be called within the main loop when used. The frequency of the call is not critical, but should occur more than once per hour. For compatibility reasons, it uses the internal millis() timebase, so it is not hardware-dependent and does not consume valuable interrupts in your code. You use this function as an alternative to the oneTickPassed() function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it.
+| Parameter | Type | Description |
 | :--- | :--- | :--- |
-| void | | |
+| | void | no return value |
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
