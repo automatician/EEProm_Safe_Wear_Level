@@ -64,7 +64,7 @@ Description: Retrieves the user-defined version number / Overwrite counter store
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | handle | uint8_t | Partition handle. |
-| Return | uint16_t | The current counter overwrite counter 0-65535) |
+| Return | uint16_t | The current overwrite counter 0-65535) |
 ### initialize(bool forceFormat, uint8_t handle)
 Description: The partition will be formatted, if forceFormat = 1 (all data will be lost) and the sector counters will be set to 0. Otherwise, the function checks the format or version of the partitions and only formats them if there are deviations to ensure the data structure.
 | Parameter | Type | Description |
