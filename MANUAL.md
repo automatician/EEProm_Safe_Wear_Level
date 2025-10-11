@@ -177,4 +177,5 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |5|Critical error: Control data corrupted (CRC fails).|
 |6|Write attempt: missing *maxSize* for reading string.|
 |7|The last read sector is empty / not used.|
+|8|To excessive use: Write Shedding is active.|
 
