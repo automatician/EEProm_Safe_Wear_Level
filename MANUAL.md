@@ -39,7 +39,7 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 ## 1.5 Write Load Management
 **Purpose**: It ensures that the EEPROM write cycles are not prematurely and unnoticed used up by a constantly too high average usage rate. <br>
 
-**Adaptive Write Budgeting**
+**Write Budgeting**
 
 It is the strategic function of this library. It describes the proactive approach to mapping the entire physical lifetime of the EEPROM to the planned product lifespan.
 
