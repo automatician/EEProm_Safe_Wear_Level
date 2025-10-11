@@ -23,12 +23,22 @@ The library achieves maximum transparency and maintainability. The internal enca
 
 It meets the high requirements for **robustness and failure safety** needed in commercial or critical projects.
 
+## Write Load Management
+The library implements an innovative Write Load Management system for protecting EEPROM lifespan, extending beyond conventional wear-leveling.
+
+### Write Budgeting
+This is the library's strategic function. It describes the proactive approach to mapping the entire physical lifespan (Endurance) of the EEPROM to the planned product lifespan, and time-based allocation of the write budget.
+
+### Write Shedding 
+This is the library's short-term, reactive protection mechanism, which is triggered only when the write frequency is overloaded (analogous to Load Shedding in the power grid). It is the response to a worst-case scenario (such as a software bug) that would damage the EEPROM outside of your planning. Since this mechanism actively throttles write cycles by temporarily preventing them, your application software should evaluate its status and respond proactively.
+
 ---
 
 ## Key Features of v25.10.5
 
 | Feature | Benefit |
 | :--- | :--- |
+| **WRITE LOAD MANAGEMENT** | Guaranteed longevity through strategic write budgeting (time-based allocation) and **Write Shedding** (protection against overload). |
 | **FAILURE SAFETY** | Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics). |
 | **CRC with High Detection Rate** | Enhanced CRC checksums for robust detection of data corruption within the EEPROM itself. |
 | **LOGGING FUNCTIONALITY** | Enables secure chronological data logging with API access to the newest/oldest entries and with record navigation. | 
