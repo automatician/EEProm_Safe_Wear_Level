@@ -53,12 +53,12 @@ Description: This function must be called regularly by the external timer or int
 **Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-| | void | no return value |
+| no | void | no return value |
 ### idle()
 Description: This is an **alternative function to oneTickPassed()**, which should be called within the main loop when used. The frequency of the call is not critical, but should occur more than once per hour. For compatibility reasons, it uses the internal millis() timebase, so it is not hardware-dependent and does not consume valuable interrupts in your code. You use this function as an alternative to the oneTickPassed() function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-| | void | no return value |
+| no | void | no return value |
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
