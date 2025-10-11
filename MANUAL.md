@@ -36,8 +36,11 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |cntLengthBytes|uint8_t|The number of bytes used for the wear-level counter (e.g., 4 for a 32-bit counter, max 4).|
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
-## 1.5 Integrated Time-Based Longevity Governance
-The manufacturer-guaranteed EEPROM write cycles are converted into a monitorable, preconfigurable guaranteed operating time. This allows the physical limit to be projected onto the economically relevant time axis. The following functions provide the necessary time base to maintain a lifetime guarantee for the entire system. One of the two functions must be used for the wear-leveling subsystem to function.
+## 1.5 Write Load Management
+**Purpose**: It ensures that the EEPROM write cycles are not prematurely and unnoticed used up by a constantly too high average usage rate. <br>
+
+Adaptive Write Budgeting is the strategic function of this library. It describes the proactive approach to mapping the entire physical lifetime of the EEPROM to the planned product lifespan. Write shedding is the library's short-term, reactive protection mechanism that is only activated when the write frequency is overloaded. It is the response to a worst-case scenario that would damage the EEPROM beyond your planning. Since this mechanism throttles write cycles by temporarily preventing them, your application software should evaluate its status and respond proactively.
+The following functions provide the necessary time base to maintain the Write Load Management for the entire system. One of the two functions must be used for the wear-leveling subsystem.
 ### oneTickPassed()
 Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
 **Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
