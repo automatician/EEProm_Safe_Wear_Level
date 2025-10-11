@@ -20,12 +20,13 @@ If any of the three previously mentioned checks fail, the automatic partial refo
 * Partial Advantage: Because each partition stores and verifies its own control hash and magic ID, a configuration change is limited to the affected partition. All other correctly configured partitions in the EEPROM remain unaffected and functional.
   
 ## 1. Initialization and Configuration
-### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds)
-Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information, and a time specification for the tick interval for write budgeting.
+### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds, uint8_t budgetCycles)
+Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information. A time specification for the tick interval and write cycles per hours for write budgeting.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-|ramHandlePtr |uint8_t* | Pointer to the beginning of the RAM buffer/cache. The required size is determined by PayloadSize and internal metadata.|
-|seconds |uint16_t | Seconds after which the **oneTickPassed()** function is called. *oneTickPassed()* is used for write budgeting. |
+| ramHandlePtr |uint8_t* | Pointer to the beginning of the RAM buffer/cache. The required size is determined by PayloadSize and internal metadata.|
+| seconds |uint16_t | Seconds after which the **oneTickPassed()** function is called. *oneTickPassed()* is used for write budgeting. |
+| budgetCycles |uint8_t | Budget write cycles per hour. |
 ### config(uint16_t startAddress, uint16_t totalBytesUsed, uint16_t PayloadSize, uint8_t cntLengthBytes, uint8_t handle)
 Description: Initializes and configures the EEPROM wear-leveling partition. This function must be called when the microcontroller is rebooted to create a partition. It formats the partition if the configuration data has changed.
 | Parameter | Type | Description |
