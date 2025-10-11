@@ -39,10 +39,12 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 ## 1.5 Write Load Management
 **Purpose**: It ensures that the EEPROM write cycles are not prematurely and unnoticed used up by a constantly too high average usage rate. <br>
 
-**Adaptive Write Budgeting** <br>
+**Adaptive Write Budgeting**
+
 It is the strategic function of this library. It describes the proactive approach to mapping the entire physical lifetime of the EEPROM to the planned product lifespan.
-  
-**Write Shedding** <br> 
+
+**Write Shedding**
+
 It is the library's short-term, reactive protection mechanism that is only activated when the write frequency is overloaded. It is the response to a worst-case scenario that would damage the EEPROM beyond your planning. Since this mechanism throttles write cycles by temporarily preventing them. Your application software should evaluate its status and respond proactively.
    
 The following functions provide the necessary time base to maintain the Write Load Management for the entire system. One of the two functions must be used for the wear-leveling subsystem.
