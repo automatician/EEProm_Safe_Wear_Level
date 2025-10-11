@@ -39,7 +39,11 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 ## 1.5 Write Load Management
 **Purpose**: It ensures that the EEPROM write cycles are not prematurely and unnoticed used up by a constantly too high average usage rate. <br>
 
-Adaptive Write Budgeting is the strategic function of this library. It describes the proactive approach to mapping the entire physical lifetime of the EEPROM to the planned product lifespan. Write shedding is the library's short-term, reactive protection mechanism that is only activated when the write frequency is overloaded. It is the response to a worst-case scenario that would damage the EEPROM beyond your planning. Since this mechanism throttles write cycles by temporarily preventing them, your application software should evaluate its status and respond proactively.
+**Adaptive Write Budgeting**
+* It is the strategic function of this library. It describes the proactive approach to mapping the entire physical lifetime of the EEPROM to the planned product lifespan. 
+**Write Shedding** 
+ * It is the library's short-term, reactive protection mechanism that is only activated when the write frequency is overloaded. It is the response to a worst-case scenario that would damage the EEPROM beyond your planning. Since this mechanism throttles write cycles by temporarily preventing them. Your application software should evaluate its status and respond proactively.
+   
 The following functions provide the necessary time base to maintain the Write Load Management for the entire system. One of the two functions must be used for the wear-leveling subsystem.
 ### oneTickPassed()
 Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
