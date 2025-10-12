@@ -352,7 +352,7 @@ bool EEProm_Safe_Wear_Level::write(const char* value, uint8_t handle) {
 
     if (success == 1){
     	if (slen > _pldSize) _status = 2;
-    	for (uitn16_t i = 0; i < _pldSize; i++) {
+    	for (uint16_t i = 0; i < _pldSize; i++) {
     	    if (i < slen) {
     	        _ioBuf[i] = value[i];
     	    } else {
@@ -645,7 +645,6 @@ bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
     	_handle = handle;
     	_ctlLen = _cntLen + 1;
     	_secSize = _pldSize + _ctlLen;
-    	uint32_t maxCapacity = (1UL << (_cntLen * 8)) - 1;
     	_maxLgcCnt = (maxCapacity / _numSecs) * _numSecs;
     }
     if (_checksum != chkSum()) {_status = 5; sei(); success = 0;}
