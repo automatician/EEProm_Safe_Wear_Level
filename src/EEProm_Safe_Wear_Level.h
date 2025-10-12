@@ -78,7 +78,6 @@ class EEProm_Safe_Wear_Level {
       // internal time management
       void oneTickPassed();
 	void idle();
-        void updateBuckets();
       // ----------------------------------------------------------------------------------------------------
    
       
@@ -102,12 +101,18 @@ class EEProm_Safe_Wear_Level {
       uint16_t  _tbCnt,_tbCntN, _tbCntLong, _accumulatedTime = 0;
       uint16_t  _bucketStartAddr;
       ControlData* _controlCache;            
+
       // Version control
       uint8_t _EEPRWL_VER = 0;
       bool _start(uint8_t handle);
       void _end();
       void _read(uint8_t ReadMode, uint8_t handle);
       bool findNewestSector(uint8_t handle);
+
+      // ----------------------------------------------------------------------------------------------------
+      // internal time management
+        void updateBuckets();
+      // ----------------------------------------------------------------------------------------------------
 
       // Static inline function to encapsulate byte reconstruction
       // and allow the compiler to deduplicate the code.
