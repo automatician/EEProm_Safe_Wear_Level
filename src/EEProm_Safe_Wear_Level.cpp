@@ -146,7 +146,6 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
 
 bool EEProm_Safe_Wear_Level::initialize(bool forceFormat, uint8_t handle) {
     _START_
-
     // 2. Check: config() must have been successful (at least 2 sectors)
     bool success =  (_numSecs < 1) ? 0 : 1;
 
@@ -207,13 +206,13 @@ uint16_t EEProm_Safe_Wear_Level::getOverwCounter(uint8_t handle) {
     _END_
     return version_read.u16; // Returns the correct 16-bit value.
 }
+
 // ----------------------------------------------------------------------------------------------------
 // --- PUBLIC API (READ / WRITE / NAV) ---
 // ----------------------------------------------------------------------------------------------------
 
 bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, char* value, uint8_t handle, size_t maxSize) {
     _START_
-
     _read(ReadMode, handle);
 
     // Check the cache status
@@ -264,7 +263,6 @@ void EEProm_Safe_Wear_Level::_read(uint8_t ReadMode, uint8_t handle) {
 // ----------------------------------------------------------------------------------------------------
 bool EEProm_Safe_Wear_Level::migrateData(uint8_t handle, uint8_t targetHandle, uint16_t count){
     _START_
-   
     bool success = 0; uint16_t count1 = 0;
 
     // find newest sector at source partition 
@@ -369,6 +367,7 @@ bool EEProm_Safe_Wear_Level::write(const char* value, uint8_t handle) {
 
 bool EEProm_Safe_Wear_Level::_write(uint8_t handle) {
     uint16_t c; bool success = 1;
+	
     if(_curLgcCnt == _maxLgcCnt){
     	_status = 3;
 	    _ioBuf[_secSize - 1] = 0;
@@ -414,6 +413,7 @@ bool EEProm_Safe_Wear_Level::_write(uint8_t handle) {
     	    }
     	}
     }
+	
     _ioBuf[_secSize - 1] = success;
     return success;
 }
@@ -481,11 +481,9 @@ uint8_t EEProm_Safe_Wear_Level::getWrtAccBalance(uint8_t handle) {
 // ----------------------------------------------------------------------------------------------------
 
 bool EEProm_Safe_Wear_Level::findNewestSector(uint8_t handle) {
-    bool success = 1;
     _START_
-    success = findMarginalSector(handle,0);
     _END_
-    return success;
+    return findMarginalSector(handle,0);
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -498,7 +496,6 @@ void EEProm_Safe_Wear_Level::updateBuckets(){
                e_c;
        }
   }
-  return;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -573,6 +570,7 @@ bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) 
 
 uint8_t EEProm_Safe_Wear_Level::calculateCRC(const uint8_t *data, size_t length) {
     uint8_t crc = 0x00; // Initialwert 0 (Oft auch 0xFF, hier 0x00 für Einfachheit/Kompaktheit)
+	
     for (size_t i = 0; i < length; i++) {
         if (data[i] > 0) _usedSector = 1;
         crc ^= data[i]; // XOR mit dem nächsten Daten-Byte
@@ -586,15 +584,17 @@ uint8_t EEProm_Safe_Wear_Level::calculateCRC(const uint8_t *data, size_t length)
             }
         }
     }
+	
     return crc;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
 void EEProm_Safe_Wear_Level::formatInternal(uint8_t handle) {
-    // Iterate through all sectors
+    
+	// Iterate through all sectors
 
-    union U16toB {uint16_t u16;uint8_t u8[2];}; 
+	union U16toB {uint16_t u16;uint8_t u8[2];}; 
     U16toB __EEPRWL_VER; __EEPRWL_VER.u16 = _EEPRWL_VER; 
     __EEPRWL_VER.u8[0] = e_r(_startAddr + 2);
     __EEPRWL_VER.u8[1] = e_r(_startAddr + 3);
@@ -628,6 +628,7 @@ void EEProm_Safe_Wear_Level::formatInternal(uint8_t handle) {
 
         e_c;
     }
+	
     return;
 }
 
@@ -638,24 +639,25 @@ void EEProm_Safe_Wear_Level::formatInternal(uint8_t handle) {
  */
 bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
     cli(); bool success = 1;
+	
     if (_handle != handle){
-	// Calculates the pointer to the start of the partition in the RAM Handle
-	size_t offset = (size_t)handle * CONTROL_STRUCT_SIZE;
-	_controlCache = (ControlData*)(_ramStart + offset);
+		// Calculates the pointer to the start of the partition in the RAM Handle
+		size_t offset = (size_t)handle * CONTROL_STRUCT_SIZE;
+		_controlCache = (ControlData*)(_ramStart + offset);
     	_handle = handle;
     	_ctlLen = _cntLen + 1;
     	_secSize = _pldSize + _ctlLen;
     	_maxLgcCnt = (maxCapacity / _numSecs) * _numSecs;
     }
-    if (_checksum != chkSum()) {_status = 5; sei(); success = 0;}
-    return success;
+    
+	if (_checksum != chkSum()) { _status = 5; sei(); success = 0; }
+    
+	return success;
 }
+
 void EEProm_Safe_Wear_Level::_end(){
     _checksum = chkSum(); sei();
-    return;
 }
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
-
-
