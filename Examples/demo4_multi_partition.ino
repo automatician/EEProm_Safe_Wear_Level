@@ -81,8 +81,8 @@ void setup() {
     Serial.println(F("--- EEProm_Safe_Wear_Level Demo Start: Multi-Partition, Single Instance ---"));
     Serial.println(F("---------------------------------------------------------------------------"));
     
-    int s1 = EEPRWL_Main.config(ADDR1, SIZE1, PAYLOAD_SIZE1, COUNTER_LENGTH_BYTES, HANDLE1); 
-    int s2 = EEPRWL_Main.config(ADDR2, SIZE2, PAYLOAD_SIZE2, COUNTER_LENGTH_BYTES, HANDLE2);    
+    int s1 = EEPRWL_Main.config(ADDR1, SIZE1, PAYLOAD_SIZE1, COUNTER_LENGTH_BYTES, 8, HANDLE1); 
+    int s2 = EEPRWL_Main.config(ADDR2, SIZE2, PAYLOAD_SIZE2, COUNTER_LENGTH_BYTES, 8, HANDLE2);    
 
     if (!s1) Serial.println(F("Partition#1 config ERROR!"));else {Serial.print(F("Existing Partition#1 counter: "));Serial.println(s1);}
     if (!s2) Serial.println(F("Partition#2 config ERROR!"));else {Serial.print(F("Existing Partition#2 counter: "));Serial.println(s2);}
