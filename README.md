@@ -36,19 +36,19 @@ This is the library's short-term, reactive protection mechanism, which is trigge
 
 ## Key Features of v25.10.5
 
-| Feature | Benefit |
-| :--- | :--- |
-| **WRITE LOAD MANAGEMENT** | Guaranteed longevity through strategic write budgeting (time-based allocation) and **Write Shedding** (protection against overload). |
-| **FAILURE SAFETY** | Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics). |
-| **CRC with High Detection Rate** | Enhanced CRC checksums for robust detection of data corruption within the EEPROM itself. |
-| **LOGGING FUNCTIONALITY** | Enables secure chronological data logging with API access to the newest/oldest entries and with record navigation. | 
-| **LONG LIFESPAN (Wear-Leveling)**| Utilizes a **Ring Buffer** to spread write cycles evenly, significantly increasing EEPROM endurance. |
-| **TYPE-SAFE I/O** | Generic templates for structs, all primitive types, and C-Strings via dedicated overloads. |
-| **MULTI-PARTITION** | Independent management of multiple logical data areas (Handles 0, 1, 2, ...). |
-| **RAM Handle Protection** | Securing control data structures (RAM Handle Structure) against corruption. |
-| **CONFIGURABLE COUNTERS** | Adapt health functionality and control data overhead (between 2 and 5 bytes). |
-| **DATA MIGRATION** | Memory-saving transfer of log entries to a second partition to prevent log loss upon saturation. |
-| **DIAGNOSTICS** | Detailed **8 Status Codes** (0x00 to 0x07) allow a targeted response to errors and log states. |
+| Feature | Benefit | |
+| :--- | :--- | :--- |
+| **WRITE LOAD MANAGEMENT** | Guaranteed longevity through strategic write budgeting (time-based allocation) and **Write Shedding** (protection against overload). |The time base is provided via oneTickPassed() or idle(); the current credit balance can be queried using getWrtAccBalance().|
+| **FAILURE SAFETY** | Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics). |The status of the last operation is provided in the getCtrlData() status flag for diagnostic purposes.|
+| **CRC with High Detection Rate** | Enhanced CRC checksums for robust detection of data corruption within the EEPROM itself. ||
+| **LOGGING FUNCTIONALITY** | Enables secure chronological data logging with API access to the newest/oldest entries and with record navigation. ||
+| **LONG LIFESPAN (Wear-Leveling)**| Utilizes a **Ring Buffer** to spread write cycles evenly, significantly increasing EEPROM endurance. ||
+| **TYPE-SAFE I/O** | Generic templates for structs, all primitive types, and C-Strings via dedicated overloads. ||
+| **MULTI-PARTITION** | Independent management of multiple logical data areas (Handles 0, 1, 2, ...). ||
+| **RAM Handle Protection** | Securing control data structures (RAM Handle Structure) against corruption. ||
+| **CONFIGURABLE COUNTERS** | Adapt health functionality and control data overhead (between 2 and 5 bytes). ||
+| **DATA MIGRATION** | Memory-saving transfer of log entries to a second partition to prevent log loss upon saturation. |Controlled by migrateData(). Queries with getOverwCounter(), healthCycles(), and healthPercent().|
+| **DIAGNOSTICS** | Detailed **8 Status Codes** (0x00 to 0x07) allow a targeted response to errors and log states. |The status of Write Budget Management, Shedding active, Credit Status, and other fields of the status byte can be queried with getCtrlData(). Health statistics: Cycles with healthCycles() and percentages with healthPercent().|
 
 ---
 
