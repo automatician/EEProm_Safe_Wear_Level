@@ -174,9 +174,14 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |1|CRC checksum of the last read sector was invalid.|
 |2|Write attempt: The passed string is > payload size.|
 |3|Write attempt rejected: Maximum logical counter reached.|
-|4|Initialization error (e.g., Magic ID/Version missing).|
+|4|Partition formatted due to: library version conflict, partition format conflict, or forced formatting.|
 |5|Critical error: Control data corrupted (CRC fails).|
 |6|Write attempt: missing *maxSize* for reading string.|
 |7|The last read sector is empty / not used.|
-|8|To excessive use: Write Shedding is active.|
+|8|After write(). Budget manager: To excessive use, Write Shedding is active.|
+|9|After write(). Budget manager: Lost credit rating. Fewer write cycles are necessary.|
+|10|After write(). Budget manager: Credit given.|
+|11|After write(). Budget manager: Credit still available.|
+
+
 
