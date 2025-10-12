@@ -150,7 +150,7 @@ Description: Loads the payload and control data of a specific physical EEPROM se
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t| 0: error / >0: ok (reserved)|
 ## 4.3. Write Budgeting
-Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the status byte in the partition control data (*getCtrlData()* function) after the **write()** command has been successful. To query the exact statistical value of a partition's account balance, use this function:
+Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the status byte in the partition control data (*getCtrlData()* function) after the **write()** command did not have a physical error. To query the exact statistical value of a partition's account balance, use this function:
 ### getWrtAccBalance(uint8_t handle)
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
