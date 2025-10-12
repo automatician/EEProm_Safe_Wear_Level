@@ -13,9 +13,11 @@
 //
 
 #include <EEProm_Safe_Wear_Level.h>
+
 // ----------------------------------------------------
 // --- DEFINITIONS AND INSTANCES ---
 // ----------------------------------------------------
+
 #define COUNTER_LENGTH_BYTES  1 // WARNING Max is 4
 
 // --- HANDLE DEFINITIONS ---
@@ -43,7 +45,7 @@ AlignedArray_t PartitionsData;
 #define status 13               // Status Byte
 #define checksum 14             // Checksum for the control data
 
-//Create instance of EEProm_Safe_Wear_Level
+//Instanz von EEProm_Safe_Wear_Level erzeugen
 EEProm_Safe_Wear_Level EEPRWL_Main(PartitionsData.data); 
 
 // --- ADDRESSES AND SIZES ---
@@ -69,7 +71,7 @@ byte loopCounter = 2;
 // ----------------------------------------------------
 
 void setup() {
-    // Random delay between 800 and 1500 ms
+    // Zuf�llige Verz�gerung zwischen 800 und 1500 ms
     randomSeed(analogRead(A0));
     long randomDelay = random(800, 1501); 
     
@@ -87,15 +89,14 @@ void setup() {
     if (!s1) Serial.println(F("Partition#1 config ERROR!"));else {Serial.print(F("Existing Partition#1 counter: "));Serial.println(s1);}
     if (!s2) Serial.println(F("Partition#2 config ERROR!"));else {Serial.print(F("Existing Partition#2 counter: "));Serial.println(s2);}
     
-    s1 = EEPRWL_Main.getVersion(HANDLE1);
-    s2 = EEPRWL_Main.getVersion(HANDLE2);
-
     Serial.print(F("Latest logical sector Partition#1: "));  
-    if (!s1) Serial.println(F("no"));else {Serial.println(EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE1));}
-    Serial.print(F("Next physical sector Partition#1: "));Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
+    Serial.println(EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE1));
+    Serial.print(F("Next physical sector Partition#1: "));
+    Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
     Serial.print(F("Latest logical Sector Partition#2: "));  
-    if (!s2) Serial.println(F("no"));else {Serial.println(EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE2));}
-    Serial.print(F("Next physical Sector Partition#2: "));Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE2));
+    Serial.println(EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE2));
+    Serial.print(F("Next physical Sector Partition#2: "));
+    Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE2));
 
     Serial.println(F("\n\nReading data ..."));
     s1 = EEPRWL_Main.read(0,device_name,HANDLE1,PAYLOAD_SIZE1);
@@ -103,6 +104,7 @@ void setup() {
     s2 = EEPRWL_Main.read(0,time_stamp,HANDLE2,4);
     Serial.print(F("time stamp: "));Serial.println(time_stamp);
 } 
+
 
 // ----------------------------------------------------
 // --- 3. LOOP ---
