@@ -177,7 +177,7 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |12|2|uint16_t|for internal use|
 |14|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
 |15|1|uint8_t|CHECKSUM (of this Control Block)|
-### Status Flag at Offset 13
+### Status Flag at Offset 14
 | Code | Meaning |
 | :--- | :--- |
 |0|OK| All OK. Partition is valid and ready for operation.|
