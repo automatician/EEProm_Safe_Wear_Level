@@ -109,7 +109,8 @@ Description: Calculates the remaining EEPROM health as a percentage.
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint8_t|The remaining health percentage (0-100).|
-## 4. Advanced Functions - Log Management
+## 4. Advanced Functions
+## 4.1 Log Management
 ### read(uint8_t readMode, T& value, uint8_t handle, size_t maxSize)
 Description: Reads data into a variable or data structure (T). The function uses the readMode parameter to control the read destination within the ring buffer. While readMode = 0 always returns the most recent status (the default mode), modes 1, 2, and 3 are used to read the data sequentially or from the beginning of the ring buffer. In this context, the wear leveling structure can be utilized as a cyclic, readable data logger. These extended readMode options allow you to use the wear leveling structure not only to store the latest state, but also to function as a fully navigable log file data buffer.
 | Parameter | Type | Description |
@@ -135,18 +136,27 @@ The new partition (target handle) immediately regains its maximum available numb
 | target | uint8_t | Handle of the target partition. | 
 | count | uint16_t | The counter, how many last log entries (newest sectors) are transferred to the target partition. |
 **WARNING:** The migrateData() function does not automatically format the source partition (sourceHandle) upon successful migration, as this is a deliberate design choice to prevent the immediate deletion of data, thus supporting backup and data recovery strategies.
+### 4.2. Physical Sectors
 ### loadPhysSector(uint16_t physSector, uint8_t handle)
 Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example. This function does not deliver the data directly to a user variable, but makes it accessible in the cache for subsequent internal operations (e.g., for checking the metadata or a subsequent read() operation).
  * The *loadPhysSector()* function always requires the next physical sector to be written to derive the sector to be read. It achieves this by decrementing the passed sector index by 1.
  * The *loadPhysSector()* function checks the passed sector for an overflow and handles this overflow correctly, meaning the user does not have to deal with it.
  * If any arbitrary, freely determined physical sector must be read, it must be passed to the *loadPhysSector()* function incremented by +1.
  * The *loadPhysSector()* function calculates the correct value for the next sector to be written from the handed over sector number (taking sector overflow into account). This function can therefore also be used to restore the next sector to be written (Ring Buffer).
-   
+
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |physSector|uint16_t|The physical sector to be loaded + 1|
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t| 0: error / >0: ok (reserved)|
+## 4.3. Write Budgeting
+Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the status byte in the partition control data (*getCtrlData()* function) after the **write()** command has been successful. To query the exact statistical value of a partition's account balance, use this function:
+### getWrtAccBalance(uint8_t handle)
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|handle|uint8_t|Partition handle.|
+|Return|uint8_t|The statistical value.|
+
 ## 5. Controll Data (Advanced)
 ### getCtrlData(int offs, int handle)
 Description: Reads a 32-bit value (4 bytes) from a specific offset within the ControlData structure of the currently loaded partition data.
