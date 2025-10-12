@@ -36,7 +36,7 @@ This is the library's short-term, reactive protection mechanism, which is trigge
 
 ## Key Features of v25.10.5
 
-| Feature | Benefit | |
+| Feature | Benefit | References |
 | :--- | :--- | :--- |
 | **WRITE LOAD MANAGEMENT** | Guaranteed longevity through strategic write budgeting (time-based allocation) and **Write Shedding** (protection against overload). |The time base is provided via oneTickPassed() or idle(); the current credit balance can be queried using getWrtAccBalance().|
 | **FAILURE SAFETY** | Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics). |The status of the last operation is provided in the getCtrlData() status flag for diagnostic purposes.|
