@@ -132,7 +132,7 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
         _ioBufSize = _secSize;
     }
 
-   if (success > 0) {
+    if (success > 0) {
         _checksum = chkSum();
         initialize(false, handle);
         success = ((uint16_t)e_r(_startAddr + 3) << 8 ) | e_r(_startAddr + 2);
@@ -657,4 +657,5 @@ void EEProm_Safe_Wear_Level::_end(){
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
 
