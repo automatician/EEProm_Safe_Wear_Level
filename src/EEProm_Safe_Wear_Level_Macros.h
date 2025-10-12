@@ -40,7 +40,7 @@ typedef struct __attribute__((packed)) {
     uint8_t  cntLen;         // Offset 11 (1 B)
     uint16_t buckCyc;        // Offset 12 (2 B)
     uint8_t  status;         // Offset 14 (1 B)
-    uint8_t checksum;        // Offset 15 (1 B)
+    uint8_t  checksum;       // Offset 15 (1 B)
 } ControlData; 
 // Total size: 16 Bytes
 
