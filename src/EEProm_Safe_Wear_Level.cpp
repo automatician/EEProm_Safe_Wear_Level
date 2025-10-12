@@ -446,24 +446,28 @@ uint32_t EEProm_Safe_Wear_Level::healthCycles(uint8_t handle){
     _START_
     uint32_t success = 1;
     _END_
-    if (_curLgcCnt > _maxLgcCnt){_status = 3; success = 0;}
+    if (_curLgcCnt >= _maxLgcCnt){_status = 3; success = 0;}
     if(success==1)success = _maxLgcCnt - _curLgcCnt;
     return success;
 }
 
 // Remaining cycles in percent
-uint8_t EEProm_Safe_Wear_Level::healthPercent(uint8_t handle){
+uint8_t EEProm_Safe_Wear_Level::healthPercent(uint32_t cycles, uint8_t handle){
     _START_
     _END_
-    uint8_t success = 1;
-    uint32_t maxCycles = _maxLgcCnt;
-    uint32_t current = _curLgcCnt;
-    if (maxCycles == 0) success = 0;
-    if(success == 1){
-    	uint32_t usedPercent = (uint32_t)(((uint64_t)current * 100) / maxCycles);
-    	success = (100 > usedPercent) ? 100 - usedPercent : 0;
-    }
-    return success;
+
+    #define _cycles_ cycles/1000
+
+    // 1. Absolute Gesamtlebensdauer (Total Lifetime, TL) berechnen (100% Limit)
+    // TL = Endurance pro Sektor (_cycles_) * Gesamtzahl der Sektoren (_numSecs)
+    #define totalLifetime (uint32_t)_numSecs * _cycles_
+    
+    // 2. Verbrauchte Zyklen (Consumed Cycles, CC) berechnen (aktueller Verschleiß)
+    // CC = (Overwrite Counter * Max Logischer Counter) + Aktueller Logischer Counter
+    #define consumedCycles (((uint32_t)getOverwCounter(handle) * _maxLgcCnt)+_curLgcCnt) / 1000UL
+    
+    // (Verbleibende Zyklen * 100) / Gesamtleben
+    return (uint8_t)(( (totalLifetime) - (consumedCycles) ) * 100UL) / (totalLifetime);
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -493,9 +497,9 @@ uint8_t EEProm_Safe_Wear_Level::healthPercent(uint8_t handle){
 
 // ----------------------------------------------------------------------------------------------------
 
-      uint8_t EEProm_Safe_Wear_Level::getWrtAccBalance(uint8_t handle) {
-         return _buckPerm[handle>>5];
-      }
+uint8_t EEProm_Safe_Wear_Level::getWrtAccBalance(uint8_t handle) {
+    return _buckPerm[handle>>5];
+}
 
 // ----------------------------------------------------------------------------------------------------
 // --- PRIVATE HELPER ---
@@ -679,5 +683,4 @@ void EEProm_Safe_Wear_Level::_end(){
 }
 
 // ----------------------------------------------------------------------------------------------------
-
 // END OF CODE
