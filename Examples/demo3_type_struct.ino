@@ -145,7 +145,7 @@ void loop() {
   loopCounter++;
   
   mySettings.counter = loopCounter;
-  mySettings.value = loopCounter*0.001;
+  mySettings.value = loopCounter*0.01;
   mySettings.is_active = 1;
   bool error = EEPRWL_Main.write(mySettings, HANDLE1);
 
