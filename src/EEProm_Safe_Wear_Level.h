@@ -16,25 +16,6 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  *****************************************************************************************************
  *
- * --- GLOSSARY OF ABBREVIATIONS (Internal Variables & Constants) ---
- *
- * MEMBER VARIABLES (State):
- * _startAddr  : startAddress
- * _totalBytesUsed : totalLength
- * _numSecs    : numSectors (Number of physical sectors)
- * _secSize    : sectorSize (Size of one sector including overhead)
- * _pldSize    : payloadSize (Size of the pure user data/payload)
- * _nextPhSec  : nextWriteSector (Next physical sector to write to)
- * _maxLgcCnt  : maxSectorNumber (Maximum logical counter value)
- * _curLgcCnt  : currentCounter (Current logical counter value)
- * _ioBuf      : ioBuffer (Data cache in RAM)
- * _EEPRWL_VER : _EEPRWL_VERSION
- *
- * STATIC CONSTANTS:
- * DEFAULT_PLD_SIZE : DEFAULT_PAYLOAD_SIZE
- * _cntLen          : counterLength (Number of counter bytes)
- * _ctlLen          : controlDataLength (Number of control data bytes)
- *
  * EEPROM MACROS:
  * e_r	: read
  * e_w	: write
@@ -59,26 +40,29 @@
 class EEProm_Safe_Wear_Level {
     public:
       // Standard Constructor
-      EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr);
+      EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds = 8);
+
+      // Check account balance for write cycles
+      uint8_t getWrtAccBalance(uint8_t handle);
 
       // --- PUBLIC API (Implementation in .cpp) ---
       // Parameter names (startAddress, totalBytesUsed, PayloadSize) are deliberately NOT abbreviated.
-      uint16_t config(uint16_t startAddress, uint16_t totalBytesUsed, uint16_t PayloadSize, uint8_t cntLengthBytes, uint8_t handle);
-      uint16_t getVersion(uint8_t handle);
-      bool setVersion(uint16_t value, uint8_t handle);
+      uint16_t config(uint16_t startAddress, uint16_t totalBytesUsed, uint8_t PayloadSize, uint8_t cntLengthBytes, uint8_t budgetCycles, uint8_t handle);
+      uint16_t getOverwCounter(uint8_t handle);
+      bool initialize(bool forceFormat, uint8_t handle);
       
       // Remaining cycles
       uint32_t healthCycles(uint8_t handle);
       
       // Remaining cycles in percent
       uint8_t healthPercent(uint8_t handle);
-      
+
       // Loads sector into the cache (Implementation in .cpp)
       uint16_t loadPhysSector(uint16_t physSector, uint8_t handle);
       bool migrateData(uint8_t sourceHandle, uint8_t targetHandle, uint16_t count);
       // ----------------------------------------------------------------------------------------------------
 	uint32_t getCtrlData(uint8_t offs, uint8_t handle){
-      	    static uint8_t const leng[] = {4,0,0,0, 2,0, 2,0, 2,0, 2,0, 1, 1, 2};
+      	    static uint8_t const leng[] = {4,0,0,0, 2,0, 2,0, 2,0, 1, 1, 2,0, 1, 1};
             _START_
 	    int start_index = (handle * 16) + offs;
 	    uint32_t value = 0;
@@ -90,6 +74,11 @@ class EEProm_Safe_Wear_Level {
 	    _END_
 	    return value;
 	}
+      // ----------------------------------------------------------------------------------------------------
+      // internal time management
+      void oneTickPassed();
+	void idle();
+        void updateBuckets();
       // ----------------------------------------------------------------------------------------------------
    
       
@@ -106,7 +95,12 @@ class EEProm_Safe_Wear_Level {
    
     private:
       // --- INTERNAL STATE VARIABLES (Names adapted) ---      
-      uint8_t * _ioBuf = nullptr;
+      uint8_t * _ioBuf;
+      uint8_t * _buckPerm;
+      uint8_t * _budgetCycles;
+      uint16_t  _buckTime = 0;
+      uint16_t  _tbCnt,_tbCntN, _tbCntLong, _accumulatedTime = 0;
+      uint16_t  _bucketStartAddr;
       ControlData* _controlCache;            
       // Version control
       uint8_t _EEPRWL_VER = 0;
@@ -133,7 +127,7 @@ class EEProm_Safe_Wear_Level {
       }
      // 3. We calculate the addition checksum over all bytes of the ControlData cache
      // from offset 0 up to the byte before the checksum (Byte 13: status).
-     inline uint16_t chkSum() {
+     inline uint8_t chkSum() {
         const size_t CHECKSUM_RANGE = 13; uint8_t check = 0, check1 = 0;
         // We cast _controlCache (ControlData*) to uint8_t* to access byte by byte
         uint8_t* controlDataPtr = (uint8_t*)_controlCache;
@@ -142,9 +136,20 @@ class EEProm_Safe_Wear_Level {
             check += controlDataPtr[i];
             check1 += check;
         }
-        return uint16_t (check << 8) | check1;
+        return check + check1;
      }
       
+     inline void trans16(uint16_t value, uint8_t* target_ptr) {
+         union U16toB {
+             uint16_t u16;
+             uint8_t u8[2];
+         };
+         U16toB converter;
+         converter.u16 = value;
+         *target_ptr = converter.u8[0];
+         *(target_ptr + 1) = converter.u8[1]; 
+     }
+
       // --- PRIVATE HELPERS (Implementation in .cpp) ---
       bool findMarginalSector(uint8_t handle, uint8_t margin);
       uint8_t calculateCRC(const uint8_t * buffer, size_t length);
@@ -153,10 +158,6 @@ class EEProm_Safe_Wear_Level {
       
       // --- INTERNAL CONSTANTS (Static, declaration adapted) ---
       // CRC_OVERHEAD, MAGIC_ID, and METADATA_SIZE remain for readability.
-      static const size_t CRC_OVERHEAD;
-      static const uint16_t MAGIC_ID;
-      static const size_t METADATA_SIZE;
-      static const size_t DEFAULT_PLD_SIZE;
       uint8_t  _ctlLen;     
       uint8_t* _ramStart;
       uint16_t _ioBufSize;
@@ -202,7 +203,7 @@ bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {
       _START_
       bool success;
       // Consistency check
-      if (_numSecs < 2 || _curLgcCnt >= _maxLgcCnt){
+      if (_numSecs < 1 || _curLgcCnt >= _maxLgcCnt){
          success = 0;
          if(_curLgcCnt >= _maxLgcCnt) _status = 3;
       }else success = 1;
@@ -231,7 +232,7 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
     _read(ReadMode, handle);
     uint8_t success = _ioBuf[_secSize - 1];
 
-    if (success == 1){      
+    if (success > 0){      
       // Copy data from _ioBuf to the target variable
       uint8_t * valuePtr = (uint8_t *)&value;
       uint16_t size = sizeof(T);
@@ -248,3 +249,4 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
 }
 // ----------------------------------------------------------------------------------------------------
 #endif // EEPROM_WEAR_LEVEL_H
+// END OF CODE
