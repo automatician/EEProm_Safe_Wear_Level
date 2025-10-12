@@ -7,16 +7,16 @@ EEProm_Safe_Wear_Level	KEYWORD1
 EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level	KEYWORD1
 
 # PUBLIC API METHODS (KEYWORD2)
+getWrtAccBalance	KEYWORD2
 config	KEYWORD2
-getVersion	KEYWORD2
-setVersion	KEYWORD2
+getOverwCounter	KEYWORD2
+initialize	KEYWORD2
 healthCycles	KEYWORD2
 healthPercent	KEYWORD2
 loadPhysSector	KEYWORD2
 migrateData	KEYWORD2
 getCtrlData	KEYWORD2
+oneTickPassed	KEYWORD2
+idle	KEYWORD2
 write	KEYWORD2
 read	KEYWORD2
-
-# READ MODES (LITERAL1) - Assuming these are constants defined elsewhere
-ReadMode	LITERAL1
