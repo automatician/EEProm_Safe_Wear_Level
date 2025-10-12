@@ -135,7 +135,7 @@ void setup() {
   // The config() method does NOT store an error status in the RAM handle, but
   // it returns a success status: TRUE or FALSE (1 or 0)
 
-  int STATUS = EEPRWL_Main.config(ADDR_START, PART_LENGTH, PAYLOAD_SIZE, COUNTER_LEN, HANDLE1);
+  int STATUS = EEPRWL_Main.config(ADDR_START, PART_LENGTH, PAYLOAD_SIZE, COUNTER_LEN, 8, HANDLE1);
 
   // The config() method calculates various values and, if necessary, sets up
   // a partition in the EEPROM. The calculated values are stored in the
