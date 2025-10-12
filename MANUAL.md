@@ -155,7 +155,7 @@ Write control management is deeply integrated into the library. Write shedding i
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
-|Return|uint8_t|The statistical value.|
+|Return|uint8_t|Account balance.|
 
 ## 5. Controll Data (Advanced)
 ### getCtrlData(int offs, int handle)
