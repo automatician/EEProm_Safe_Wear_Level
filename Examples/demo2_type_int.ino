@@ -52,7 +52,7 @@ void setup() {
   #define COUNTER_LEN 1     // Length of the wear-leveling counter (1 Byte = 256 writes)
 
   // 1. Configure Partition (Calculates metadata and stores it in the RAM Handle)
-  int STATUS = EEPRWL_Main.config(ADDR_START, PART_LENGTH, PAYLOAD_SIZE, COUNTER_LEN, HANDLE1);
+  int STATUS = EEPRWL_Main.config(ADDR_START, PART_LENGTH, PAYLOAD_SIZE, COUNTER_LEN, 8, HANDLE1);
 
   if(STATUS > 0){
     Serial.println(F("Configuration successful.")); 
@@ -94,6 +94,6 @@ void loop() {
     Serial.println(EEPRWL_Main.getCtrlData(4, HANDLE1)); 
   }
 
-  delay(5000);
+  delay(10000);
 }
 // END OF CODE
