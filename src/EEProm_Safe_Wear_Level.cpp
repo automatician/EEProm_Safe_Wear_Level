@@ -128,7 +128,7 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
 
     if(_ioBufSize<_secSize){
         delete[] _ioBuf;
-	_ioBuf = new uint8_t [_secSize];
+	    _ioBuf = new uint8_t [_secSize];
         _ioBufSize = _secSize;
     }
 
@@ -657,3 +657,4 @@ void EEProm_Safe_Wear_Level::_end(){
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
