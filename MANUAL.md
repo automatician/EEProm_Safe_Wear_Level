@@ -181,7 +181,7 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |8|After write(). Budget manager: To excessive use, Write Shedding is active.|
 |9|After write(). Budget manager: Lost credit rating. Fewer write cycles are necessary.|
 |10|After write(). Budget manager: Credit given.|
-|11|After write(). Budget manager: Credit still available.|
+|11|After write(). Budget manager: Credit still available (normal condition).|
 
 
 
