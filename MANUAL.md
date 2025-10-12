@@ -1,5 +1,5 @@
 # EEProm_Safe_Wear_Level - API Manual
-The functions can be divided into five main categories, with the Write Load Management (WLM) logic being controlled by three functions: constructor, config(), oneTickPassed()/idle() and getWrtAccBalance().
+The functions can be divided into five main categories, with the Write Load Management (WLM) logic being controlled by three functions: **constructor**, **config()**, **oneTickPassed()/idle()** and **getWrtAccBalance()**.
 
 This document provides a concise reference for all public functions of the EEProm_Safe_Wear_Level library, which was developed to manage wear-leveling in EEPROM memory.
 The functions **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()** and **idle()** are optional functions. They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
