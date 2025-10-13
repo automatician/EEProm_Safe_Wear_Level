@@ -3,6 +3,24 @@
 **Library Version: v25.10.5**
 
 This library provides a solution for the permanent and reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the μC to the verifiable data logging required at the commercial level. This library was developed to combine wear leveling with the security of data integrity and an operational guarantee. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a quantifiable guarantee. Premature failures are replaced by planning in the software design and active management of the planned parameters.
+---
+
+## 🚀 Get Started
+
+* The complete manual with public functions, parameters, and return values can be found in the **API Manual** [klick](/MANUAL.md).
+* Starts directly with detailed example codes that will get you to your goal quickly:
+    * [Demo1](/Examples/demo1_type_char_array.ino): String in an array
+    * [Demo2](/Examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
+    * [Demo3](/Examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
+    * [Demo4](/Examples/demo4_multi_partition.ino): Multi-partition reading and writing
+    * [Demo5](/Examples/demo5_log_functions.ino): Demonstrates iterative navigation and reading using read(), findNewestData() and findOldestData().
+
+### Manual Installation Method:
+1. Download the repository's release ZIP file.
+2. Unzip the file (e.g., `EEProm_Safe_Wear_Level-vX.X.X`).
+3. Rename the folder to `EEProm_Safe_Wear_Level`.
+4. Copy the folder to your **Arduino Library Directory** (`Documents/Arduino/libraries/`).
+5. Restart the Arduino IDE.
 
 ---
 ## 🛡️ Design Conformity with Industry Standards
@@ -49,24 +67,6 @@ This is the library's short-term, reactive protection mechanism, which is trigge
 | **CONFIGURABLE COUNTERS** | Adapt health functionality and control data overhead (between 2 and 5 bytes). ||
 | **DATA MIGRATION** | Memory-saving transfer of log entries to a second partition to prevent log loss upon saturation. |Controlled by migrateData(). Queries with getOverwCounter(), healthCycles(), and healthPercent().|
 | **DIAGNOSTICS** | Detailed **8 Status Codes** (0x00 to 0x07) allow a targeted response to errors and log states. |The status of Write Budget Management, Shedding active, Credit Status, and other fields of the status byte can be queried with getCtrlData(). Health statistics: Cycles with healthCycles() and percentages with healthPercent().|
-
----
-
-## 🚀 Get Started
-
-* The complete manual with public functions, parameters, and return values can be found in the **API Manual** [klick](/MANUAL.md).
-* Starts directly with detailed example codes that will get you to your goal quickly:
-    * [Demo1](/Examples/demo1_type_char_array.ino): String in an array
-    * [Demo2](/Examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
-    * [Demo3](/Examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
-    * [Demo4](/Examples/demo4_multi_partition.ino): Multi-partition reading and writing
-
-### Manual Installation Method:
-1. Download the repository's release ZIP file.
-2. Unzip the file (e.g., `EEProm_Safe_Wear_Level-vX.X.X`).
-3. Rename the folder to `EEProm_Safe_Wear_Level`.
-4. Copy the folder to your **Arduino Library Directory** (`Documents/Arduino/libraries/`).
-5. Restart the Arduino IDE.
 
 ---
 
