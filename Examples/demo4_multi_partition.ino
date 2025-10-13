@@ -29,7 +29,7 @@
 #define HANDLE2  1
 
 
-// The ControlData structure must provide space for 2 partitions (4 * 16 Bytes = 64 Bytes)
+// The ControlData structure must provide space for 2 partitions (2 * 16 Bytes = 64 Bytes)
 typedef struct {
     uint8_t data[16 * PART_CNT];  
 } __attribute__((aligned(8))) AlignedArray_t;
