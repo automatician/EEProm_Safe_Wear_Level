@@ -179,6 +179,7 @@ bool EEProm_Safe_Wear_Level::initialize(bool forceFormat, uint8_t handle) {
             e_c;
 			updateBuckets();
 	    };
+		
 	    if (magicID_read != MAGIC_ID || forceFormat == true || c_hash != c_hash_read) {  
 	        _status = 4;
 	        // Necessary: First use or version conflict -> Format!
@@ -675,5 +676,6 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
 
 
