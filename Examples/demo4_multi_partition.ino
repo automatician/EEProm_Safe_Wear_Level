@@ -41,9 +41,9 @@ AlignedArray_t PartitionsData;
 #define startAddress 6          // Start address of the partition in the EEPROM
 #define payloadSize 8           // Size of the pure payload data (EepromData)
 #define numberOfSectors 10      // Total number of available sectors in the partition
-#define counterByteLength 12    // Size of a single sector (Payload + Metadata)
-#define status 13               // Status Byte
-#define checksum 14             // Checksum for the control data
+#define counterByteLength 11    // Size of a single sector (Payload + Metadata)
+#define status 14               // Status Byte
+#define checksum 15             // Checksum for the control data
 
 //Instanz von EEProm_Safe_Wear_Level erzeugen
 EEProm_Safe_Wear_Level EEPRWL_Main(PartitionsData.data); 
