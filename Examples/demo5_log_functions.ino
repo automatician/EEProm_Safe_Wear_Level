@@ -165,7 +165,6 @@ void loop() {
           }
     }
 
-    while (0==0){delay(1000);
-}
+    while (0==0){delay(1000);}
    
 }
