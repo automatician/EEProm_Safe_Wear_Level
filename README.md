@@ -3,14 +3,14 @@
 
 **Library Version: v25.10.5**
 
-This library provides a solution for the permanent and reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the μC to the verifiable data logging required at the commercial level. This library was developed to combine wear leveling with the security of data integrity and an operational guarantee. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a quantifiable guarantee. Premature failures are replaced by planning in the software design and active management of the planned parameters.
+This library provides a reliable and permanent storage solution for critical data on Arduino-compatible μCs. It covers the entire application spectrum, from simple EEPROM storage in the μC to the verifiable data logging required at the commercial level. This library was developed to combine wear leveling with the security of data integrity and an operational guarantee. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a quantifiable guarantee. Premature failures are replaced by planning in the software design and active management of the planned parameters.
 
 ---
 
 ## 🚀 Get Started
 
 * The complete manual with public functions, parameters, and return values can be found in the **API Manual** [klick](/MANUAL.md).
-* Starts directly with detailed example codes that will get you to your goal quickly:
+* Jumpstart your project with detailed examples:
     * [Demo1](/Examples/demo1_type_char_array.ino): String in an array
     * [Demo2](/Examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
     * [Demo3](/Examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
