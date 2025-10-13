@@ -133,10 +133,8 @@ The migrateData() function is a special tool for data transfer and maintenance b
 In more complex systems, this function could serve as the basis for a manual backup routine, copying the contents of a critical handle to a separate, less frequently used handle.
 #### Logically Exhausted Partitions
 The *migrateData()* function addresses the issue where a partition's logical counter has reached its maximum, making the partition logically "full" or "exhausted" from the wear-leveling algorithm's perspective, thus preventing further writes.
-#### 1. Releasing the Partition
-The function works by reading the last valid data record (the current state) from the logically exhausted partition (sourceHandle) and writing it to a new, freshly configured partition (targetHandle).
-#### 2. Restoring Write Cycles
-The new partition (target handle) immediately regains its maximum available number of write cycles (e.g., 65535) because its logical counter starts at zero. This process effectively allows the user to retire the old, exhausted partition, and potentially reuse or reformat the underlying EEPROM memory space, significantly extending the overall endurance and longevity of the EEPROM storage.
+#### Releasing the Partition
+The function works by reading the last valid data records from the logically exhausted partition (sourceHandle) and writing it to a empty partition (targetHandle). The destination partition must be formatted and identical in structure to the source partition. The destination partition must fit at least the sectors to be copied. Make sure there's enough space! After migration, the source partition can be formatted.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | source | uint8_t | Handle of the source partition. | 
