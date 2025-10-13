@@ -81,7 +81,7 @@ Description: Reads data into a variable or data structure (T). If the readMode p
 ### Explicit Overloads for C-Strings
 For character arrays (char*), specific, non-templated overloads are available to correctly handle null termination:
  * bool write(const char* value, uint8_t handle)
- * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
+ * bool read(uint8_t readMode, char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
 ## 3. Health Monitoring
 ### getOverwCounter(uint8_t handle)
 Description: Retrieves the partition overwrite counter stored in the control data.
@@ -116,7 +116,7 @@ Description: Calculates the remaining EEPROM health as a percentage. Related to 
 Description: Reads data into a variable or data structure (T). The function uses the readMode parameter to control the read destination within the ring buffer. While readMode = 0 always returns the most recent status (the default mode), modes 1, 2, and 3 are used to read the data sequentially or from the beginning of the ring buffer. In this context, the wear leveling structure can be utilized as a cyclic, readable data logger. These extended readMode options allow you to use the wear leveling structure not only to store the latest state, but also to function as a fully navigable log file data buffer.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
-|readMode|uint8_t| 1: reads data from the next sector <br> 2: reads data from the previous sector <br> 3: reads the oldest sector (log beginning) |
+|readMode|uint8_t| 1: reads data from the next sector <br> 2: reads data from the previous sector <br> 3: reads the oldest sector (log beginning) <br> 4: reads the newest sector (log ending)|
 |value|T&|A reference to the target variable or structure where the data will be loaded.|
 |handle|uint8_t|Partition handle.|
 |maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
