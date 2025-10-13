@@ -79,7 +79,6 @@ EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t s
       _tbCntLong(seconds)
 {
       _bucketStartAddr = EEPROM.length() - 9; 
-	
       for (uint8_t i = 0; i < 8; i++) { 
 	    _buckPerm[i] = e_r(_bucketStartAddr+i);
             _budgetCycles[i] = 0;
@@ -99,7 +98,6 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
      uint8_t* ramPtr = _ramStart + ((size_t)handle * CONTROL_STRUCT_SIZE);
      // Assignment of the calculated pointer to _controlCache (with casting)
      _controlCache = (ControlData*) ramPtr;
-	
      _handle = handle;
 
      _buckCyc = budgetCycles;
@@ -179,7 +177,6 @@ bool EEProm_Safe_Wear_Level::initialize(bool forceFormat, uint8_t handle) {
             e_c;
 			updateBuckets();
 	    };
-		
 	    if (magicID_read != MAGIC_ID || forceFormat == true || c_hash != c_hash_read) {  
 	        _status = 4;
 	        // Necessary: First use or version conflict -> Format!
@@ -259,11 +256,17 @@ void EEProm_Safe_Wear_Level::_read(uint8_t ReadMode, uint8_t handle) {
             cli();
             _handle1 = handle;
             return;
+        case 4:
+            findMarginalSector(handle, 0);
+            cli();
+            _handle1 = handle;
+            return;
         default:
             break;
     }
     
     if (_handle1 != handle) {
+        _checksum = chkSum();
 	loadPhysSector(_nextPhSec, handle);
         cli();
         _handle1 = handle;
@@ -316,13 +319,13 @@ uint16_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t han
 
     uint16_t success;  uint16_t x; _usedSector = 0;
 
-    if (physSector == -1) physSector = _numSecs-1; 
-	else if (physSector > _numSecs) physSector = 0;
- 
-    _nextPhSec = physSector;
+    if (physSector == 0) physSector = _numSecs-1; 
+    else if (physSector == -1) physSector = _numSecs-2; 
+    else if (physSector > _numSecs) physSector = 0;
+         else physSector--;
 
-    if (physSector == 0) physSector = _numSecs - 1;
-    else physSector--;
+    if (physSector == _numSecs-1) _nextPhSec = 0;
+    else _nextPhSec = physSector+1;
 
     physSector *= _secSize;
     physSector += _startAddr + METADATA_SIZE;
@@ -499,6 +502,18 @@ uint8_t EEProm_Safe_Wear_Level::getWrtAccBalance(uint8_t handle) {
 }
 
 // ----------------------------------------------------------------------------------------------------
+bool EEProm_Safe_Wear_Level::findNewestData(uint8_t handle) {
+    check_and_init
+    bool success = findMarginalSector(handle, 0);
+    return_and_checksum success;
+}
+// ----------------------------------------------------------------------------------------------------
+bool EEProm_Safe_Wear_Level::findOldestData(uint8_t handle) {
+    check_and_init
+    bool success = findMarginalSector(handle, 1);
+    return_and_checksum success;
+}
+// ----------------------------------------------------------------------------------------------------
 // --- PRIVATE HELPER ---
 // ----------------------------------------------------------------------------------------------------
 
@@ -517,7 +532,7 @@ void EEProm_Safe_Wear_Level::updateBuckets() {
 // ----------------------------------------------------------------------------------------------------
 
 bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) {
-    _curLgcCnt = 0; _nextPhSec = 0; bool success = false;
+    _curLgcCnt = margin>0 ? (-1) : 0; _nextPhSec = 0;  bool success = false;
 
     // Search all sectors
     // i MUST be uint16_t to support > 255 sectors (e.g., with 2KB EEPROM)
@@ -570,7 +585,6 @@ bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) 
         _ioBuf[_secSize - 1] = 1;
     } else {
         // Set the status flag (0 = invalid) if no valid sector was found.
-        // _ioBuf[_secSize - 1] = 0; <-- This line is not in the original, but the logic should be:
          _ioBuf[_secSize - 1] = 0;
     }
 
@@ -675,7 +689,3 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
-
-
-
-
