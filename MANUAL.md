@@ -8,6 +8,7 @@ This functions are optional functions:
  *  **idle()**
  *  **findNewestData()**
  *  **findOldestData**
+
 They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
 * Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
