@@ -1,6 +1,6 @@
 # EEProm_Safe_Wear_Level - API Manual
 This document provides a concise reference for all public functions of the EEProm_Safe_Wear_Level library, which was developed to manage wear-leveling in EEPROM memory. The functions can be divided into five main categories, with the Write Load Management (WLM) logic being controlled by three functions: **constructor**, **config()**, **oneTickPassed()/idle()** and **getWrtAccBalance()**. <br>
-The functions **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()** and **idle()** are optional functions. They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
+The functions **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()**, **idle()**, **findNewestData()** and **findOldestData** are optional functions. They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
 * Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
 
@@ -120,6 +120,12 @@ Description: Reads data into a variable or data structure (T). The function uses
 |handle|uint8_t|Partition handle.|
 |maxSize|size_t|To limit the number of bytes read. Can be used to read partial data. Recommended for correct reading of character strings|
 |Return|bool|*true* if valid data was successfully read and loaded, otherwise *false* (e.g., if the IO-Buffer is empty or invalid).|migrateData(uint8_t handle, uint8_t targetHandle, uint16_t count)
+### findOldestData(uint8_t handle) / findNewestData(uint8_t handle)
+These functions search for the logically newest or oldest sector available. Unlike *read()*, the data is not loaded directly into the user code. However, the references to the current logical and physical sector are updated. This is important for reading data, but especially for writing data starting at a specific position. The data can then be read with **read()** and new data can write with **write()**.
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+|handle|uint8_t|Partition handle.|
+|Return|bool|*true* or *false* if no sector is found.|
 ### migrateData(uint8_t source, uint8_t target, uint16_t count)
 The migrateData() function is a special tool for data transfer and maintenance between two separate storage areas (partitions) of your wear-leveling structure. It allows you to copy a specific amount of data from one defined partition (source handle) to another partition (destination handle). The main purpose of this function is to consolidate data and handle version updates in the EEPROM.
 #### Backup and Restore
@@ -129,7 +135,7 @@ The *migrateData()* function addresses the issue where a partition's logical cou
 #### 1. Releasing the Partition
 The function works by reading the last valid data record (the current state) from the logically exhausted partition (sourceHandle) and writing it to a new, freshly configured partition (targetHandle).
 #### 2. Restoring Write Cycles
-The new partition (target handle) immediately regains its maximum available number of write cycles (e.g., 65,535+) because its logical counter starts at zero. This process effectively allows the user to retire the old, exhausted partition, and potentially reuse or reformat the underlying EEPROM memory space, significantly extending the overall endurance and longevity of the EEPROM storage.
+The new partition (target handle) immediately regains its maximum available number of write cycles (e.g., 65535) because its logical counter starts at zero. This process effectively allows the user to retire the old, exhausted partition, and potentially reuse or reformat the underlying EEPROM memory space, significantly extending the overall endurance and longevity of the EEPROM storage.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | source | uint8_t | Handle of the source partition. | 
