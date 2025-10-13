@@ -647,10 +647,9 @@ void EEProm_Safe_Wear_Level::formatInternal(uint8_t handle) {
 }
 
 // ----------------------------------------------------------------------------------------------------
-/**
- * Loads the control data of the specified partition from the RAM handle into the cache.
- * Disables interrupts (cli). Replaces check_and_init.
- */
+// Loads the control data of the specified partition from the RAM handle into the cache.
+// Disables interrupts (cli). Replaces check_and_init.
+
 bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
     cli(); 
     bool success = 1;
@@ -676,6 +675,7 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
 
 
 
