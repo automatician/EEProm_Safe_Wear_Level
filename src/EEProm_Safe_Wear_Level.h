@@ -61,27 +61,30 @@ class EEProm_Safe_Wear_Level {
       uint16_t loadPhysSector(uint16_t physSector, uint8_t handle);
       bool migrateData(uint8_t sourceHandle, uint8_t targetHandle, uint16_t count);
       // ----------------------------------------------------------------------------------------------------
-	   uint32_t getCtrlData(uint8_t offs, uint8_t handle){
+      uint32_t getCtrlData(uint8_t offs, uint8_t handle) {
       	    static uint8_t const leng[] = {4,0,0,0, 2,0, 2,0, 2,0, 1, 1, 2,0, 1, 1};
             check_and_init
 		   
-	        int start_index = (handle * 16) + offs;
-	        uint32_t value = 0;
-	        uint8_t read_len = leng[offs];
+	    int start_index = (handle * 16) + offs;
+            uint32_t value = 0;
+            uint8_t read_len = leng[offs];
 
-	        if (read_len > 0 && read_len <= sizeof(uint32_t)) {
-	            value = readLE(&_ramStart[start_index], read_len);
-	        }
+	    if (read_len > 0 && read_len <= sizeof(uint32_t)) {
+                value = readLE(&_ramStart[start_index], read_len);
+	    }
 		   
-	        return_and_checksum value;
-	  }
+            return_and_checksum value;
+      }
       // ----------------------------------------------------------------------------------------------------
       // internal time management
       void oneTickPassed();
-	  void idle();
+      void idle();
       // ----------------------------------------------------------------------------------------------------
    
-      
+      bool findNewestData(uint8_t handle);
+      bool findOldestData(uint8_t handle);
+
+
       // --- GENERIC TEMPLATE FUNCTIONS ---
       
       template <typename T>
@@ -117,7 +120,7 @@ class EEProm_Safe_Wear_Level {
       // Static inline function to encapsulate byte reconstruction
       // and allow the compiler to deduplicate the code.
       // 1. Little-Endian read logic (for 3x redundancy: load, find, getCtrlData)
-      static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
+        static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
               uint32_t value = 0;
 			
               for (uint8_t i = 0; i < length; i++) {
@@ -211,28 +214,24 @@ class EEProm_Safe_Wear_Level {
 template <typename T>
 bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {     
       check_and_init
-	
       bool success;
-	
       // Consistency check
-      if (_numSecs < 1 || _curLgcCnt >= _maxLgcCnt){
-         success = 0;
-         if(_curLgcCnt >= _maxLgcCnt) _status = 3;
-      }else success = 1;
-	
-      if (success == 1){
+      if (_numSecs < 1 || _curLgcCnt >= _maxLgcCnt) {
+           success = 0;
+           if(_curLgcCnt >= _maxLgcCnt) _status = 3;
+      } else success = 1;
+      if (success == 1) {
          if (sizeof(T) > _pldSize) _status = 2;
 
          uint8_t * valuePtr = (uint8_t *)&value;
          uint16_t i;
 
-         for(i = 0; i < _pldSize; i++){
+         for(i = 0; i < _pldSize; i++) {
               if(i < sizeof(T)) _ioBuf[i] = valuePtr[i];
               else _ioBuf[i] = 0;
          }
          success = _write(handle);
       }
-	
       return_and_checksum success;
 }
 
@@ -245,7 +244,7 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
     _read(ReadMode, handle);
     uint8_t success = _ioBuf[_secSize - 1];
 
-    if (success > 0){      
+    if (success > 0) {      
       // Copy data from _ioBuf to the target variable
       uint8_t * valuePtr = (uint8_t *)&value;
       uint16_t size = sizeof(T);
@@ -257,10 +256,8 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
       
       memcpy(valuePtr, _ioBuf, size); 
     }
-	
     return_and_checksum success;
 }
 // ----------------------------------------------------------------------------------------------------
 #endif // EEPROM_WEAR_LEVEL_H
 // END OF CODE
-
