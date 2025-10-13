@@ -82,7 +82,7 @@ Description: Reads data into a variable or data structure (T). If the readMode p
 For character arrays (char*), specific, non-templated overloads are available to correctly handle null termination:
  * bool write(const char* value, uint8_t handle)
  * bool read(char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
-## 3. Versioning and Health Monitoring
+## 3. Health Monitoring
 ### getOverwCounter(uint8_t handle)
 Description: Retrieves the partition overwrite counter stored in the control data.
 | Parameter | Type | Description |
@@ -103,10 +103,11 @@ This function returns the remaining write cycles. To achieve this, the counter w
 | :--- | :--- | :--- |
 |handle|uint8_t|Partition handle.|
 |Return|uint32_t|The estimated number of remaining write cycles.|
-### healthPercent(uint8_t handle)
-Description: Calculates the remaining EEPROM health as a percentage.
+### healthPercent(uint32_t cycles, uint8_t handle)
+Description: Calculates the remaining EEPROM health as a percentage. Related to the entire lifetime.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
+|cycles|uint32_t|write cycles of the EEPROM specification (e.g. 100000 at ATmega).|
 |handle|uint8_t|Partition handle.|
 |Return|uint8_t|The remaining health percentage (0-100).|
 ## 4. Advanced Functions
