@@ -3,6 +3,7 @@
 **Library Version: v25.10.5**
 
 This library provides a solution for the permanent and reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the μC to the verifiable data logging required at the commercial level. This library was developed to combine wear leveling with the security of data integrity and an operational guarantee. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a quantifiable guarantee. Premature failures are replaced by planning in the software design and active management of the planned parameters.
+
 ---
 
 ## 🚀 Get Started
@@ -23,6 +24,7 @@ This library provides a solution for the permanent and reliable storage of criti
 5. Restart the Arduino IDE.
 
 ---
+
 ## 🛡️ Design Conformity with Industry Standards
 
 The architecture of this library follows the highest design requirements from the fields of functional safety and software quality:
