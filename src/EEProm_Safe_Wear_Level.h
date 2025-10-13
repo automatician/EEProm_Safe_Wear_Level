@@ -21,7 +21,7 @@
  * e_w	: write
  * e_c	: commit
  * -------------------------------------------------------------
- */
+*/
 #ifndef EEPROM_WEAR_LEVEL_H
 #define EEPROM_WEAR_LEVEL_H
 
@@ -38,7 +38,7 @@
 // --- CLASS DEFINITION ---
 // ----------------------------------------------------------------------------------------------------
 class EEProm_Safe_Wear_Level {
-public:
+    public:
       // Standard Constructor
       EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds = 8);
 
@@ -61,9 +61,10 @@ public:
       uint16_t loadPhysSector(uint16_t physSector, uint8_t handle);
       bool migrateData(uint8_t sourceHandle, uint8_t targetHandle, uint16_t count);
       // ----------------------------------------------------------------------------------------------------
-	  uint32_t getCtrlData(uint8_t offs, uint8_t handle){
+	   uint32_t getCtrlData(uint8_t offs, uint8_t handle){
       	    static uint8_t const leng[] = {4,0,0,0, 2,0, 2,0, 2,0, 1, 1, 2,0, 1, 1};
-            _START_
+            check_and_init
+		   
 	        int start_index = (handle * 16) + offs;
 	        uint32_t value = 0;
 	        uint8_t read_len = leng[offs];
@@ -71,27 +72,28 @@ public:
 	        if (read_len > 0 && read_len <= sizeof(uint32_t)) {
 	            value = readLE(&_ramStart[start_index], read_len);
 	        }
-	        _END_
-	        return value;
+		   
+	        return_and_checksum value;
 	  }
       // ----------------------------------------------------------------------------------------------------
       // internal time management
       void oneTickPassed();
 	  void idle();
       // ----------------------------------------------------------------------------------------------------
+   
+      
       // --- GENERIC TEMPLATE FUNCTIONS ---
       
       template <typename T>
       bool write(const T& value, uint8_t handle);
       template <typename T>
       bool read(uint8_t ReadMode, T& value, uint8_t handle, size_t maxSize = 0);
-
       // --- EXPLICIT OVERLOADS FOR C-STRINGS (Implementation in .cpp) ---
       
       bool write(const char* value, uint8_t handle);
       bool read(uint8_t ReadMode, char* value, uint8_t handle, size_t maxSize = 0);
    
-private:
+    private:
       // --- INTERNAL STATE VARIABLES (Names adapted) ---      
       uint8_t * _ioBuf;
       uint8_t * _buckPerm;
@@ -101,62 +103,62 @@ private:
       uint16_t  _bucketStartAddr;
       ControlData* _controlCache;            
 
-      // ----------------------------------------------------------------------------------------------------
       // Version control
       uint8_t _EEPRWL_VER = 0;
-      // ----------------------------------------------------------------------------------------------------
-      
       bool _start(uint8_t handle);
       void _end();
       void _read(uint8_t ReadMode, uint8_t handle);
-      bool findNewestSector(uint8_t handle);
 
       // ----------------------------------------------------------------------------------------------------
       // internal time management
         void updateBuckets();
       // ----------------------------------------------------------------------------------------------------
 
-      // ----------------------------------------------------------------------------------------------------
       // Static inline function to encapsulate byte reconstruction
       // and allow the compiler to deduplicate the code.
       // 1. Little-Endian read logic (for 3x redundancy: load, find, getCtrlData)
-      static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
-        uint32_t value = 0;
-        for (uint8_t i = 0; i < length; i++) {
-            value |= (uint32_t)buffer[i] << (i * 8);
-        }
-        return value;
+        static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
+              uint32_t value = 0;
+			
+              for (uint8_t i = 0; i < length; i++) {
+                  value |= (uint32_t)buffer[i] << (i * 8);
+              }
+			
+              return value;
       }
+      
       // 2. Little-Endian write logic (for 1x redundancy: _write)
       static inline void writeLE(uint8_t* buffer, uint32_t value, uint8_t length) {
         for (uint8_t i = 0; i < length; i++) {
             buffer[i] = (uint8_t)(value >> (i * 8));
         }
       }
+
       // 3. We calculate the addition checksum over all bytes of the ControlData cache
       // from offset 0 up to the byte before the checksum (Byte 13: status).
       inline uint8_t chkSum() {
-        const size_t CHECKSUM_RANGE = 13; uint8_t check = 0, check1 = 0;
-        // We cast _controlCache (ControlData*) to uint8_t* to access byte by byte
-        uint8_t* controlDataPtr = (uint8_t*)_controlCache;
-        // 2. Calculate addition checksum
-        for (size_t i = 0; i < CHECKSUM_RANGE; i++) {
-            check += controlDataPtr[i];
-            check1 += check;
-        }
-        return check + check1;
+         const size_t CHECKSUM_RANGE = 13; uint8_t check = 0, check1 = 0;
+         // We cast _controlCache (ControlData*) to uint8_t* to access byte by byte
+         uint8_t* controlDataPtr = (uint8_t*)_controlCache;
+         // 2. Calculate addition checksum
+         for (size_t i = 0; i < CHECKSUM_RANGE; i++) {
+             check += controlDataPtr[i];
+             check1 += check;
+         }
+		  
+         return check + check1;
       }
+      
       inline void trans16(uint16_t value, uint8_t* target_ptr) {
-         union U16toB {
-             uint16_t u16;
-             uint8_t u8[2];
-         };
-         U16toB converter;
-         converter.u16 = value;
-         *target_ptr = converter.u8[0];
-         *(target_ptr + 1) = converter.u8[1]; 
+          union U16toB {
+              uint16_t u16;
+              uint8_t u8[2];
+          };
+          U16toB converter;
+          converter.u16 = value;
+          *target_ptr = converter.u8[0];
+          *(target_ptr + 1) = converter.u8[1]; 
       }
-      // ----------------------------------------------------------------------------------------------------
 
       // --- PRIVATE HELPERS (Implementation in .cpp) ---
       bool findMarginalSector(uint8_t handle, uint8_t margin);
@@ -206,9 +208,9 @@ private:
  * resource.
  *
  */
- template <typename T>
- bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {     
-      _START_
+template <typename T>
+bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {     
+      check_and_init
       bool success;
       // Consistency check
       if (_numSecs < 1 || _curLgcCnt >= _maxLgcCnt){
@@ -227,15 +229,14 @@ private:
          }
          success = _write(handle);
     }
-    _END_
-    return success;
- }
+    return_and_checksum success;
+}
 
- // ----------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
- template <typename T>
- bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, size_t maxSize) {
-    _START_
+template <typename T>
+bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, size_t maxSize) {
+    check_and_init
       
     _read(ReadMode, handle);
     uint8_t success = _ioBuf[_secSize - 1];
@@ -252,10 +253,8 @@ private:
       
       memcpy(valuePtr, _ioBuf, size); 
     }
-     _END_
-      return success;
- }
-
+    return_and_checksum success;
+}
 // ----------------------------------------------------------------------------------------------------
 #endif // EEPROM_WEAR_LEVEL_H
 // END OF CODE
