@@ -79,6 +79,7 @@ EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t s
       _tbCntLong(seconds)
 {
       _bucketStartAddr = EEPROM.length() - 9; 
+	
       for (uint8_t i = 0; i < 8; i++) { 
 	    _buckPerm[i] = e_r(_bucketStartAddr+i);
             _budgetCycles[i] = 0;
@@ -673,3 +674,4 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
