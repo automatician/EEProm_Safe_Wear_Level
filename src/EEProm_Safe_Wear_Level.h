@@ -117,7 +117,7 @@ class EEProm_Safe_Wear_Level {
       // Static inline function to encapsulate byte reconstruction
       // and allow the compiler to deduplicate the code.
       // 1. Little-Endian read logic (for 3x redundancy: load, find, getCtrlData)
-        static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
+      static inline uint32_t readLE(const uint8_t* buffer, uint8_t length) {
               uint32_t value = 0;
 			
               for (uint8_t i = 0; i < length; i++) {
@@ -211,12 +211,15 @@ class EEProm_Safe_Wear_Level {
 template <typename T>
 bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {     
       check_and_init
+	
       bool success;
+	
       // Consistency check
       if (_numSecs < 1 || _curLgcCnt >= _maxLgcCnt){
          success = 0;
          if(_curLgcCnt >= _maxLgcCnt) _status = 3;
       }else success = 1;
+	
       if (success == 1){
          if (sizeof(T) > _pldSize) _status = 2;
 
@@ -228,8 +231,9 @@ bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {
               else _ioBuf[i] = 0;
          }
          success = _write(handle);
-    }
-    return_and_checksum success;
+      }
+	
+      return_and_checksum success;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -253,8 +257,10 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
       
       memcpy(valuePtr, _ioBuf, size); 
     }
+	
     return_and_checksum success;
 }
 // ----------------------------------------------------------------------------------------------------
 #endif // EEPROM_WEAR_LEVEL_H
 // END OF CODE
+
