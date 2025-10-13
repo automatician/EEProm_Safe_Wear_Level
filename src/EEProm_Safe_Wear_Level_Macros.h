@@ -26,8 +26,8 @@
 // -----------------------------------------------------------
 // 3. SETUP Macro
 // -----------------------------------------------------------
-#define _START_ if(_start(handle)==0) return 0;
-#define _END_ _end();
+#define check_and_init if(_start(handle)==0) return 0;
+#define return_and_checksum _end(); return 
 
 // The structure of the control data per partition
 // '__attribute__((packed))' ensures tight packing for exact size.
@@ -40,7 +40,7 @@ typedef struct __attribute__((packed)) {
     uint8_t  cntLen;         // Offset 11 (1 B)
     uint16_t buckCyc;        // Offset 12 (2 B)
     uint8_t  status;         // Offset 14 (1 B)
-    uint8_t  checksum;       // Offset 15 (1 B)
+    uint8_t checksum;        // Offset 15 (1 B)
 } ControlData; 
 // Total size: 16 Bytes
 
@@ -54,4 +54,10 @@ typedef struct __attribute__((packed)) {
 #endif
 
 #endif // EEPROM_SAFE_WEAR_LEVEL_MACROS_H
+
+// -----------------------------------------------------------
+// Other
+// -----------------------------------------------------------
+#define maxCapacity (uint32_t)(1UL << (_cntLen * 8)) - 1
+
 // END OF CODE
