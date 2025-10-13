@@ -99,6 +99,7 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
      uint8_t* ramPtr = _ramStart + ((size_t)handle * CONTROL_STRUCT_SIZE);
      // Assignment of the calculated pointer to _controlCache (with casting)
      _controlCache = (ControlData*) ramPtr;
+	
      _handle = handle;
 
      _buckCyc = budgetCycles;
@@ -674,4 +675,5 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
 
