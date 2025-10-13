@@ -257,8 +257,6 @@ void EEProm_Safe_Wear_Level::_read(uint8_t ReadMode, uint8_t handle) {
         cli();
         _handle1 = handle;
     }
-
-    return;
 }
 // ----------------------------------------------------------------------------------------------------
 bool EEProm_Safe_Wear_Level::migrateData(uint8_t handle, uint8_t targetHandle, uint16_t count){
@@ -628,8 +626,6 @@ void EEProm_Safe_Wear_Level::formatInternal(uint8_t handle) {
 
         e_c;
     }
-	
-    return;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -661,3 +657,4 @@ void EEProm_Safe_Wear_Level::_end(){
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
