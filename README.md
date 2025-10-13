@@ -2,7 +2,7 @@
 
 **Library Version: v25.10.5**
 
-This library provides a **fool-proof solution** for the persistent, reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the $\mu\text{C}$ to verifiable data logging required at a commercial level.
+This library provides a fool-proof solution for the persistent, reliable storage of critical data on Arduino-compatible microcontrollers. It covers the entire application spectrum, from simple EEPROM storage in the μC to verifiable data logging required at a commercial level. This library was designed to combine wear leveling with data integrity assurance. Write management is a welcome assurance regarding lifespan, answering the question: "How long will my EEPROM last?" It eliminates this uncertainty by effectively converting the question of longevity into a quantifiable guarantee, replacing random failure with planning in the software design and the active management of the planned parameters.
 
 ---
 ## 🛡️ Design Conformity with Industry Standards
