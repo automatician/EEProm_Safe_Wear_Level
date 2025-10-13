@@ -1,4 +1,4 @@
-# Industrial Data Integrity with Log- and Write-Load-Management
+# Industrial Data Integrity with Log and Write Load Management
 ## EEProm_Safe_Wear_Level 
 
 **Library Version: v25.10.5**
