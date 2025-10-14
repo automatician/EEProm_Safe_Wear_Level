@@ -74,7 +74,7 @@ Description: This is an **alternative function to oneTickPassed()**, which shoul
 | :--- | :--- | :--- |
 | no | void | no return value |
 
-### Operating Mode: Fixed Budget (Without Tick Functions)
+### 1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)
 If you intentionally omit the calls to *oneTickPassed()* or *idle()*:
 
 The system operates in a **Fixed Budget Mode**.
