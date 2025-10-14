@@ -96,7 +96,7 @@ For character arrays (char*), specific, non-templated overloads are available to
  * bool read(uint8_t readMode, char* value, uint8_t handle, size_t maxSize) //maxSize isnecessary
 ## 3. Health Monitoring
 ### getOverwCounter(uint8_t handle)
-Description: Retrieves the partition overwrite counter stored in the control data.
+Description: Retrieves the overwrite counter stored in the partition.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | handle | uint8_t | Partition handle. |
