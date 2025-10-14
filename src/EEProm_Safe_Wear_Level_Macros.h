@@ -44,10 +44,23 @@ typedef struct __attribute__((packed)) {
 } ControlData; 
 // Total size: 16 Bytes
 
-// END OF CODE
-
 #define e_w EEPROM.write
 #define e_r EEPROM.read
+
+#define actual 0
+#define next 1
+#define previous 2
+#define oldest 3
+#define newest 4
+#define forceFormat 1
+
+#define ACTUAL 0
+#define NEXT 1
+#define PREVIOUS 2
+#define OLDEST 3
+#define NEWEST 4
+#define FORCEFORMAT 1
+#define FORCE_FORMAT 1
 
 #if defined(ESP8266) || defined(ESP32)
      #define e_c EEPROM.commit()
