@@ -63,10 +63,11 @@ It is the library's short-term, reactive protection mechanism that is only activ
 The following functions provide the necessary time base to maintain the Write Load Management for the entire system. One of the two functions must be called in your software.
 ### oneTickPassed()
 Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
-**Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | no | void | no return value |
+
+**Warning:** If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.
 ### idle()
 Description: This is an **alternative function to oneTickPassed()**, which should be called within the main loop when used. The frequency of the call is not critical, but should occur more than once per hour. For compatibility reasons, it uses the internal millis() timebase, so it is not hardware-dependent and does not consume valuable interrupts in your code. You use this function as an alternative to the oneTickPassed() function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it.
 | Parameter | Type | Description |
