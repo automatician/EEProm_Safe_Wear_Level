@@ -152,6 +152,7 @@ The function works by reading the last valid data records from the logically exh
 | source | uint8_t | Handle of the source partition. | 
 | target | uint8_t | Handle of the target partition. | 
 | count | uint16_t | The counter, how many last log entries (newest sectors) are transferred to the target partition. |
+
 **WARNING:** The migrateData() function does not automatically format the source partition (sourceHandle) upon successful migration, as this is a deliberate design choice to prevent the immediate deletion of data, thus supporting backup and data recovery strategies.
 ### 4.2. Physical Sectors
 ### loadPhysSector(uint16_t physSector, uint8_t handle)
