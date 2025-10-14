@@ -135,7 +135,7 @@ Diese Umstellung wird benötigt, um den minimal notwendigen WLM-Parameter (budge
 
 ### Berechnung der benötigten SectorsPartition (Wear-Leveling Multiplikator)
 Diese Umstellung wird benötigt, um die minimale Partitionsgröße (SectorsPartition) zu finden, die notwendig ist, um die geplante Lebensdauer bei gegebener Schreiblast (budgetCycles) zu erreichen.
-<div align="center"><h4><i>SectorsPartition = (budgetCycles×OperatingLifetime (Years) × HoursPerYear) ÷ TotalCyclesEEPROM</i></h4></div>
+<div align="center"><h3>$$\text{SectorsPartition} = \frac{\text{budgetCycles} \times \text{OperatingLifetime (Years)} \times \text{HoursPerYear}}{\text{TotalCyclesEEPROM}}$$</h3></div>
 
 ### Berechnung der maximal zulässigen TotalCyclesEEPROM (Datenblattprüfung)
 Diese Umstellung wird benötigt, um zu überprüfen, welche EEPROM-Spezifikation (Total Cycles) erforderlich ist, um die geplante Lebensdauer mit einer festgelegten Partitionsgröße und WLM-Einstellung zu erreichen.
