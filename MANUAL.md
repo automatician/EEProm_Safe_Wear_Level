@@ -75,14 +75,24 @@ Description: This is an **alternative function to oneTickPassed()**, which shoul
 | no | void | no return value |
 
 ### 1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)
-If you intentionally omit the calls to *oneTickPassed()* or *idle()*:
+If you intentionally omit the calls to *oneTickPassed()* or *idle()*: the system operates in a **Fixed Budget Mode**.
 
-The system operates in a **Fixed Budget Mode**.
+The WLM does not save the current, reduced state of the Write Credit Bucket to EEPROM during runtime.
+Upon every system reboot, the Write Credit Bucket is fully reset and initialized with an initial credit calculated from the config() parameter.
 
- * The WLM does not save the current state of the Write Credit Bucket to EEPROM during runtime.
- * Upon every system reboot, the Write Credit Bucket is fully reset and initialized with the value defined in config() (budgetCycles, max 255).
- * Advantage for Prototyping/Testing: This mode guarantees a fixed, maximum number of write operations (equal to budgetCycles) after every reset. This is especially useful in test environments where the Arduino is connected to a PC, providing an automatic safeguard against excessive EEPROM wear if the device writes frequently and is left running unattended.
- * Limitation: This mode eliminates the time-based wear leveling control, making it unsuitable for long-term production use where consistent write rate control is required.
+### Initial Budget Calculation:
+
+The maximum available write credit in this mode is calculated by multiplying the budgetCycles value from config() with the initial internal bucket constant (143).
+Initial budget: $\text{Initial Budget} = \text{budgetCycles} \times 143$
+BudgetCycles acts as a multiplication factor for the credit bucket upon initialization.
+
+To set a desired maximum number of write operations (MaxWrites) after a reboot, you must pass the following calculated value to config():
+\text{budgetCycles} = \frac{\text{MaxWrites}}{143}
+Since the budgetCycles parameter is a uint8_t (max. 255), you should ensure that the result of the division does not exceed this value.
+
+Advantage for Prototyping/Testing: This guarantees a fixed, high maximum number of write operations upon every reset. This is ideal for testing where the Arduino is connected to a PC, providing an automatic safeguard against excessive EEPROM wear if the device writes frequently and is left running unattended.
+
+**Limitation:** This mode eliminates the continuous, time-based wear leveling control, making it unsuitable for long-term production use where consistent write rate control is required.
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
