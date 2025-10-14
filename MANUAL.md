@@ -6,6 +6,8 @@ They are only loaded into Flash memory by the compiler - and thus only occupy sp
 * Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
 
+The **Log Management Functions** can be found under point **4. Advanced functions**.
+
 ## Table of functions
 | 1. Initialization / configuration | 2. Reading & Writing | 3. Health & Statistics / WLM |
 | :--- | :--- | :--- |
@@ -15,8 +17,6 @@ They are only loaded into Flash memory by the compiler - and thus only occupy sp
 | [idle()](#idle) | [read(readMode, char\* value, ...)](#explicit-overloads-for-c-strings) | [healthPercent()](#healthpercentuint32_t-cycles-uint8_t-handle) |
 | [getWrtAccBalance()](#getwrtaccbalanceuint8_t-handle) | [read(readMode, T& value, ...)](#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize-1) | [getCtrlData()](#getctrldataint-offs-int-handle) |
 | [loadPhysSector()](#loadphyssectoruint16_t-physsector-uint8_t-handle) | [findNewestData() / findOldestData()](#findoldestdatauint8_t-handle--findnewestdatauint8_t-handle) | [migrateData()](#migratedatauint8_t-source-uint8_t-target-uint16_t-count) |
-
-The **Log Management Functions** can be found under point **4. Advanced functions**.
 
 ## Security, Integrity and Partial Reformatting
 The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.
