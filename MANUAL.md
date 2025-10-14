@@ -1,15 +1,9 @@
 # EEProm_Safe_Wear_Level - API Manual
 This document provides a concise reference for all public functions of the EEProm_Safe_Wear_Level library, which was developed to manage wear-leveling in EEPROM memory. The functions can be divided into five main categories, with the Write Load Management (WLM) logic being controlled by three functions: **constructor**, **config()**, **oneTickPassed()/idle()** and **getWrtAccBalance()**. <br>
 
-This functions are optional functions: 
- *  **migrateData()**
- *  **getCtrlData()**
- *  **getWrtAccBalance()**
- *  **oneTickPassed()**
- *  **idle()**
- *  **findNewestData()**
- *  **findOldestData**
+This functions are optional: **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()**, **idle()**, **findNewestData()**, **findOldestData**
 
+## Functions
 | 1. Initialization / configuration | 2. Reading & Writing | 3. Health & Statistics / WLM |
 | :--- | :--- | :--- |
 | [EEProm\_Safe\_Wear\_Level(...)](#eeprom_safe_wear_leveluint8t-ramhandleptr-uint16t-seconds) | [write(const T& value, ...)](#writeconst-t-value-uint8t-handle) | [getOverwCounter()](#getoverwcounteruint8t-handle) |
