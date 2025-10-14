@@ -44,6 +44,8 @@ typedef struct __attribute__((packed)) {
 } ControlData; 
 // Total size: 16 Bytes
 
+// END OF CODE
+
 #define e_w EEPROM.write
 #define e_r EEPROM.read
 
@@ -59,5 +61,4 @@ typedef struct __attribute__((packed)) {
 // Other
 // -----------------------------------------------------------
 #define maxCapacity (uint32_t)(1UL << (_cntLen * 8)) - 1
-
 // END OF CODE
