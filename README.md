@@ -15,6 +15,7 @@ The complete manual with public functions, parameters, and return values can be 
     * [Demo3](/Examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
     * [Demo4](/Examples/demo4_multi_partition.ino): Multi-partition reading and writing
     * [Demo5](/Examples/demo5_log_functions.ino): Demonstrates iterative navigation and reading using read(), findNewestData() and findOldestData().
+    * [Demo6](/Examples/demo6_log_migration.ino): Demonstrates the migration of sectors to a second partition starting with a new logical counter.
 
 ### Manual Installation Method:
 1. Download the repository's release ZIP file.
