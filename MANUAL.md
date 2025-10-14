@@ -127,19 +127,19 @@ Every piece of software has a development cycle. When working with EEPROM, which
 Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **SectorsPartition**).
 
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
-<h4>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</h4>
+<div align="center"><h4>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</h4></div>
 
 ### Berechnung der benötigten budgetCycles (WLM-Konfiguration)
 Diese Umstellung wird benötigt, um den minimal notwendigen WLM-Parameter (budgetCycles) zu finden, der eine geplante Lebensdauer (OperatingLifetime) bei gegebener Partition gewährleistet.
-<h4>budgetCycles = (TotalCyclesEEPROM×SectorsPartition) ÷ (OperatingLifetime (Years) × HoursPerYear)</h4>
+<div align="center"><h4>budgetCycles = (TotalCyclesEEPROM×SectorsPartition) ÷ (OperatingLifetime (Years) × HoursPerYear)</h4></div>
 
 ### Berechnung der benötigten SectorsPartition (Wear-Leveling Multiplikator)
 Diese Umstellung wird benötigt, um die minimale Partitionsgröße (SectorsPartition) zu finden, die notwendig ist, um die geplante Lebensdauer bei gegebener Schreiblast (budgetCycles) zu erreichen.
-<h4>SectorsPartition = (budgetCycles×OperatingLifetime (Years) × HoursPerYear) ÷ TotalCyclesEEPROM</h4>
+<div align="center"><h4>SectorsPartition = (budgetCycles×OperatingLifetime (Years) × HoursPerYear) ÷ TotalCyclesEEPROM</h4></div>
 
 ### Berechnung der maximal zulässigen TotalCyclesEEPROM (Datenblattprüfung)
 Diese Umstellung wird benötigt, um zu überprüfen, welche EEPROM-Spezifikation (Total Cycles) erforderlich ist, um die geplante Lebensdauer mit einer festgelegten Partitionsgröße und WLM-Einstellung zu erreichen.
-<h4>TotalCyclesEEPROM = (budgetCycles × OperatingLifetime (Years) × HoursPerYear) ÷ SectorsPartition</h4>
+<div align="center"><h4>TotalCyclesEEPROM = (budgetCycles × OperatingLifetime (Years) × HoursPerYear) ÷ SectorsPartition</h4></div>
 
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
