@@ -138,8 +138,9 @@ Dies ist die häufigste Anwendung: Sie kennen die **OperatingLifetime** (geplant
 ## 1.5.3.2 Berechnung der benötigten Sektorenzahl (SectorsPartition)
 Dies ist die Anwendung für die Wear-Leveling-Planung: Sie kennen die **OperatingLifetime** (geplant) und Ihre **budgetCycles** (erforderliche Schreiblast) und suchen den Wear-Leveling-Multiplikator.
 **Zweck:** Ermittlung der minimalen Anzahl an Sektoren, die notwendig sind, um die geplante Lebensdauer bei gegebener Schreiblast zu erreichen.
-<h4>SectorsPartition = budgetCycles × OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM</h4>
-​**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in die totalBytesUsed-Berechnung (Kapitel 1.1) einfließen, da die Sektorenanzahl die Größe der Partition bestimmt.
+<h4>SectorsPartition = budgetCycles × OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM</h4> 
+
+**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in die totalBytesUsed-Berechnung (Kapitel 1.1) einfließen, da die Sektorenanzahl die Größe der Partition bestimmt.
 
 ## 1.5.3.3 Berechnung der maximal möglichen Schreiblast pro Stunde (CyclesPerHr)
 Dies ist die Anwendung für die Kapazitätsanalyse: Sie kennen die physische **SectorsPartition** und suchen die maximal mögliche budgetCycles-Einstellung für eine geplante Lebensdauer.
