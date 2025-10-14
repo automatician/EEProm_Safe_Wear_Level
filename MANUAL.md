@@ -83,11 +83,11 @@ Upon every system reboot, the Write Credit Bucket is fully reset and initialized
 ### Initial Budget Calculation:
 
 The maximum available write credit in this mode is calculated by multiplying the budgetCycles value from config() with the initial internal bucket constant (143):
-<div align="center"> <h4>Initial Budget = budgetCycles &#215; 143</h4> </div>
+<div align="center"> <h4><i></i>Initial Budget = budgetCycles &#215; 143</h4></h4> </div>
 BudgetCycles acts as a multiplication factor for the credit bucket upon initialization.
 
 To set a desired maximum number of write operations (MaxWrites) after a reboot, you must pass the following calculated value to config():
-<div align="center"> <h4>budgetCycles = MaxWrites &divide; 143 </h4> </div>
+<div align="center"> <h4><i>budgetCycles = MaxWrites &divide; 143 </i></h4> </div>
 Since the budgetCycles parameter is a uint8_t (max. 255), you should ensure that the result of the division does not exceed this value.
 
 <b><i>Advantage for Prototyping/Testing:</i></b> This guarantees a fixed, high maximum number of write operations upon every reset. This is ideal for testing where the Arduino is connected to a PC, providing an automatic safeguard against excessive EEPROM wear if the device writes frequently and is left running unattended.
@@ -127,19 +127,19 @@ Every piece of software has a development cycle. When working with EEPROM, which
 Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **SectorsPartition**).
 
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
-<div align="center"><h4>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</h4></div>
+<div align="center"><h4><i>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</i></h4></div>
 
 ### Berechnung der benötigten budgetCycles (WLM-Konfiguration)
 Diese Umstellung wird benötigt, um den minimal notwendigen WLM-Parameter (budgetCycles) zu finden, der eine geplante Lebensdauer (OperatingLifetime) bei gegebener Partition gewährleistet.
-<div align="center"><h4>budgetCycles = (TotalCyclesEEPROM×SectorsPartition) ÷ (OperatingLifetime (Years) × HoursPerYear)</h4></div>
+<div align="center"><h4><i>budgetCycles = (TotalCyclesEEPROM×SectorsPartition) ÷ (OperatingLifetime (Years) × HoursPerYear)</i></h4></div>
 
 ### Berechnung der benötigten SectorsPartition (Wear-Leveling Multiplikator)
 Diese Umstellung wird benötigt, um die minimale Partitionsgröße (SectorsPartition) zu finden, die notwendig ist, um die geplante Lebensdauer bei gegebener Schreiblast (budgetCycles) zu erreichen.
-<div align="center"><h4>SectorsPartition = (budgetCycles×OperatingLifetime (Years) × HoursPerYear) ÷ TotalCyclesEEPROM</h4></div>
+<div align="center"><h4><i>SectorsPartition = (budgetCycles×OperatingLifetime (Years) × HoursPerYear) ÷ TotalCyclesEEPROM</i></h4></div>
 
 ### Berechnung der maximal zulässigen TotalCyclesEEPROM (Datenblattprüfung)
 Diese Umstellung wird benötigt, um zu überprüfen, welche EEPROM-Spezifikation (Total Cycles) erforderlich ist, um die geplante Lebensdauer mit einer festgelegten Partitionsgröße und WLM-Einstellung zu erreichen.
-<div align="center"><h4>TotalCyclesEEPROM = (budgetCycles × OperatingLifetime (Years) × HoursPerYear) ÷ SectorsPartition</h4></div>
+<div align="center"><h4><i>TotalCyclesEEPROM = (budgetCycles × OperatingLifetime (Years) × HoursPerYear) ÷ SectorsPartition</i></h4></div>
 
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
