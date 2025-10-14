@@ -10,6 +10,15 @@ This functions are optional functions:
  *  **findNewestData()**
  *  **findOldestData**
 
+| 1. Initialization / configuration | 2. Reading & Writing | 3. Health & Statistics / WLM |
+| :--- | :--- | :--- |
+| [EEProm\_Safe\_Wear\_Level(...)](#eeprom_safe_wear_leveluint8t-ramhandleptr-uint16t-seconds) | [write(const T& value, ...)](#writeconst-t-value-uint8t-handle) | [getOverwCounter()](#getoverwcounteruint8t-handle) |
+| [config(...)](#configuint16t-startaddress-uint16t-totalbytesused-uint16t-payloadsize-uint8t-cntlengthbytes-uint8t-budgetcycles-uint8t-handle) | [read(0, T& value, ...)](#readuint8t-readmode-t-value-uint8t-handle-sizet-maxsize) | [initialize(...)](#initializebool-forceformat-uint8t-handle) |
+| [oneTickPassed()](#onetickpassed) | [write(const char\* value, ...)](#explicit-overloads-for-c-strings) | [healthCycles()](#healthcyclesuint8t-handle) |
+| [idle()](#idle) | [read(readMode, char\* value, ...)](#explicit-overloads-for-c-strings) | [healthPercent()](#healthpercentuint32t-cycles-uint8t-handle) |
+| [getWrtAccBalance()](#getwrtaccbalanceuint8t-handle) | [read(readMode, T& value, ...)](#readuint8t-readmode-t-value-uint8t-handle-sizet-maxsize-1) | [getCtrlData()](#getctrldataint-offs-int-handle) |
+| [loadPhysSector()](#loadphyssectoruint16t-physsector-uint8t-handle) | [findNewestData() / findOldestData()](#findoldestdatauint8t-handle--findnewestdatauint8t-handle) | [migrateData()](#migratedatauint8t-source-uint8t-target-uint16t-count) |
+
 They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
 * Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
 * Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
