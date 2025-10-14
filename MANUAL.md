@@ -129,6 +129,18 @@ Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritis
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
 <h4>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</h4>
 
+### Berechnung der benötigten budgetCycles (WLM-Konfiguration)
+Diese Umstellung wird benötigt, um den minimal notwendigen WLM-Parameter (budgetCycles) zu finden, der eine geplante Lebensdauer (OperatingLifetime) bei gegebener Partition gewährleistet.
+<h4>budgetCycles = (TotalCyclesEEPROM×SectorsPartition) ÷ (OperatingLifetime (Years) × HoursPerYear)</h4>
+
+### Berechnung der benötigten SectorsPartition (Wear-Leveling Multiplikator)
+Diese Umstellung wird benötigt, um die minimale Partitionsgröße (SectorsPartition) zu finden, die notwendig ist, um die geplante Lebensdauer bei gegebener Schreiblast (budgetCycles) zu erreichen.
+<h4>SectorsPartition = (budgetCycles×OperatingLifetime (Years) × HoursPerYear) ÷ TotalCyclesEEPROM</h4>
+
+### Berechnung der maximal zulässigen TotalCyclesEEPROM (Datenblattprüfung)
+Diese Umstellung wird benötigt, um zu überprüfen, welche EEPROM-Spezifikation (Total Cycles) erforderlich ist, um die geplante Lebensdauer mit einer festgelegten Partitionsgröße und WLM-Einstellung zu erreichen.
+<h4>TotalCyclesEEPROM = (budgetCycles × OperatingLifetime (Years) × HoursPerYear) ÷ SectorsPartition</h4>
+
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
