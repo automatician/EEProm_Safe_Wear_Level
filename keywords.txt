@@ -7,7 +7,7 @@ EEProm_Safe_Wear_Level	KEYWORD1
 EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level	KEYWORD1
 
 # PUBLIC API METHODS (KEYWORD2)
-getWrtAccBalance	KEYWORD2
+getWrtAccBalance        KEYWORD2
 config	KEYWORD2
 getOverwCounter	KEYWORD2
 initialize	KEYWORD2
@@ -17,6 +17,26 @@ loadPhysSector	KEYWORD2
 migrateData	KEYWORD2
 getCtrlData	KEYWORD2
 oneTickPassed	KEYWORD2
+findNewestData	KEYWORD2
+findOldestData	KEYWORD2
 idle	KEYWORD2
 write	KEYWORD2
 read	KEYWORD2
+
+# READ MODES (LITERAL1) - Assuming these are constants defined elsewhere
+ReadMode	LITERAL1
+actual	LITERAL1
+next	LITERAL1
+previous	LITERAL1
+oldest	LITERAL1
+newest	LITERAL1
+count	LITERAL1
+forceFormat	LITERAL1
+
+ACTUAL	LITERAL1
+NEXT	LITERAL1
+PREVIOUS	LITERAL1
+OLDEST	LITERAL1
+NEWEST	LITERAL1
+COUNT	LITERAL1
+FORCEFORMAT	LITERAL1
