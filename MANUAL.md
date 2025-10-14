@@ -126,7 +126,7 @@ Every piece of software has a development cycle. When working with EEPROM, which
 Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **SectorsPartition**).
 
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
-<h3>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</h3>
+<h4>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</h4>
 
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
