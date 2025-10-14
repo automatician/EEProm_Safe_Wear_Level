@@ -56,7 +56,7 @@
 #define DEFAULT_PLD_SIZE  1
 // Meta Data (size: magic-id(1) + config-hash(1) + Overwrite-counter(2)):
 #define METADATA_SIZE  4
-#define MAGIC_ID  0x49
+#define MAGIC_ID  0x48
 
 // ----------------------------------------------------------------------------------------------------
 // --- CONSTRUCTOR ---
@@ -81,7 +81,7 @@ EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t s
       _bucketStartAddr = EEPROM.length() - 9; 
       for (uint8_t i = 0; i < 8; i++) { 
 	    _buckPerm[i] = e_r(_bucketStartAddr+i);
-            _budgetCycles[i] = 0;
+        _budgetCycles[i] = 0;
       }
 }
 
@@ -181,10 +181,10 @@ bool EEProm_Safe_Wear_Level::initialize(bool forceFormat, uint8_t handle) {
 	        _status = 4;
 	        // Necessary: First use or version conflict -> Format!
 	        formatInternal(handle);
-		    e_w(_startAddr + 0, MAGIC_ID);
-		    e_w(_startAddr + 1, c_hash);
+		e_w(_startAddr + 0, MAGIC_ID);
+		e_w(_startAddr + 1, c_hash);
 	        e_c;
-	        _nextPhSec = 0;
+	        _nextPhSec = 0; _curLgcCnt = 1;
 	    }else {
 	        // --- 4. RESTORATION ---
 	        // If the metadata is valid, find the latest sector.
@@ -275,41 +275,44 @@ void EEProm_Safe_Wear_Level::_read(uint8_t ReadMode, uint8_t handle) {
 
 // ----------------------------------------------------------------------------------------------------
 
-bool EEProm_Safe_Wear_Level::migrateData(uint8_t handle, uint8_t targetHandle, uint16_t count) {
-    check_and_init
+bool EEProm_Safe_Wear_Level::migrateData(uint8_t sourceHandle, uint8_t targetHandle, uint16_t count) {
 
-    bool success = 0; uint16_t count1 = 0;
-
+    bool success = findMarginalSector(sourceHandle,0); 
+    if (!success) return false;
+    
+    uint16_t count1 = 1;
+    uint16_t sectors = _numSecs - 1;
+    uint16_t actSector = _nextPhSec;
+   
     // find newest sector at source partition 
     // migration starts when a sector is found, with searching backward
 
-    if (findMarginalSector(handle,0)) {
-	     size_t actPhysSec = _nextPhSec; _nextPhSec--;
-	
-	     while (count > 0 && _nextPhSec != actPhysSec) {
-             	success = loadPhysSector(_nextPhSec, handle); cli();
-        	    if (success == true) { count--; count1++; } 
-	            _nextPhSec--;
-	     }
+    while (count > 1 && sectors > 0) {
+	actSector--;
+        success = loadPhysSector(actSector, sourceHandle);
+        actSector = _nextPhSec;
+        if (success == true) { count--; count1++; } 
+        sectors--;
     }
 
     // now migrate a sector to target partition
+
     while (count1 > 0) {
-	    _start(targetHandle); uint16_t i=1;
-	    while (write(_ioBuf,targetHandle) == 0 && i < _numSecs) { i++; }
-        if (i==_numSecs) count1 = 1;
-	    if (count1 > 1) {
-            _start(handle); success = 0;
-		    while (success == 0) {
-		        _nextPhSec++;
-		    	success = loadPhysSector(_nextPhSec,handle);
-		        cli();
-		    }
-	    }
-	    count1--;
+	uint16_t i = 1;
+	while (write((const char*)_ioBuf,targetHandle) == 0 && i < _numSecs) { i++; }
+        if (i == _numSecs) { count1 = 1; success = 0; }
+	if (count1 > 1) {
+                success = 0;
+	        while (success == 0) {
+		        actSector++;
+		    	success = loadPhysSector(actSector,sourceHandle);
+                actSector = _nextPhSec;
+	        }
+	}
+	count1--;
     }
 
-    return_and_checksum success;
+    return success;
 }
 
 // ----------------------------------------------------------------------------------------------------
@@ -319,13 +322,12 @@ uint16_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t han
 
     uint16_t success;  uint16_t x; _usedSector = 0;
 
-    if (physSector == 0) physSector = _numSecs-1; 
-    else if (physSector == -1) physSector = _numSecs-2; 
-    else if (physSector > _numSecs) physSector = 0;
-         else physSector--;
+    if (physSector == 65535) physSector = _numSecs-1; 
+    else if (physSector == _numSecs) physSector = 0;
 
-    if (physSector == _numSecs-1) _nextPhSec = 0;
-    else _nextPhSec = physSector+1;
+    _nextPhSec = physSector; physSector--;
+
+    if (physSector == 65535) physSector = _numSecs-1; 
 
     physSector *= _secSize;
     physSector += _startAddr + METADATA_SIZE;
@@ -341,13 +343,11 @@ uint16_t EEProm_Safe_Wear_Level::loadPhysSector(uint16_t physSector, uint8_t han
     uint8_t crc1 = calculateCRC(_ioBuf, _secSize - 1);
 
     if (crc == crc1) {
-        _curLgcCnt = 0;
-	    _curLgcCnt = readLE(&_ioBuf[_pldSize], _cntLen);
+        _curLgcCnt = readLE(&_ioBuf[_pldSize], _cntLen);
         success = 1;
         _status = 1;
         if (_usedSector == 0) _status = 7;
-        success = 0;
-    }
+    } else success = 0;
 
     return_and_checksum success;
 }
@@ -439,6 +439,8 @@ bool EEProm_Safe_Wear_Level::_write(uint8_t handle) {
 
 // ----------------------------------------------------------------------------------------------------
 // --- GETTERS FOR STATE AND METADATA ---
+// ----------------------------------------------------------------------------------------------------
+
 // Remaining cycles
 uint32_t EEProm_Safe_Wear_Level::healthCycles(uint8_t handle) {
     check_and_init
@@ -448,6 +450,8 @@ uint32_t EEProm_Safe_Wear_Level::healthCycles(uint8_t handle) {
     if(success==1) success = _maxLgcCnt - _curLgcCnt;
     return_and_checksum success;
 }
+
+// ----------------------------------------------------------------------------------------------------
 
 // Remaining cycles in percent
 uint8_t EEProm_Safe_Wear_Level::healthPercent(uint32_t cycles, uint8_t handle) {
@@ -661,9 +665,10 @@ void EEProm_Safe_Wear_Level::formatInternal(uint8_t handle) {
 }
 
 // ----------------------------------------------------------------------------------------------------
-// Loads the control data of the specified partition from the RAM handle into the cache.
-// Disables interrupts (cli). Replaces check_and_init.
-
+/**
+ * Loads the control data of the specified partition from the RAM handle into the cache.
+ * Disables interrupts (cli). Replaces check_and_init.
+ */
 bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
     cli(); 
     bool success = 1;
