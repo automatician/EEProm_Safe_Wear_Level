@@ -9,12 +9,12 @@ They are only loaded into Flash memory by the compiler - and thus only occupy sp
 ## Table of functions
 | 1. Initialization / configuration | 2. Reading & Writing | 3. Health & Statistics / WLM |
 | :--- | :--- | :--- |
-| [EEProm\_Safe\_Wear\_Level(...)](#eeprom_safe_wear_leveluint8t-ramhandleptr-uint16t-seconds) | [write(const T& value, ...)](#writeconst-t-value-uint8t-handle) | [getOverwCounter()](#getoverwcounteruint8t-handle) |
-| [config(...)](#configuint16t-startaddress-uint16t-totalbytesused-uint16t-payloadsize-uint8t-cntlengthbytes-uint8t-budgetcycles-uint8t-handle) | [read(0, T& value, ...)](#readuint8t-readmode-t-value-uint8t-handle-sizet-maxsize) | [initialize(...)](#initializebool-forceformat-uint8t-handle) |
-| [oneTickPassed()](#onetickpassed) | [write(const char\* value, ...)](#explicit-overloads-for-c-strings) | [healthCycles()](#healthcyclesuint8t-handle) |
-| [idle()](#idle) | [read(readMode, char\* value, ...)](#explicit-overloads-for-c-strings) | [healthPercent()](#healthpercentuint32t-cycles-uint8t-handle) |
-| [getWrtAccBalance()](#getwrtaccbalanceuint8t-handle) | [read(readMode, T& value, ...)](#readuint8t-readmode-t-value-uint8t-handle-sizet-maxsize-1) | [getCtrlData()](#getctrldataint-offs-int-handle) |
-| [loadPhysSector()](#loadphyssectoruint16t-physsector-uint8t-handle) | [findNewestData() / findOldestData()](#findoldestdatauint8t-handle--findnewestdatauint8t-handle) | [migrateData()](#migratedatauint8t-source-uint8t-target-uint16t-count) |
+| [EEProm\_Safe\_Wear\_Level(...)](#eeprom_safe_wear_leveluint8_t-ramhandleptr-uint16_t-seconds) | [write(const T& value, ...)](#writeconst-t-value-uint8_t-handle) | [getOverwCounter()](#getoverwcounteruint8_t-handle) |
+| [config(...)](#configuint16_t-startaddress-uint16_t-totalbytesused-uint16_t-payloadsize-uint8_t-cntlengthbytes-uint8_t-budgetcycles-uint8_t-handle) | [read(0, T& value, ...)](#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize) | [initialize(...)](#initializebool-forceformat-uint8_t-handle) |
+| [oneTickPassed()](#onetickpassed) | [write(const char\* value, ...)](#explicit-overloads-for-c-strings) | [healthCycles()](#healthcyclesuint8_t-handle) |
+| [idle()](#idle) | [read(readMode, char\* value, ...)](#explicit-overloads-for-c-strings) | [healthPercent()](#healthpercentuint32_t-cycles-uint8_t-handle) |
+| [getWrtAccBalance()](#getwrtaccbalanceuint8_t-handle) | [read(readMode, T& value, ...)](#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize-1) | [getCtrlData()](#getctrldataint-offs-int-handle) |
+| [loadPhysSector()](#loadphyssectoruint16_t-physsector-uint8_t-handle) | [findNewestData() / findOldestData()](#findoldestdatauint8_t-handle--findnewestdatauint8_t-handle) | [migrateData()](#migratedatauint8_t-source-uint8_t-target-uint16_t-count) |
 
 The **Log Management Functions** can be found under point **4. Advanced functions**.
 
