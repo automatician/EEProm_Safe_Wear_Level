@@ -83,11 +83,11 @@ Upon every system reboot, the Write Credit Bucket is fully reset and initialized
 ### Initial Budget Calculation:
 
 The maximum available write credit in this mode is calculated by multiplying the budgetCycles value from config() with the initial internal bucket constant (143):
-<div align="center"> <h4><i></i>Initial Budget = budgetCycles &#215; 143</h4></h4> </div>
+<div align="center"> <h4><i>Initial Budget = budgetCycles &#215; 143</i></h4> </div>
 BudgetCycles acts as a multiplication factor for the credit bucket upon initialization.
 
 To set a desired maximum number of write operations (MaxWrites) after a reboot, you must pass the following calculated value to config():
-<div align="center"> <h4><i>budgetCycles = MaxWrites &divide; 143 </i></h4> </div>
+<div align="center"> <h4><i>budgetCycles = MaxWrites &divide; 143</i></h4> </div>
 Since the budgetCycles parameter is a uint8_t (max. 255), you should ensure that the result of the division does not exceed this value.
 
 <b><i>Advantage for Prototyping/Testing:</i></b> This guarantees a fixed, high maximum number of write operations upon every reset. This is ideal for testing where the Arduino is connected to a PC, providing an automatic safeguard against excessive EEPROM wear if the device writes frequently and is left running unattended.
