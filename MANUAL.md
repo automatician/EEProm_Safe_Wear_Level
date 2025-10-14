@@ -124,21 +124,20 @@ Every piece of software has a development cycle. When working with EEPROM, which
 
 ## 1.5.3 Calculation for WLM and Lifetime Optimization
 
-Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **SectorsPartition**).
+The total operating lifetime of the system depends on three critical, interdependent parameters. Correct configuration requires rearranging the original equation for the unknown quantity (usually **budgetCycles** or **SectorsPartition**).
 
-Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
+The original equation for calculating the operating life in years is:
 <div align="center"><h3>$$\text{OperatingLifetime (Years)} = \frac{\text{TotalCyclesEEPROM} \times \text{SectorsPartition}}{\text{budgetCycles} \times \text{HoursPerYear}}$$</h3></div>
 
-### Berechnung der benötigten budgetCycles (WLM-Konfiguration)
-Diese Umstellung wird benötigt, um den minimal notwendigen WLM-Parameter (budgetCycles) zu finden, der eine geplante Lebensdauer (OperatingLifetime) bei gegebener Partition gewährleistet.
+### Calculating the required budgetCycles (WLM configuration)
+This conversion is required to find the minimum WLM parameter (budgetCycles) that ensures a planned lifetime (OperatingLifetime) for a given partition.
 <div align="center"><h3>$$\text{budgetCycles} = \frac{\text{TotalCyclesEEPROM} \times \text{SectorsPartition}}{\text{OperatingLifetime (Years)} \times \text{HoursPerYear}}$$</h3></div>
 
-### Berechnung der benötigten SectorsPartition (Wear-Leveling Multiplikator)
-Diese Umstellung wird benötigt, um die minimale Partitionsgröße (SectorsPartition) zu finden, die notwendig ist, um die geplante Lebensdauer bei gegebener Schreiblast (budgetCycles) zu erreichen.
-<div align="center"><h3>$$\text{SectorsPartition} = \frac{\text{budgetCycles} \times \text{OperatingLifetime (Years)} \times \text{HoursPerYear}}{\text{TotalCyclesEEPROM}}$$</h3></div>
+### Calculating the required SectorsPartition (Wear-Leveling Multiplier)
+This conversion is required to find the minimum partition size (SectorsPartition) necessary to achieve the planned lifetime for a given write load (budgetCycles).<div align="center"><h3>$$\text{SectorsPartition} = \frac{\text{budgetCycles} \times \text{OperatingLifetime (Years)} \times \text{HoursPerYear}}{\text{TotalCyclesEEPROM}}$$</h3></div>
 
-### Berechnung der maximal zulässigen TotalCyclesEEPROM (Datenblattprüfung)
-Diese Umstellung wird benötigt, um zu überprüfen, welche EEPROM-Spezifikation (Total Cycles) erforderlich ist, um die geplante Lebensdauer mit einer festgelegten Partitionsgröße und WLM-Einstellung zu erreichen.
+### Calculation of the maximum permissible TotalCyclesEEPROM (datasheet check)
+This conversion is needed to verify which EEPROM specification (Total Cycles) is required to achieve the planned lifetime with a specified partition size and WLM setting.
 <div align="center"><h3>$$\text{TotalCyclesEEPROM} = \frac{\text{budgetCycles} \times \text{OperatingLifetime (Years)} \times \text{HoursPerYear}}{\text{SectorsPartition}}$$</h3></div>
 
 ## 2. Reading and Writing Data (Templated Functions)
