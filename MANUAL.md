@@ -126,12 +126,12 @@ Every piece of software has a development cycle. When working with EEPROM, which
 Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **Sectors per Partition**).
 
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
-<h3>OperatingLifetime (Years) = budgetCycles × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h3>
+<h4>OperatingLifetime (Years) = budgetCycles × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
 ​
 ## 1.5.3.1 Berechnung der benötigten budgetCycles (Konfigurationsparameter)
 Dies ist die häufigste Anwendung: Sie kennen die **OperatingLifetime** (geplant) und **Sectors per Partition** (festgelegt) und suchen den passenden **budgetCycles**-Wert.
 
-Zweck: Ermittlung der minimal notwendigen Schreiblast (budgetCycles), die die geplante Lebensdauer gewährleistet, ohne vorzeitig in das Write Shedding zu fallen.
+**Zweck:** Ermittlung der minimal notwendigen Schreiblast (budgetCycles), die die geplante Lebensdauer gewährleistet, ohne vorzeitig in das Write Shedding zu fallen.
 <h4>budgetCycles = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
 ​**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in config() übergeben werden, da das WLM nur ganze Zyklen pro Stunde vergibt.
 
