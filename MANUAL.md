@@ -95,7 +95,7 @@ Since the budgetCycles parameter is a uint8_t (max. 255), you should ensure that
 **Limitation:** This mode eliminates the continuous, time-based wear leveling control, making it unsuitable for long-term production use where consistent write rate control is required.
 
 ## 1.5.2 Write Load  &mdash;  Distinction
-Der Wear-Leveling-Mechanismus der Bibliothek wird durch die config()-Parameter und die regelmäßige Ausführung der Tick-Funktionen gesteuert. Die korrekte Berechnung dieser Parameter ist der Schlüssel zur Festlegung und Sicherstellung der gesamten Produktlebensdauer (OperatingLifetime).
+The library's wear-leveling mechanism is controlled by the config() parameters and the regular execution of the tick functions. Correctly calculating these parameters is key to determining and ensuring the overall product operating lifetime.
 
 **1. Classic Wear-Leveling (Physical Distribution)**
 
