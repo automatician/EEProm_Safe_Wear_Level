@@ -127,6 +127,7 @@ Every piece of software has a development cycle. When working with EEPROM, which
 Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **SectorsPartition**).
 
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
+$$\text{OperatingLifetime (Years)} = \frac{\text{TotalCyclesEEPROM} \times \text{SectorsPartition}}{\text{budgetCycles} \times \text{HoursPerYear}} $$
 <div align="center"><h4><i>OperatingLifetime(Years) = (TotalCyclesEEPROM × SectorsPartition) &divide; (budgetCycles × HoursPerYear)</i></h4></div>
 
 ### Berechnung der benötigten budgetCycles (WLM-Konfiguration)
