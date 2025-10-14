@@ -3,7 +3,7 @@ This document provides a concise reference for all public functions of the EEPro
 
 This functions are optional: **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()**, **idle()**, **findNewestData()**, **findOldestData**
 
-## Functions
+## Table of functions
 | 1. Initialization / configuration | 2. Reading & Writing | 3. Health & Statistics / WLM |
 | :--- | :--- | :--- |
 | [EEProm\_Safe\_Wear\_Level(...)](#eeprom_safe_wear_leveluint8t-ramhandleptr-uint16t-seconds) | [write(const T& value, ...)](#writeconst-t-value-uint8t-handle) | [getOverwCounter()](#getoverwcounteruint8t-handle) |
