@@ -144,7 +144,7 @@ Dies ist die Anwendung für die Wear-Leveling-Planung: Sie kennen die **Operatin
 ## 1.5.3.3 Berechnung der maximal möglichen Schreiblast pro Stunde (CyclesPerHr)
 Dies ist die Anwendung für die Kapazitätsanalyse: Sie kennen die physische **SectorsPartition** und suchen die maximal mögliche budgetCycles-Einstellung für eine geplante Lebensdauer.
 <h4>CyclesPerHr (max. budgetCycles) = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
-​ 
+
 ## 1.5.3.4 Engineering Beispiel: Berechnung des minimalen budgetCycles
 **Szenario:** Ein 5-Jahres-Produkt erfordert 2.000.000 Schreibvorgänge insgesamt. Die Partition ist auf 50 Sektoren festgelegt (SectorsPartition).
 
