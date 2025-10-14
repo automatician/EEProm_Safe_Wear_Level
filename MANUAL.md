@@ -72,6 +72,16 @@ Description: This is an **alternative function to oneTickPassed()**, which shoul
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | no | void | no return value |
+
+###Operating Mode: Fixed Budget (Without Tick Functions)
+If you intentionally omit the calls to *oneTickPassed()* or *idle()*:
+
+The system operates in a **Fixed Budget Mode**.
+
+ * The WLM does not save the current state of the Write Credit Bucket to EEPROM during runtime.
+ * Upon every system reboot, the Write Credit Bucket is fully reset and initialized with the value defined in config() (budgetCycles, max 255).
+ * Advantage for Prototyping/Testing: This mode guarantees a fixed, maximum number of write operations (equal to budgetCycles) after every reset. This is especially useful in test environments where the Arduino is connected to a PC, providing an automatic safeguard against excessive EEPROM wear if the device writes frequently and is left running unattended.
+ * Limitation: This mode eliminates the time-based wear leveling control, making it unsuitable for long-term production use where consistent write rate control is required.
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
