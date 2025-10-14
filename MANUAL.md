@@ -146,24 +146,24 @@ Dies ist die Anwendung für die Kapazitätsanalyse: Sie kennen die physische **S
 <h4>CyclesPerHr (max. budgetCycles) = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
 
 ## 1.5.3.4 Engineering Beispiel: Berechnung des minimalen budgetCycles
-**Szenario:** Ein 5-Jahres-Produkt erfordert 2.000.000 Schreibvorgänge insgesamt. Die Partition ist auf 50 Sektoren festgelegt (SectorsPartition).
-
-**Gegeben:** 
-TotalCyclesEEPROM = 100.000 
-SectorsPartition = 50
-OperatingLifetime (Years) = 5
-
-**Rechenschritte:**
-
-Ermittlung der benötigten Stunden pro Zyklus (Nenner der Formel): 
-<h4>LifetimeHours = 5 × 8.760 = 43.800 Stunden</h4>
-
-Bestimmung des minimalen budgetCycles (Formel 1 umgestellt nach TotalWritesNeeded):
-
-<h4>budgetCycles = LifetimeHours &divide; TotalWritesNeeded = 43.800 &divide; 2.000.000  ≈45,66</h4>
-
-**Ergebnis:**
-Um die 5 Jahre zu erreichen, muss **budgetCycles** auf **46** gesetzt werden.
+**Szenario:** Ein 5-Jahres-Produkt erfordert 2.000.000 Schreibvorgänge insgesamt. Die Partition ist auf 50 Sektoren festgelegt (SectorsPartition).<br>
+<br>
+**Gegeben:** <br> 
+TotalCyclesEEPROM = 100.000<br> 
+SectorsPartition = 50<br>
+OperatingLifetime (Years) = 5<br>
+<br>
+**Rechenschritte:** <br>
+<br>
+Ermittlung der benötigten Stunden pro Zyklus (Nenner der Formel):<br>
+<h4>LifetimeHours = 5 × 8.760 = 43.800 Stunden</h4><br>
+<br>
+Bestimmung des minimalen budgetCycles (Formel 1 umgestellt nach TotalWritesNeeded):<br>
+<br>
+<h4>budgetCycles = LifetimeHours &divide; TotalWritesNeeded = 43.800 &divide; 2.000.000  ≈45,66</h4><br>
+<br>
+**Ergebnis:** <br>
+Um die 5 Jahre zu erreichen, muss **budgetCycles** auf **46** gesetzt werden.<br>
 
 **Finaler Abgleich (Wear-Leveling):**
 Die MaxTotalWritesPartition beträgt 100.000 × 50 = 5.000.000. Da 5.000.000 ≥ 2.000.000, ist das Wear-Leveling ausreichend, und die Konfiguration ist valide.
