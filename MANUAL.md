@@ -132,18 +132,18 @@ Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
 Dies ist die häufigste Anwendung: Sie kennen die **OperatingLifetime** (geplant) und **Sectors per Partition** (festgelegt) und suchen den passenden **budgetCycles**-Wert.
 
 Zweck: Ermittlung der minimal notwendigen Schreiblast (budgetCycles), die die geplante Lebensdauer gewährleistet, ohne vorzeitig in das Write Shedding zu fallen.
-<h3>budgetCycles = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h3>
+<h4>budgetCycles = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
 ​**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in config() übergeben werden, da das WLM nur ganze Zyklen pro Stunde vergibt.
 
 ## 1.5.3.2 Berechnung der benötigten Sektorenzahl (SectorsPartition)
 Dies ist die Anwendung für die Wear-Leveling-Planung: Sie kennen die **OperatingLifetime** (geplant) und Ihre **budgetCycles** (erforderliche Schreiblast) und suchen den Wear-Leveling-Multiplikator.
 **Zweck:** Ermittlung der minimalen Anzahl an Sektoren, die notwendig sind, um die geplante Lebensdauer bei gegebener Schreiblast zu erreichen.
-<h3>SectorsPartition = budgetCycles × OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM</h3>
+<h4>SectorsPartition = budgetCycles × OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM</h4>
 ​**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in die totalBytesUsed-Berechnung (Kapitel 1.1) einfließen, da die Sektorenanzahl die Größe der Partition bestimmt.
 
 ## 1.5.3.3 Berechnung der maximal möglichen Schreiblast pro Stunde (CyclesPerHr)
 Dies ist die Anwendung für die Kapazitätsanalyse: Sie kennen die physische **SectorsPartition** und suchen die maximal mögliche budgetCycles-Einstellung für eine geplante Lebensdauer.
-<h3>CyclesPerHr (max. budgetCycles) = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h3>
+<h4>CyclesPerHr (max. budgetCycles) = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
 ​ 
 ## 1.5.3.4 Engineering Beispiel: Berechnung des minimalen budgetCycles
 **Szenario:** Ein 5-Jahres-Produkt erfordert 2.000.000 Schreibvorgänge insgesamt. Die Partition ist auf 50 Sektoren festgelegt (SectorsPartition).
@@ -156,11 +156,11 @@ OperatingLifetime (Years) = 5
 **Rechenschritte:**
 
 Ermittlung der benötigten Stunden pro Zyklus (Nenner der Formel): 
-<h3>LifetimeHours = 5 × 8.760 = 43.800 Stunden</h3>
+<h4>LifetimeHours = 5 × 8.760 = 43.800 Stunden</h4>
 
 Bestimmung des minimalen budgetCycles (Formel 1 umgestellt nach TotalWritesNeeded):
 
-budgetCycles = LifetimeHours &divide; TotalWritesNeeded = 43.800 &divide; 2.000.000  ≈45,66
+<h4>budgetCycles = LifetimeHours &divide; TotalWritesNeeded = 43.800 &divide; 2.000.000  ≈45,66</h4>
 
 **Ergebnis:**
 Um die 5 Jahre zu erreichen, muss **budgetCycles** auf **46** gesetzt werden.
