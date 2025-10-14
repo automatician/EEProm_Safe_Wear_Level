@@ -127,7 +127,7 @@ Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritis
 
 Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
 <h4>OperatingLifetime (Years) = budgetCycles × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h4>
-​
+
 ## 1.5.3.1 Berechnung der benötigten budgetCycles (Konfigurationsparameter)
 Dies ist die häufigste Anwendung: Sie kennen die **OperatingLifetime** (geplant) und **Sectors per Partition** (festgelegt) und suchen den passenden **budgetCycles**-Wert.
 
