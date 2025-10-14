@@ -1,7 +1,10 @@
 # EEProm_Safe_Wear_Level - API Manual
 This document provides a concise reference for all public functions of the EEProm_Safe_Wear_Level library, which was developed to manage wear-leveling in EEPROM memory. The functions can be divided into five main categories, with the Write Load Management (WLM) logic being controlled by three functions: **constructor**, **config()**, **oneTickPassed()/idle()** and **getWrtAccBalance()**. <br>
 
-This functions are optional: **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()**, **idle()**, **findNewestData()**, **findOldestData**
+This functions are optional: **migrateData()**, **getCtrlData()**, **getWrtAccBalance()**, **oneTickPassed()**, **idle()**, **findNewestData()**, **findOldestData**.
+They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
+* Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
+* Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
 
 ## Table of functions
 | 1. Initialization / configuration | 2. Reading & Writing | 3. Health & Statistics / WLM |
@@ -12,10 +15,6 @@ This functions are optional: **migrateData()**, **getCtrlData()**, **getWrtAccBa
 | [idle()](#idle) | [read(readMode, char\* value, ...)](#explicit-overloads-for-c-strings) | [healthPercent()](#healthpercentuint32t-cycles-uint8t-handle) |
 | [getWrtAccBalance()](#getwrtaccbalanceuint8t-handle) | [read(readMode, T& value, ...)](#readuint8t-readmode-t-value-uint8t-handle-sizet-maxsize-1) | [getCtrlData()](#getctrldataint-offs-int-handle) |
 | [loadPhysSector()](#loadphyssectoruint16t-physsector-uint8t-handle) | [findNewestData() / findOldestData()](#findoldestdatauint8t-handle--findnewestdatauint8t-handle) | [migrateData()](#migratedatauint8t-source-uint8t-target-uint16t-count) |
-
-They are only loaded into Flash memory by the compiler - and thus only occupy space - if they are explicitly called by the user in their code.
-* Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.
-* Maximum Efficiency: Users requiring advanced maintenance, backup strategies, or deep diagnostics receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.
 
 The **Log Management Functions** can be found under point **4. Advanced functions**.
 
