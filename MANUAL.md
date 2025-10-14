@@ -121,9 +121,52 @@ The EEProm_Safe_Wear_Level library introduces Write Load Management (WLM) to sol
 
 Every piece of software has a development cycle. When working with EEPROM, which only has a limited lifespan, errors during this phase can have fatal consequences. In the worst case, the memory can be destroyed within minutes or hours by uncontrolled write loops. To prevent this, you can calculate the intended write load and configure it via this library. **Write Shedding** will protect the EEPROM by rejecting writes exceeding the budget. With queryable parameters (via *getCtrlData()* and *getWrtAccBalance()*), write load can be actively controlled at runtime. The inherent limitation of EEPROM write cycles is thus transformed from a passive liability into an **actively controlled risk**.
 
-## 1.5.3 Calculation and Application of WLM
+## 1.5.3 Calculation for WLM and Lifetime Optimization
 
+Die gesamte Betriebsdauer (OperatingLifetime) des Systems hängt von drei kritischen, voneinander abhängigen Parametern ab. Die korrekte Konfiguration erfordert, dass die Ursprungs-Gleichung nach der unbekannten Größe umgestellt wird (meist **budgetCycles** oder **Sectors per Partition**).
 
+Die Ursprungs-Gleichung zur Berechnung der Betriebsdauer in Jahren lautet:
+<h3>OperatingLifetime (Years) = budgetCycles × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h3>
+​
+## 1.5.3.1 Berechnung der benötigten budgetCycles (Konfigurationsparameter)
+Dies ist die häufigste Anwendung: Sie kennen die **OperatingLifetime** (geplant) und **Sectors per Partition** (festgelegt) und suchen den passenden **budgetCycles**-Wert.
+
+Zweck: Ermittlung der minimal notwendigen Schreiblast (budgetCycles), die die geplante Lebensdauer gewährleistet, ohne vorzeitig in das Write Shedding zu fallen.
+<h3>budgetCycles = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h3>
+​**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in config() übergeben werden, da das WLM nur ganze Zyklen pro Stunde vergibt.
+
+## 1.5.3.2 Berechnung der benötigten Sektorenzahl (SectorsPartition)
+Dies ist die Anwendung für die Wear-Leveling-Planung: Sie kennen die **OperatingLifetime** (geplant) und Ihre **budgetCycles** (erforderliche Schreiblast) und suchen den Wear-Leveling-Multiplikator.
+**Zweck:** Ermittlung der minimalen Anzahl an Sektoren, die notwendig sind, um die geplante Lebensdauer bei gegebener Schreiblast zu erreichen.
+<h3>SectorsPartition = budgetCycles × OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM</h3>
+​**Wichtiger Hinweis:** Der errechnete Wert muss auf die nächste Ganzzahl aufgerundet und in die totalBytesUsed-Berechnung (Kapitel 1.1) einfließen, da die Sektorenanzahl die Größe der Partition bestimmt.
+
+## 1.5.3.3 Berechnung der maximal möglichen Schreiblast pro Stunde (CyclesPerHr)
+Dies ist die Anwendung für die Kapazitätsanalyse: Sie kennen die physische **SectorsPartition** und suchen die maximal mögliche budgetCycles-Einstellung für eine geplante Lebensdauer.
+<h3>CyclesPerHr (max. budgetCycles) = OperatingLifetime (Years) × HoursPerYear &divide; TotalCyclesEEPROM × SectorsPartition</h3>
+​ 
+## 1.5.3.4 Engineering Beispiel: Berechnung des minimalen budgetCycles
+**Szenario:** Ein 5-Jahres-Produkt erfordert 2.000.000 Schreibvorgänge insgesamt. Die Partition ist auf 50 Sektoren festgelegt (SectorsPartition).
+
+**Gegeben:** 
+TotalCyclesEEPROM = 100.000 
+SectorsPartition = 50
+OperatingLifetime (Years) = 5
+
+**Rechenschritte:**
+
+Ermittlung der benötigten Stunden pro Zyklus (Nenner der Formel): 
+<h3>LifetimeHours = 5 × 8.760 = 43.800 Stunden</h3>
+
+Bestimmung des minimalen budgetCycles (Formel 1 umgestellt nach TotalWritesNeeded):
+
+budgetCycles = LifetimeHours &divide; TotalWritesNeeded = 43.800 &divide; 2.000.000  ≈45,66
+
+**Ergebnis:**
+Um die 5 Jahre zu erreichen, muss **budgetCycles** auf **46** gesetzt werden.
+
+**Finaler Abgleich (Wear-Leveling):**
+Die MaxTotalWritesPartition beträgt 100.000 × 50 = 5.000.000. Da 5.000.000 ≥ 2.000.000, ist das Wear-Leveling ausreichend, und die Konfiguration ist valide.
 
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
