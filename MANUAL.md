@@ -175,7 +175,7 @@ The function works by reading the last valid data records from the logically exh
 | count | uint16_t | The counter, how many last log entries (newest sectors) are transferred to the target partition. |
 
 **WARNING:** The migrateData() function does not automatically format the source partition (sourceHandle) upon successful migration, as this is a deliberate design choice to prevent the immediate deletion of data, thus supporting backup and data recovery strategies.
-### 4.2. Physical Sectors
+## 4.2. Physical Sectors
 ### loadPhysSector(uint16_t physSector, uint8_t handle)
 Description: Loads the payload and control data of a specific physical EEPROM sector (identified by physSector) into the RAM cache. This function allows direct access to any sector, useful for reading historical data, for example. This function does not deliver the data directly to a user variable, but makes it accessible in the cache for subsequent internal operations (e.g., for checking the metadata or a subsequent read() operation).
  * The *loadPhysSector()* function always requires the next physical sector to be written to derive the sector to be read. It achieves this by decrementing the passed sector index by 1.
