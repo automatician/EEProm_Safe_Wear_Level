@@ -74,7 +74,7 @@ Description: This is an **alternative function to oneTickPassed()**, which shoul
 | :--- | :--- | :--- |
 | no | void | no return value |
 
-### 1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)
+## 1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)
 If you intentionally omit the calls to *oneTickPassed()* or *idle()*: the system operates in a **Fixed Budget Mode**.
 
 The WLM does not save the current, reduced state of the Write Credit Bucket to EEPROM during runtime.
@@ -93,6 +93,38 @@ Since the budgetCycles parameter is a uint8_t (max. 255), you should ensure that
 <b><i>Advantage for Prototyping/Testing:</i></b> This guarantees a fixed, high maximum number of write operations upon every reset. This is ideal for testing where the Arduino is connected to a PC, providing an automatic safeguard against excessive EEPROM wear if the device writes frequently and is left running unattended.
 
 **Limitation:** This mode eliminates the continuous, time-based wear leveling control, making it unsuitable for long-term production use where consistent write rate control is required.
+
+## 1.5.2 Write Load &mdash; Distinction
+
+**1. Classic Wear-Leveling (Physical Distribution)**
+
+Most EEPROM libraries focus on Classic Wear-Leveling. 
+* Goal: To distribute the TotalCycles per EEPROM cell (e.g. 100.000 cycles per cell) evenly across all available sectors of a partition.
+* Mechanism: By using a ring buffer (Sectors of the partition) and a logical counter, it's ensured that each physical cell is only written to again after N write operations (where N=Sectors 
+Partition).
+* Result: The lifespan is extended by the Wear-Leveling Multiplier (Sectors per Partition), but the write frequency (how often per second/minute data is written) remains uncontrolled.
+
+**2. Write Load**
+
+The Write Load is the time frequency (or rate) of write operations exerted on the storage medium, regardless of spatial distribution. 
+* Definition: Write Load describes the number of write() calls per unit of time (e.g. cycles per hour).
+* Problem: An overly high Write Load can lead to the Classic Wear-Leveling functioning correctly, but the product's overall lifespan (in years or month) still ending prematurely. If you allow 100.000 cycles/hour, the memory will be exhausted after fewer hours, regardless of whether you use wear-leveling or not.
+
+**3. The next level: Write Load Management (WLM)**
+
+The EEProm_Safe_Wear_Level library introduces Write Load Management (WLM) to solve this Write Load problem. 
+ * Goal: To actively control the system's write frequency per hour/day and map it to the planned product lifespan.
+ * Mechanism: It uses a Write Budgeting (credit system) that throttles write operations (Write Shedding) based on a fixed budgetCycles (cycles per hour).
+ * Result: WLM ensures that the temporal wear aligns with the planned lifespan (5 years, 10 years, etc.), providing protection against excessive Write Load in addition to physical distribution. Furthermore, WLM can be used to comfortably and effectively throttle excessive user inputs in interactive or menu-driven systems, preventing uncontrolled writes to the EEPROM. It offers a convenient way to utilize the advantages of a non-volatile memory while simultaneously protecting it from rapid exhaustion.
+
+**Development Cycle Safety & Controlled Risk**
+
+Every piece of software has a development cycle. When working with EEPROM, which only has a limited lifespan, errors during this phase can have fatal consequences. In the worst case, the memory can be destroyed within minutes or hours by uncontrolled write loops. To prevent this, you can calculate the intended write load and configure it via this library. **Write Shedding** will protect the EEPROM by rejecting writes exceeding the budget. With queryable parameters (via *getCtrlData()* and *getWrtAccBalance()*), write load can be actively controlled at runtime. The inherent limitation of EEPROM write cycles is thus transformed from a passive liability into an **actively controlled risk**.
+
+## 1.5.3 Calculation and Application of WLM
+
+
+
 ## 2. Reading and Writing Data (Templated Functions)
 These are the primary functions for interacting with the stored data. They use templates for maximum flexibility.
 ### write(const T& value, uint8_t handle)
