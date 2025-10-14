@@ -49,7 +49,7 @@ Description: Initializes and configures the EEPROM wear-leveling partition. This
 |budgetCycles|uint8_t | Budget write cycles per hour. |
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t|Status code: =0 Error, >0 Partition Version / Overwrite Counter 1 to 65535|
-## 1.5 Write Load Management
+## 1.5 Write Load Management (WLM)
 **Purpose**: It ensures that the EEPROM write cycles are not prematurely and unnoticed used up by a constantly too high average usage rate. <br>
 
 **Write Budgeting**
