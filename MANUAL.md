@@ -228,6 +228,12 @@ Write control management is deeply integrated into the library. Write shedding i
 |handle|uint8_t|Partition handle.|
 |Return|uint8_t|Write account balance. (statistical value: 0 - 255)|
 
+**1. The Statistical Nature of the Write Account Balance**
+
+* Based on Averages: The WLM credit (Account Balance) is calculated based on the average value (budgetCycles) set in *config()* over an assumed period (one hour). It does not represent the currently available storage capacity (like bytes), but rather the statistically permitted frequency of write operations.
+* Represents Rate, Not State: The value serves to control the write rate over the entire product lifespan. It is an indicator of whether the statistical usage is within the acceptable range, not a direct counter of actual EEPROM cycles.
+* Credited Over Time: The credit is allocated over time (via the tick functions) and acts as a statistical equalization mechanism.
+
 ## 5. Controll Data (Advanced)
 ### getCtrlData(int offs, int handle)
 Description: Reads a 32-bit value (4 bytes) from a specific offset within the ControlData structure of the currently loaded partition data.
