@@ -16,6 +16,7 @@ The complete manual with public functions, parameters, and return values can be 
     * [Demo4](/Examples/demo4_multi_partition.ino): Multi-partition reading and writing
     * [Demo5](/Examples/demo5_log_functions.ino): Demonstrates iterative navigation and reading using read(), findNewestData() and findOldestData().
     * [Demo6](/Examples/demo6_log_migration.ino): Demonstrates the migration of sectors to a second partition starting with a new logical counter.
+    * [Demo7](/Examples/demo7_wlm_management.ino): Shows the change in the write load account and the change in the resulting status to show when and why **Write Shedding** occurs
 
 ### Manual Installation Method:
 1. Download the repository's release ZIP file.
