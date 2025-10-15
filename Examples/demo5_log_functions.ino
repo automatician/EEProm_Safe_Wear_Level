@@ -9,30 +9,30 @@
 // the topic. First, 20 data records are written. Then they are 
 // read in ascending and descending order of their relevance.
 //
-// Fehlerkorrektur: Anpassung der Iterationslogik zur korrekten 
-// Darstellung von 20 gültigen Einträgen und Vermeidung von Off-by-One.
+// Bug fix: Adjusting the iteration logic for correct 
+// representation of 20 valid entries and avoidance of off-by-one.
 //
 
 #include <EEProm_Safe_Wear_Level.h>
 
-// --- KONTROLLDATEN OFFSETS (WIE IN DER BIBLIOTHEK DEFINIERT) ---
-// Diese Offsets werden nur zur Lesbarmachung der Kontrolldaten verwendet.
-#define currentLogicalCounter 0 // Zähler für die Gesamtanzahl geschriebener Sektoren
-#define nextPhysicalSector 4    // Physischer Sektor, der als Nächstes beschrieben wird
-#define numberOfSectors 8       // Gesamtanzahl der Sektoren in der Partition (aus Konfiguration)
+// --- CONTROL DATA OFFSETS (AS DEFINED IN THE LIBRARY) ---
+// These offsets are only used for making the control data readable.
+#define currentLogicalCounter 0 // Counter for the total number of sectors written
+#define nextPhysicalSector 4    // Physical sector that will be written to next
+#define numberOfSectors 8       // Total number of sectors in the partition (from configuration)
 
 // ----------------------------------------------------
-// --- DEFINITIONEN UND INSTANZEN ---
+// --- DEFINITIONS AND INSTANCES ---
 // ----------------------------------------------------
 
 #define COUNTER_LENGTH_BYTES  2 
 
 // --- HANDLE DEFINITIONS ---
-#define PART_CNT 1               // EINE logische Partition 
+#define PART_CNT 1               // ONE logical partition 
 #define WRITE_CYCLES_PER_HOUR 128
 #define HANDLE1  0
 
-// ControlData Struktur
+// ControlData Structure
 typedef struct {
     uint8_t data[16 * PART_CNT];  
 } __attribute__((aligned(8))) AlignedArray_t;
@@ -41,15 +41,15 @@ AlignedArray_t PartitionsData;
 EEProm_Safe_Wear_Level EEPRWL_Main(PartitionsData.data); 
 
 // --- ADDRESSES AND SIZES ---
-// Partition#1: Start 0, Größe 256
+// Partition#1: Start 0, Size 256
 #define ADDR1 0
 #define SIZE1 256
-#define PAYLOAD_SIZE 10           // Länge des device_name
-#define VALID_LOG_RECORDS 19      // Definiert, wie viele Einträge wir lesen wollen
+#define PAYLOAD_SIZE 9            // Length of device_name
+#define VALID_LOG_RECORDS 21      // Defines how many entries we want to read
 #define forceFormat 1
 
 // Data
-char device_name[10];
+char device_name[9];
 byte loopCounter = VALID_LOG_RECORDS;
 
 // ----------------------------------------------------
@@ -63,7 +63,7 @@ void setup() {
     Serial.println(F("\r\r\r\r\r\r\r\r\r\n"));
     Serial.println(F("---------------------------------------------------------------------------"));
     Serial.println(F("--- EEProm_Safe_Wear_Level Demo Start: Log-Functions, Single Instance ---"));
-    Serial.println(F("--- Schreibe 20 Records und lese den Ringpuffer (20 gültige Einträge) ---"));
+    Serial.println(F("--- Write 20 Records and read the ring buffer (20 valid entries) ---"));
     Serial.println(F("---------------------------------------------------------------------------"));
     
     int s1 = EEPRWL_Main.config(ADDR1, SIZE1, PAYLOAD_SIZE, COUNTER_LENGTH_BYTES, WRITE_CYCLES_PER_HOUR, HANDLE1); 
@@ -80,8 +80,8 @@ void setup() {
     Serial.print(F("Next physical sector Partition#1: "));
     Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
 
-    // Optional: Überprüfen der erkannten Sektoranzahl. Sollte 21 sein,
-    // um den vorherigen Log-Fehler zu erklären (0-20 = 21 Sektoren)
+    // Optional: Check the recognized number of sectors. Should be 21,
+    // to explain the previous log error (0-20 = 21 sectors)
     Serial.print(F("Total sectors recognized by config: "));
     Serial.println(EEPRWL_Main.getCtrlData(numberOfSectors, HANDLE1));
 } 
@@ -96,17 +96,17 @@ void setup() {
 
 void loop() {
     
-    // 1. SCHREIBEN DER DATEN (20 Records)
+    // 1. WRITING DATA (20 Records)
     while (loopCounter > 0) {
 
         int id = EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE1);
         int z = (id / 10) % 10;
         int e = id % 10;          
         
-        // **ACHTUNG: KORRIGIERT.** Damit der Gerätename zur Logik-ID passt, 
-        // wird die ID 'id' verwendet. Der Bug im vorherigen Log lag hier.
-        // Wenn Sie möchten, dass der Name z.B. bei ID 41 -> device41 ist, 
-        // muss die Logik Ihrerseits sicherstellen, dass id den richtigen Wert liefert.
+        // **ATTENTION: CORRECTED.** For the device name to match the logical ID, 
+        // the ID 'id' is used. The bug in the previous log was here.
+        // If you want the name to be e.g., for ID 41 -> device41, 
+        // your logic must ensure that id provides the correct value.
         snprintf(device_name, PAYLOAD_SIZE, "device%d%d", z, e); 
         int s1=EEPRWL_Main.write(device_name, HANDLE1);
 
@@ -126,25 +126,25 @@ void loop() {
 
     Serial.println(F("\n\n--- FORWARD ITERATION (Oldest -> Newest) ---"));
 
-    // 2. VORWÄRTS-ITERATION (vom Ältesten zum Neuesten)
+    // 2. FORWARD ITERATION (from Oldest to Newest)
     int s1 = EEPRWL_Main.findOldestData(HANDLE1);
     if(!s1) Serial.println(F("\nfailed."));
     else {
           Serial.print(F("OK. Next physical sector in Partition#1: "));
           Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
 
-          // **ERSTE LESUNG (Ältestes Element)**
+          // **FIRST READING (Oldest Element)**
           Serial.print(F("\nReading data at logical sector #"));
-          // Die Anzeige des logischen Sektors muss aus dem *gelesenen Sektor* kommen, 
-          // nicht aus den Kontrolldaten (currentLogicalCounter). 
-          // Da wir die interne Funktion nicht kennen, verwenden wir den globalen Counter.
-          // Hier müsste die Bibliotheksfunktion die ID des gelesenen Headers liefern.
+          // The display of the logical sector must come from the *read sector*, 
+          // not from the control data (currentLogicalCounter). 
+          // Since we don't know the internal function, we use the global counter.
+          // The library function should provide the ID of the read header here.
           Serial.print(EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE1)); 
           Serial.print(F(":  "));
           EEPRWL_Main.read(actual, device_name, HANDLE1, PAYLOAD_SIZE);
           Serial.println(device_name);
 
-          // Schleife liest die restlichen (VALID_LOG_RECORDS - 1) = 19 Sektoren
+          // Loop reads the remaining (VALID_LOG_RECORDS - 1) = 18 sectors
           int sectorsToRead = VALID_LOG_RECORDS - 1; 
 
           for (byte h = 0; h < sectorsToRead; h++) {
@@ -157,17 +157,17 @@ void loop() {
 
         Serial.println(F("\n\n--- BACKWARD ITERATION (Newest -> Oldest) ---"));
         
-        // 3. RÜCKWÄRTS-ITERATION (vom Neuesten zum Ältesten)
+        // 3. BACKWARD ITERATION (from Newest to Oldest)
         EEPRWL_Main.findNewestData(HANDLE1);
               
-        // **ERSTE LESUNG (Neuestes Element)**
+        // **FIRST READING (Newest Element)**
         EEPRWL_Main.read(actual, device_name, HANDLE1, PAYLOAD_SIZE);
         Serial.print(F("\nReading newest sector, data at logical sector #"));
         Serial.print(EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE1));
         Serial.print(F(":  "));
         Serial.println(device_name);
 
-        // Schleife liest die restlichen (VALID_LOG_RECORDS - 1) = 19 Sektoren
+        // Loop reads the remaining (VALID_LOG_RECORDS - 1) = 18 sectors
         for (byte h = 0; h < sectorsToRead; h++) {
             EEPRWL_Main.read(previous, device_name, HANDLE1, PAYLOAD_SIZE);
             Serial.print(F("Reading next sector, data at logical sector #"));
@@ -177,7 +177,6 @@ void loop() {
         }
     }
 
-    while (0==0){delay(1000);}
-    
+    while (0==0){delay(1000);}   
 }
 //END OF CODE
