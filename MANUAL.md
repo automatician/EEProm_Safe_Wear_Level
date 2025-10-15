@@ -300,5 +300,4 @@ Consequence: You have full control over this value. Your code can set the Status
 
 **Advantage for Programming (Atomic Check)**
 
-To ensure that you only check the status of the immediately following operation, you can manually reset the status to 0 (OK) before the call.
-If the Status Byte is not changed by your code, it will only be overwritten by the library with a new status if one is applicable, and otherwise left as is.
+If the Status Byte is not changed by your code, it will only be overwritten by the library with a new status if one is applicable, and otherwise left as is (behaving as a "Sticky Status").
