@@ -47,7 +47,7 @@ class EEProm_Safe_Wear_Level {
 
       // --- PUBLIC API (Implementation in .cpp) ---
       // Parameter names (startAddress, totalBytesUsed, PayloadSize) are deliberately NOT abbreviated.
-      uint16_t config(uint16_t startAddress, uint16_t totalBytesUsed, uint8_t PayloadSize, uint8_t cntLengthBytes, uint8_t budgetCycles, uint8_t handle);
+      uint16_t config(uint16_t startAddress = 0, uint16_t totalBytesUsed = 256, uint8_t PayloadSize = 2, uint8_t cntLengthBytes = 3, uint8_t budgetCycles = 20, uint8_t handle = 0);
       uint16_t getOverwCounter(uint8_t handle);
       bool initialize(bool forceFormat, uint8_t handle);
       
@@ -73,7 +73,7 @@ class EEProm_Safe_Wear_Level {
                 value = readLE(&_ramStart[start_index], read_len);
 	    }
 		   
-		return_and_checksum value;
+            return_and_checksum value;
       }
       // ----------------------------------------------------------------------------------------------------
       // internal time management
@@ -132,11 +132,9 @@ class EEProm_Safe_Wear_Level {
       
       // 2. Little-Endian write logic (for 1x redundancy: _write)
       static inline void writeLE(uint8_t* buffer, uint32_t value, uint8_t length) {
-		  
         for (uint8_t i = 0; i < length; i++) {
             buffer[i] = (uint8_t)(value >> (i * 8));
         }
-		  
       }
 
       // 3. We calculate the addition checksum over all bytes of the ControlData cache
@@ -146,7 +144,6 @@ class EEProm_Safe_Wear_Level {
          // We cast _controlCache (ControlData*) to uint8_t* to access byte by byte
          uint8_t* controlDataPtr = (uint8_t*)_controlCache;
          // 2. Calculate addition checksum
-		  
          for (size_t i = 0; i < CHECKSUM_RANGE; i++) {
              check += controlDataPtr[i];
              check1 += check;
@@ -221,9 +218,7 @@ bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {
       // Consistency check
       if (_numSecs < 1 || _curLgcCnt >= _maxLgcCnt) {
            success = 0;
-		  
            if(_curLgcCnt >= _maxLgcCnt) _status = 3;
-		  
       } else success = 1;
       if (success == 1) {
          if (sizeof(T) > _pldSize) _status = 2;
@@ -235,7 +230,6 @@ bool EEProm_Safe_Wear_Level::write(const T& value, uint8_t handle) {
               if(i < sizeof(T)) _ioBuf[i] = valuePtr[i];
               else _ioBuf[i] = 0;
          }
-		  
          success = _write(handle);
       }
       return_and_checksum success;
@@ -264,6 +258,8 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
     }
     return_and_checksum success;
 }
+
 // ----------------------------------------------------------------------------------------------------
+
 #endif // EEPROM_WEAR_LEVEL_H
 // END OF CODE
