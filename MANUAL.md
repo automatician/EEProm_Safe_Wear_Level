@@ -267,9 +267,9 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |10|1|uint8_t|PAYLOAD SIZE IN BYTES|
 |11|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
 |12|2|uint16_t|for internal use|
-|14|1|uint8_t|*STATUS FLAG* (0x00=OK, etc. see next table)|
+|14|1|uint8_t|*STATUS Byte* (0x00=OK, etc. see next table)|
 |15|1|uint8_t|CHECKSUM (of this Control Block)|
-### Status Flag at Offset 14
+### Status Byte at Offset 14
 | Code | Meaning |
 | :--- | :--- |
 |0|OK| All OK. Partition is valid and ready for operation.|
