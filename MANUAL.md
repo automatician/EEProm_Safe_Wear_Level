@@ -236,7 +236,7 @@ Description: Loads the payload and control data of a specific physical EEPROM se
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t| 0: error / >0: ok (reserved)|
 ## 4.3. Write Budgeting
-Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the status byte in the partition control data (*getCtrlData()* function) after the **write()** command did not have a physical error. To query the exact statistical value of a partition's **write account balance**, use this function:
+Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the sticky status byte in the partition control data (*getCtrlData()* function) after the **write()** command did not have a physical error. To query the exact statistical value of a partition's **write account balance**, use this function:
 ### getWrtAccBalance(uint8_t handle)
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
@@ -267,9 +267,9 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |10|1|uint8_t|PAYLOAD SIZE IN BYTES|
 |11|1|uint8_t|LOGICAL SECTOR COUNTER LENGTH 1 to 4 (e.g., 3 Bytes)|
 |12|2|uint16_t|for internal use|
-|14|1|uint8_t|*STATUS Byte* (0x00=OK, etc. see next table)|
+|14|1|uint8_t|*STICKY STATUS Byte* (0x00=OK, etc. see next table)|
 |15|1|uint8_t|CHECKSUM (of this Control Block)|
-### Status Byte at Offset 14
+### Sticky Status Byte at Offset 14
 | Code | Meaning |
 | :--- | :--- |
 |0|OK| All OK. Partition is valid and ready for operation.|
@@ -285,7 +285,7 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |10|After write(). Budget manager: Credit given.|
 |11|After write(). Budget manager: Credit still available (normal condition).|
 
-## The Status Byte (Offset 14): Independence and Control
+## The Sticky Status Byte (Offset 14): Independence and Control
 The Status Byte serves as the primary register for the result and state of the last executed operation (e.g. read(), write()). Due to its placement and architectural design, it offers two key advantages for your application code:
 
 **1. Direct Query (Efficiency)**
