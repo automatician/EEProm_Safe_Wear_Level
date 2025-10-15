@@ -71,14 +71,14 @@ byte loopCounter = 2;
 // ----------------------------------------------------
 
 void setup() {
-    // Zuf�llige Verz�gerung zwischen 800 und 1500 ms
+    // Random delay between 800 and 1500 ms
     randomSeed(analogRead(A0));
     long randomDelay = random(800, 1501); 
     
     Serial.begin(115200);
     delay(randomDelay); 
 
-    Serial.println(F("\r\r\r\r\r\r\r\r\r\n"));
+    Serial.println(F("\n\n\n"));
     Serial.println(F("---------------------------------------------------------------------------"));
     Serial.println(F("--- EEProm_Safe_Wear_Level Demo Start: Multi-Partition, Single Instance ---"));
     Serial.println(F("---------------------------------------------------------------------------"));
