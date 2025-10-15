@@ -285,5 +285,21 @@ Description: Reads a 32-bit value (4 bytes) from a specific offset within the Co
 |10|After write(). Budget manager: Credit given.|
 |11|After write(). Budget manager: Credit still available (normal condition).|
 
+## The Status Byte (Offset 14): Independence and Control
+The Status Byte serves as the primary register for the result and state of the last executed operation (e.g. read(), write()). Due to its placement and architectural design, it offers two key advantages for your application code:
 
+**1. Direct Query (Efficiency)**
+
+The Status Byte is located at Offset 14 within the Partition ControlData.
+You can query the current status via the getCtrlData(14, handle) function. However, you can also query the Status Byte directly, which is faster and saves a function call.
+
+**2. Manual Reset**
+
+The Status Byte is NOT included in the calculation of the Control Hash.
+Consequence: You have full control over this value. Your code can set the Status Byte to 0 at any time or overwrite it with other values. The Status Byte is not a control byte for the library, but a pure notification register intended to assist you in controlling your code.
+
+**Advantage for Programming (Atomic Check)**
+
+To ensure that you only check the status of the immediately following operation, you can manually reset the status to 0 (OK) before the call.
+If the Status Byte is not changed by your code, it will only be overwritten by the library with a new status if one is applicable, and otherwise left as is.
 
