@@ -394,22 +394,19 @@ bool EEProm_Safe_Wear_Level::_write(uint8_t handle) {
 
 
     if (success == 1) {
-    	uint8_t bI = handle >> 3; 
-    	if (_budgetCycles[bI] > 0) _budgetCycles[bI]--;
-    	else if (_buckPerm[bI] > 0) {
+    	uint8_t bI = handle - ((handle >> 3)<<3); 
+    	if (_buckPerm[bI] > 0 && _budgetCycles[bI] == 0) {
 		    _budgetCycles[bI] = _buckCyc;
 	            _buckPerm[bI]--;	
-
-                    if (_budgetCycles[bI] > 0) _budgetCycles[bI]--;
-
                     if (_buckPerm[bI] < 64) _status = 9;
                     else if (_buckPerm[bI] < 120) _status = 10;
                     else _status = 11;
 
-	     } else { 
+	     } else if (_buckPerm[bI] == 0 && _budgetCycles[bI] == 0){ 
 		    success = 0; 
                     _status = 8;
 	     }
+        if(_budgetCycles[bI] > 0) _budgetCycles[bI]--;
     }
 
 
