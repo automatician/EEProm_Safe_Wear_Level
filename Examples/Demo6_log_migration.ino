@@ -4,11 +4,11 @@
 // EEProm_Safe_Wear_Level Library v25.10.5
 // #############################################
 // 
-// Demonstrates the migration of sectors to a 
+// Demonstrates the migration of the LATEST 5 sectors to a 
 // second partition starting with a new logical counter.
 //
-// This demo builds on previous ones. Please understand that a
-// basic understanding from those other demos is a prerequisite.
+// This demo focuses on demonstrating the successful migration and 
+// data integrity, minimizing complex Ring Buffer output.
 //
 
 #include <EEProm_Safe_Wear_Level.h>
@@ -17,63 +17,50 @@
 // --- DEFINITIONS AND INSTANCES ---
 // ----------------------------------------------------
 
-#define COUNTER_LENGTH_BYTES  2 // WARNING Max is 4
+#define COUNTER_LENGTH_BYTES  2 
 
 // --- HANDLE DEFINITIONS ---
-#define PART_CNT 2                      //Two logical partitions 
+#define PART_CNT 2                       // Two logical partitions 
 
 // --- Write cycles for Write Load Management
 #define WRITE_CYCLES_PER_HOUR 64
 
-// Unique handle IDs for the ONE instance
-// consecutive numbering
+// Unique handle IDs for the TWO instances
 #define HANDLE1  0
 #define HANDLE2  1
 
-// The ControlData structure must provide space for 2 partitions (2 * 16 Bytes = 64 Bytes)
+// The ControlData structure must provide space for 2 partitions (2 * 16 Bytes)
 typedef struct {
     uint8_t data[16 * PART_CNT];  
 } __attribute__((aligned(8))) AlignedArray_t;
 AlignedArray_t PartitionsData;
 
-//Offset Definitions for PartitionsData
-#define currentLogicalCounter 0 // Counter for the total number of sectors written
-#define nextPhysicalSector 4    // Physical sector that will be written to next
-#define startAddress 6          // Start address of the partition in the EEPROM
-#define payloadSize 8           // Size of the pure payload data (EepromData)
-#define numberOfSectors 10      // Total number of available sectors in the partition
-#define counterByteLength 11    // Size of a single sector (Payload + Metadata)
-#define status 14               // Status Byte
-#define checksum 15             // Checksum for the control data
+//Offset Definitions for PartitionsData (nur die für die Initialisierung benötigten)
+#define currentLogicalCounter 0
+#define nextPhysicalSector 4 
 
 //Instanz von EEProm_Safe_Wear_Level erzeugen
 EEProm_Safe_Wear_Level EEPRWL_Main(PartitionsData.data); 
 
 // --- ADDRESSES AND SIZES ---
-// Partition#1: 0 - 255
 #define ADDR1 0
 #define ADDR2 128
 #define SIZE1 128
 #define SIZE2 128
 
 // Payload Sizes
-#define PAYLOAD_SIZE 9          //length of device_name
+#define PAYLOAD_SIZE 9           // Length of device_name (e.g., "deviceXX\0")
 // Data
-char device_name[9];            // String Array (safe)
+char device_name[9];             // String Array
 
-// Control variable
-byte loopCounter = 4;
+// Control variable: Set to 5 for consistent write/migrate/read count
+byte loopCounter = 5; 
 
 // ----------------------------------------------------
 // --- 2. SETUP ---
 // ----------------------------------------------------
 #define actual 0
 #define next 1
-#define previous 2
-#define oldest 3
-#define newest 4
-#define count 10
-#define forceFormat 1
 
 void setup() {
     Serial.begin(115200);
@@ -82,14 +69,17 @@ void setup() {
     Serial.println(F("\r\r\r\r\r\r\r\r\r\n"));
     Serial.println(F("---------------------------------------------------------------------------"));
     Serial.println(F("--- EEProm_Safe_Wear_Level Demo Start:  Log Migration,  Single Instance ---"));
+    Serial.println(F("---              WRITES, MIGRATES AND READS 5 RECORDS                   ---"));
     Serial.println(F("---------------------------------------------------------------------------"));
     
+    // Konfiguration beider Partitionen
     int s1 = EEPRWL_Main.config(ADDR1, SIZE1, PAYLOAD_SIZE, COUNTER_LENGTH_BYTES, WRITE_CYCLES_PER_HOUR, HANDLE1); 
     int s2 = EEPRWL_Main.config(ADDR2, SIZE2, PAYLOAD_SIZE, COUNTER_LENGTH_BYTES, WRITE_CYCLES_PER_HOUR, HANDLE2); 
-    // EEPRWL_Main.initialize(forceFormat, HANDLE1);
-    EEPRWL_Main.initialize(forceFormat, HANDLE2);
-   
-    if (!s1||!s2) Serial.println(F("Partition#1 config ERROR!"));
+    
+    // Partition 2 wird formatiert (um einen sauberen Migrationsstart zu gewährleisten)
+    EEPRWL_Main.initialize(1, HANDLE2); // forceFormat=1
+    
+    if (!s1 || !s2) Serial.println(F("Partition config ERROR!"));
     else {
       Serial.print(F("Existing Partition#1 counter: "));
       Serial.println(s1);
@@ -101,74 +91,86 @@ void setup() {
     Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
 } 
 
-void readPartition(int handle) {
-              EEPRWL_Main.read(actual,device_name,handle,PAYLOAD_SIZE);
-              Serial.print(F("\n\nReading data at logical sector #"));
-              Serial.print(EEPRWL_Main.getCtrlData(currentLogicalCounter, handle));
-              Serial.print(F(":  "));
-              Serial.println(device_name);
+// ************ VERIFIZIERUNGSFUNKTION ************
+void readAndVerifyPartition(int handle, uint8_t countToRead, const char* label) {
+    // 1. Setze auf den ältesten Sektor (Startpunkt der logischen Historie)
+    int s = EEPRWL_Main.findOldestData(handle);
+    if (!s) { Serial.print(label); Serial.println(F(" Reading failed (findOldestData).")); return; }
+    
+    // 2. Lese den ältesten (ersten) migrierten/verbliebenen Record
+    EEPRWL_Main.read(0, device_name, handle, PAYLOAD_SIZE); // read(actual)
+    Serial.print(label);
+    Serial.print(F(" Log START (Oldest): "));
+    Serial.print(device_name);
+    Serial.print(F(" (Log #"));
+    Serial.print(EEPRWL_Main.getCtrlData(currentLogicalCounter, handle));
+    Serial.println(F(")"));
 
-          for (byte h = 0; h < 4; h++) {
-              EEPRWL_Main.read(next,device_name,handle,PAYLOAD_SIZE);
-              Serial.print(F("\nReading next sector, data at logical sector #"));
-              Serial.print(EEPRWL_Main.getCtrlData(currentLogicalCounter, handle));
-              Serial.print(F(":  "));
-              Serial.print(device_name);
-          }
+    // 3. Spule zum neuesten (letzten) Record vor
+    for (byte h = 0; h < countToRead - 1; h++) {
+        EEPRWL_Main.read(next, device_name, handle, PAYLOAD_SIZE);
+    }
+
+    // 4. Lese den neuesten Record (Ende der Historie)
+    Serial.print(label);
+    Serial.print(F(" Log END (Newest): "));
+    Serial.print(device_name);
+    Serial.print(F(" (Log #"));
+    Serial.print(EEPRWL_Main.getCtrlData(currentLogicalCounter, handle));
+    Serial.println(F(")"));
 }
-
+// ********************************************
 
 // ----------------------------------------------------
 // --- 3. LOOP ---
 // ----------------------------------------------------
 
 void loop() {
-    
-    while (loopCounter > 0) {
+    uint16_t recordsToOperate = 5; // Konsistente Anzahl
 
+    // 1. SCHREIBEN (5 Sektoren)
+    while (loopCounter > 0) {
+        // Logik zur Erstellung eines eindeutigen device_name basierend auf dem logischen Zähler
         int id =  EEPRWL_Main.getCtrlData(currentLogicalCounter, HANDLE1);
         int z = (id / 10) % 10;
-        int e = id % 10;        
-        snprintf(device_name, PAYLOAD_SIZE, "device%d%d", z, e);
+        int e = id % 10;          
+        snprintf(device_name, PAYLOAD_SIZE, "device%d%d", z, e); 
+        
         int s1 = EEPRWL_Main.write(device_name, HANDLE1);
 
         Serial.print(F("Writing Data: "));
         Serial.print(device_name);
               
-        if(!s1) Serial.println(F("\nWriting failed."));
-        else {
-          Serial.print(F(".  OK. Next physical sector in Partition#1: "));
-          Serial.println(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
-        }
+        if(!s1) Serial.println(F(". ERROR!"));
+        else Serial.println(F(". OK.")); // Vereinfachte Ausgabe
         
         loopCounter--;
     }
     
-    delay(2500); 
+    delay(2500);  
 
-    Serial.println(F("\n\n--- Data migration to second partition ---"));
-    Serial.println(F("migrateData(uint8_t handle1, uint8_t handle2, uint16_t count)"));
-    if (EEPRWL_Main.migrateData(HANDLE1, HANDLE2, 5)==false) Serial.println("Error");
-    else {
-        Serial.println(F("\n\n-----  Partition #1  -----"));
-        int s1 = EEPRWL_Main.findOldestData(HANDLE1);
-        if(!s1) Serial.println(F("\nfailed."));
-        else {
-              Serial.print(F("findOldestData 4 records: OK. Next physical sector in Partition#1: "));
-              Serial.print(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE1));
-              readPartition(HANDLE1);
-        }
-
-        Serial.println(F("\n\n-----  Partition #2  -----"));
-        s1 = EEPRWL_Main.findOldestData(HANDLE2);
-        if(!s1) Serial.println(F("\nfailed."));
-        else {
-              Serial.print(F("findOldestData 4 records: OK.  Next physical sector in Partition#2: "));
-              Serial.print(EEPRWL_Main.getCtrlData(nextPhysicalSector, HANDLE2));
-              readPartition(HANDLE2);
-        }
+    Serial.println(F("\n\n--- DATA MIGRATION ---"));
+    Serial.print(F("Migrating "));
+    Serial.print(recordsToOperate);
+    Serial.print(F(" LATEST records from HANDLE1 to HANDLE2... "));
+    
+    // 2. MIGRATION & Ergebnisprüfung
+    if (EEPRWL_Main.migrateData(HANDLE1, HANDLE2, recordsToOperate) == false) {
+         Serial.println(F("ERROR: Migration Failed!"));
+    } else {
+         Serial.println(F("SUCCESS: Migration Complete."));
+         
+         // 3. VERIFIZIERUNG DES ERGEBNISSES (Konzentriert)
+         Serial.println(F("\n--- VERIFICATION: Log Integrity Check ---"));
+         
+         // P#1 soll die ÄLTESTEN 5 Records zeigen (die nicht migriert wurden)
+         readAndVerifyPartition(HANDLE1, recordsToOperate, "[P#1 Old Data]:");
+         
+         // P#2 soll die NEUESTEN 5 Records zeigen (die migriert wurden)
+         readAndVerifyPartition(HANDLE2, recordsToOperate, "[P#2 New Data]:");
     }
 
     while (0==0){delay(1000);}
 }
+//END OF CODE
 // END OF CODE
