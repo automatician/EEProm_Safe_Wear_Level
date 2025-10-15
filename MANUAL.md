@@ -295,8 +295,9 @@ You can query the current status via the getCtrlData(14, handle) function. Howev
 
 **2. Manual Reset**
 
-The Status Byte is NOT included in the calculation of the Control Hash.
-Consequence: You have full control over this value. Your code can set the Status Byte to 0 at any time or overwrite it with other values. The Status Byte is not a control byte for the library, but a pure **notification status** intended to assist you in controlling your code.
+The Status Byte is NOT included in the calculation of the Control Hash. <br>
+
+**Consequence:** You have full control over this value. Your code can set the Status Byte to 0 at any time or overwrite it with other values. The Status Byte is not a control byte for the library, but a pure **notification status** intended to assist you in controlling your code.
 
 **Advantage for Programming (Atomic Check)**
 
