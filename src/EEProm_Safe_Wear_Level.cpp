@@ -56,7 +56,7 @@
 #define DEFAULT_PLD_SIZE  1
 // Meta Data (size: magic-id(1) + config-hash(1) + Overwrite-counter(2)):
 #define METADATA_SIZE  4
-#define MAGIC_ID  0x48
+#define MAGIC_ID  0x49
 
 // ----------------------------------------------------------------------------------------------------
 // --- CONSTRUCTOR ---
@@ -81,7 +81,7 @@ EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t s
       _bucketStartAddr = EEPROM.length() - 9; 
       for (uint8_t i = 0; i < 8; i++) { 
 	    _buckPerm[i] = e_r(_bucketStartAddr+i);
-        _budgetCycles[i] = 0;
+            _budgetCycles[i] = 0;
       }
 }
 
@@ -229,10 +229,9 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, char* value, uint8_t handle,
 	    uint16_t i;
 	    
 	    if (maxSize > _pldSize) maxSize = _pldSize;
-	        if (maxSize > 0) {
-                _status = 0;
-	            for (i = 0; i < maxSize; i++) { value[i] = _ioBuf[i]; }
-	        } else _status = 6;
+            if (maxSize > 0) {
+	         for (i = 0; i < maxSize; i++) { value[i] = _ioBuf[i]; }
+            } else _status = 6;
     }
 
     return_and_checksum success;
@@ -306,7 +305,7 @@ bool EEProm_Safe_Wear_Level::migrateData(uint8_t sourceHandle, uint8_t targetHan
 	        while (success == 0) {
 		        actSector++;
 		    	success = loadPhysSector(actSector,sourceHandle);
-                actSector = _nextPhSec;
+                        actSector = _nextPhSec;
 	        }
 	}
 	count1--;
@@ -439,8 +438,6 @@ bool EEProm_Safe_Wear_Level::_write(uint8_t handle) {
 
 // ----------------------------------------------------------------------------------------------------
 // --- GETTERS FOR STATE AND METADATA ---
-// ----------------------------------------------------------------------------------------------------
-
 // Remaining cycles
 uint32_t EEProm_Safe_Wear_Level::healthCycles(uint8_t handle) {
     check_and_init
@@ -450,8 +447,6 @@ uint32_t EEProm_Safe_Wear_Level::healthCycles(uint8_t handle) {
     if(success==1) success = _maxLgcCnt - _curLgcCnt;
     return_and_checksum success;
 }
-
-// ----------------------------------------------------------------------------------------------------
 
 // Remaining cycles in percent
 uint8_t EEProm_Safe_Wear_Level::healthPercent(uint32_t cycles, uint8_t handle) {
