@@ -301,3 +301,7 @@ Consequence: You have full control over this value. Your code can set the Status
 **Advantage for Programming (Atomic Check)**
 
 If the Status Byte is not changed by your code, it will only be overwritten by the library with a new status if one is applicable, and otherwise left as is (behaving as a "Sticky Status").
+
+**Note on use**
+
+You generally **do not** need to change the sticky status code. This isn't necessary for normal functionality, because the API functions return an error status (as documented) that is either *true* or *false* if necessary. Depending on the situation, query the status byte for the code relevant to the last called function.
