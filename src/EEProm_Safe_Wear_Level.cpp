@@ -128,9 +128,9 @@ uint16_t EEProm_Safe_Wear_Level::config(uint16_t startAddress, uint16_t totalByt
     // Write address initially unknown
     _nextPhSec = 0;
 
-    if (_ioBufSize<_secSize) {
+    if (_ioBufSize < _secSize) {
         delete[] _ioBuf;
-	    _ioBuf = new uint8_t [_secSize];
+        _ioBuf = new uint8_t [_secSize]; //[((_secSize>>2)+1)<<2];
         _ioBufSize = _secSize;
     }
 
@@ -230,7 +230,7 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, char* value, uint8_t handle,
 	    
 	    if (maxSize > _pldSize) maxSize = _pldSize;
             if (maxSize > 0) {
-	            for (i = 0; i < maxSize; i++) { value[i] = _ioBuf[i]; }
+	         for (i = 0; i < maxSize; i++) { value[i] = _ioBuf[i]; }
             } else _status = 6;
     }
 
@@ -287,7 +287,7 @@ bool EEProm_Safe_Wear_Level::migrateData(uint8_t sourceHandle, uint8_t targetHan
     // migration starts when a sector is found, with searching backward
 
     while (count > 1 && sectors > 0) {
-	    actSector--;
+	actSector--;
         success = loadPhysSector(actSector, sourceHandle);
         actSector = _nextPhSec;
         if (success == true) { count--; count1++; } 
@@ -297,20 +297,18 @@ bool EEProm_Safe_Wear_Level::migrateData(uint8_t sourceHandle, uint8_t targetHan
     // now migrate a sector to target partition
 
     while (count1 > 0) {
-	    uint16_t i = 1;
-	
-	    while (write((const char*)_ioBuf,targetHandle) == 0 && i < _numSecs) { i++; } 
-	    if (i == _numSecs) { count1 = 1; success = 0; }
-		
-	    if (count1 > 1) {
+	uint16_t i = 1;
+	while (write((const char*)_ioBuf,targetHandle) == 0 && i < _numSecs) { i++; }
+        if (i == _numSecs) { count1 = 1; success = 0; }
+	if (count1 > 1) {
                 success = 0;
-	            while (success == 0) {
-		            actSector++;
-		    	    success = loadPhysSector(actSector,sourceHandle);
-                    actSector = _nextPhSec;
-	            }
-	    }
-	    count1--;
+	        while (success == 0) {
+		        actSector++;
+		    	success = loadPhysSector(actSector,sourceHandle);
+                        actSector = _nextPhSec;
+	        }
+	}
+	count1--;
     }
 
     return success;
@@ -404,12 +402,11 @@ bool EEProm_Safe_Wear_Level::_write(uint8_t handle) {
                     else if (_buckPerm[bI] < 120) _status = 10;
                     else _status = 11;
 
-	    } else if (_buckPerm[bI] == 0 && _budgetCycles[bI] == 0) { 
-		        success = 0; 
-                _status = 8;
-	      }
-        
-		if(_budgetCycles[bI] > 0) _budgetCycles[bI]--;
+	     } else if (_buckPerm[bI] == 0 && _budgetCycles[bI] == 0){ 
+		    success = 0; 
+                    _status = 8;
+	     }
+        if(_budgetCycles[bI] > 0) _budgetCycles[bI]--;
     }
 
 
@@ -454,7 +451,6 @@ uint32_t EEProm_Safe_Wear_Level::healthCycles(uint8_t handle) {
     uint32_t success = 1;
     if (_curLgcCnt >= _maxLgcCnt) {_status = 3; success = 0;}
     if(success==1) success = _maxLgcCnt - _curLgcCnt;
-	
     return_and_checksum success;
 }
 
@@ -570,7 +566,7 @@ bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) 
             cC = readLE(&_ioBuf[_pldSize], _cntLen);
             // --- 2. Find the highest counter value ---
             
-            if ((margin == 0 && _curLgcCnt <= cC) || (margin != 0 && _curLgcCnt >= cC)) {
+            if ((margin == 0 && _curLgcCnt <= cC) || (margin != 0 && _curLgcCnt > cC)) {
             // These assignments are identical in both successful cases
                 _curLgcCnt = cC;        // log. sector
                 _nextPhSec = i + 1;     // ph. sector
@@ -679,10 +675,10 @@ bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
     bool success = 1;
 	
     if (_handle != handle) {
-	    // Calculates the pointer to the start of the partition in the RAM Handle
-	    size_t offset = (size_t)handle * CONTROL_STRUCT_SIZE;
-	    _controlCache = (ControlData*)(_ramStart + offset);
-        _handle = handle;
+	// Calculates the pointer to the start of the partition in the RAM Handle
+	size_t offset = (size_t)handle * CONTROL_STRUCT_SIZE;
+	_controlCache = (ControlData*)(_ramStart + offset);
+    	_handle = handle;
     	_ctlLen = _cntLen + 1;
     	_secSize = _pldSize + _ctlLen;
     	_maxLgcCnt = (maxCapacity / _numSecs) * _numSecs;
@@ -699,4 +695,3 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
-
