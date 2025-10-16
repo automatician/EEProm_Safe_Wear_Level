@@ -1,7 +1,7 @@
 // #############################################
 // ############ Demo3: type struct #############
 // #############################################
-// EEProm_Safe_Wear_Level Library v25.10.5
+// EEProm_Safe_Wear_Level Library v25.10.x
 // #############################################
 // 
 // What Structures Are Good For
