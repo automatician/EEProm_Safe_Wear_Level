@@ -1,7 +1,7 @@
 // #############################################
 // ########### Demo6: log migration ############
 // #############################################
-// EEProm_Safe_Wear_Level Library v25.10.5
+// EEProm_Safe_Wear_Level Library v25.10.x
 // #############################################
 // 
 // Demonstrates the migration of the LATEST 5 sectors and 
