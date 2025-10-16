@@ -33,7 +33,7 @@ If any of the three previously mentioned checks fail, the automatic partial refo
   
 ## 1. Initialization and Configuration
 ### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds)
-Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information. A time specification for the tick interval for write budgeting.
+Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for control information. A time specification for the tick interval for write budgeting.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | ramHandlePtr |uint8_t* | Pointer to the beginning of the RAM buffer/cache. The required size is determined by PayloadSize and internal metadata.|
