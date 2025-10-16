@@ -1,7 +1,7 @@
 // #############################################
 // ########## Demo7: WLM management ############
 // #############################################
-// EEProm_Safe_Wear_Level Library v25.10.5
+// EEProm_Safe_Wear_Level Library v25.10.x
 // #############################################
 // 
 // Control of a partition's WLM (Write Load Management) account
