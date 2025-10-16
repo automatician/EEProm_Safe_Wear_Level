@@ -23,7 +23,7 @@ The library implements a three-level security policy to ensure the structural in
 * Library Compatibility (Magic ID)
   * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format was changed.
 * Overwrite Counter
-  * Indicates how many times a partition has been formatted. Once the logical counter has reached its limit, it can be reset by formatting. The write cycles can be calculated as follows: **Total write cycles = (Overwrite counter × Logical counter capacity) + Logical counter**. Logical counter capacity is the maximum value (e.g., 255 or 65535) that the logical counter can reach before overflow forces the system to move to the next physical sector.
+  * Indicates how many times a partition has been formatted. Once the logical counter has reached its limit, it can be reset by formatting. The write cycles can be calculated as follows: **Total write cycles = (Overwrite counter × Logical counter capacity) + Logical counter**. Logical counter capacity is the maximum value (e.g., 255 or 65535) that the logical counter can reach.
 * Configuration Integrity (Control Hash)
   * The 1-byte Control Hash (CRC-8) checks the physical properties of this specific partition.
 ### Automatic Reformatting and Partial Advantage
