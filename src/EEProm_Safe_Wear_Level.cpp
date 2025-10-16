@@ -184,7 +184,7 @@ bool EEProm_Safe_Wear_Level::initialize(bool forceFormat, uint8_t handle) {
 		e_w(_startAddr + 0, MAGIC_ID);
 		e_w(_startAddr + 1, c_hash);
 	        e_c;
-	        _nextPhSec = 0; _curLgcCnt = 1;
+	        _nextPhSec = 0; _curLgcCnt = 0;
 	    }else {
 	        // --- 4. RESTORATION ---
 	        // If the metadata is valid, find the latest sector.
@@ -690,7 +690,8 @@ bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
 }
 
 void EEProm_Safe_Wear_Level::_end() {
-    _checksum = chkSum(); sei();
+    _checksum = chkSum(); 
+	sei();
 }
 
 // ----------------------------------------------------------------------------------------------------
