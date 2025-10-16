@@ -1,7 +1,7 @@
 // #############################################
 // ########## Demo4: multi partition ###########
 // #############################################
-// EEProm_Safe_Wear_Level Library v25.10.5
+// EEProm_Safe_Wear_Level Library v25.10.x
 // #############################################
 // 
 // This demo illustrates the use of multiple partitions with a single 
