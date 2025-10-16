@@ -1,5 +1,5 @@
 *******************************************************************************
-* EEProm_Safe_Wear_Level Library v25.10.5 
+* EEProm_Safe_Wear_Level Library v25.10.5 - v25.10.6
 * Copyright (C) 2025, Torsten Frieser / automatician
 *******************************************************************************
 * This library is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ EEPROM (**WEAR-LEVELING**), but also to GUARANTEE **data integrity** under
 critical conditions.
 
 -------------------------------------------------------------------------------
-2. KEY FEATURES OF v25.10.5
+2. KEY FEATURES OF v25.10.5 - v25.10.6
 -------------------------------------------------------------------------------
 
 * **TYPE-SAFE I/O:** Templated Write/Read for **Structs** and primitive
