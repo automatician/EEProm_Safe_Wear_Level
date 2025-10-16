@@ -77,7 +77,7 @@ Description: This is an **alternative function to oneTickPassed()**, which shoul
 ## 1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)
 If you intentionally omit the calls to *oneTickPassed()* or *idle()*: the system operates in a **Fixed Budget Mode**.
 
-The WLM does not save the current, reduced state of the Write Credit Bucket to EEPROM during runtime.
+The WLM does not save the current reduced state of the Write Credit Bucket in the EEPROM during runtime if you do not call the above functions.
 Upon every system reboot, the Write Credit Bucket is fully reset and initialized with an initial credit calculated from the config() parameter.
 
 ### Initial Budget Calculation:
