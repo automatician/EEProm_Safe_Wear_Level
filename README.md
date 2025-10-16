@@ -12,13 +12,13 @@ This library provides a reliable and permanent storage solution for critical dat
 ## 🚀 Get Started
 The complete manual with public functions, parameters, and return values can be found in the **API Manual** [klick](/MANUAL.md).
 * Jumpstart your project with detailed examples:
-    * [Demo1](/Examples/demo1_type_char_array.ino): String in an array
-    * [Demo2](/Examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
-    * [Demo3](/Examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
-    * [Demo4](/Examples/demo4_multi_partition.ino): Multi-partition reading and writing
-    * [Demo5](/Examples/demo5_log_functions.ino): Demonstrates iterative navigation and reading using read(), findNewestData() and findOldestData().
-    * [Demo6](/Examples/demo6_log_migration.ino): Demonstrates the migration of sectors to a second partition starting with a new logical counter.
-    * [Demo7](/Examples/demo7_wlm_management.ino): Shows the change in the write load account and the change in the resulting status to show when and why **Write Shedding** occurs
+    * [Demo1](/examples/demo1_type_char_array.ino): String in an array
+    * [Demo2](/examples/demo2_type_int.ino): Store pure states or measured values (numbers, Booleans)
+    * [Demo3](/examples/demo3_type_struct.ino): Store logical grouping of different but related data in structures
+    * [Demo4](/examples/demo4_multi_partition.ino): Multi-partition reading and writing
+    * [Demo5](/examples/demo5_log_functions.ino): Demonstrates iterative navigation and reading using read(), findNewestData() and findOldestData().
+    * [Demo6](/examples/demo6_log_migration.ino): Demonstrates the migration of sectors to a second partition starting with a new logical counter.
+    * [Demo7](/examples/demo7_wlm_management.ino): Shows the change in the write load account and the change in the resulting status to show when and why **Write Shedding** occurs
 
 ### Manual Installation Method:
 1. Download the repository's release ZIP file.
