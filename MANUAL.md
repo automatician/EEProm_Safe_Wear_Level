@@ -19,7 +19,7 @@ The **Log Management Functions** can be found under point **4. Advanced function
 | [loadPhysSector()](#loadphyssectoruint16_t-physsector-uint8_t-handle) | [findNewestData() / findOldestData()](#findoldestdatauint8_t-handle--findnewestdatauint8_t-handle) | [migrateData()](#migratedatauint8_t-source-uint8_t-target-uint16_t-count) |
 
 ## Security, Integrity and Partial Reformatting
-The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.
+The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition will be automatically reformatted.
 * Library Compatibility (Magic ID)
   * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
 * Overwrite Counter
