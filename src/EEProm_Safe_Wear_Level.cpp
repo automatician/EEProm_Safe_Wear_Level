@@ -1,5 +1,5 @@
 /******************************************************************************************************
- * EEProm_Safe_Wear_Level Library v25.10.5
+ * EEProm_Safe_Wear_Level Library v25.10.5 - v25.10.6
  * Copyright (C) 2025, Torsten Frieser / automatician
  *
  * This library is free software: you can redistribute it and/or modify
@@ -710,3 +710,4 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
+
