@@ -124,7 +124,7 @@ Every piece of software has a development cycle. When working with EEPROM, which
 
 ## 1.5.3 Calculation for WLM and Lifetime Optimization
 
-The total operating lifetime of the system depends on three critical, interdependent parameters. Correct configuration requires rearranging the original equation for the unknown quantity (usually **budgetCycles** or **SectorsPartition**).
+The total operating lifetime of the system depends on three critical, interdependent parameters. Correct configuration requires rearranging the original equation for the unknown quantity (usually **budgetCycles** or **SectorsPartition**). In addition to increasing the partition size (SectorsPartition), reducing the metadata overhead (header) is the most effective way to optimize memory usage and extend the lifespan of the EEPROM partition. The logical sector counter occupies most of the sector header. It can be between 1 and 4 bytes in size. The smaller this counter is, the more often a partition must be reset. You lose one write cycle of TotalCyclesEEPROM per reset. Each byte saved in the header is multiplied by the total number of sectors in the partition (SectorsPartition), thus contributing to the creation of new sectors.
 
 The original equation for calculating the operating life in years is:
 <div align="center"><h3>$$\text{OperatingLifetime (Years)} = \frac{\text{TotalCyclesEEPROM} \times \text{SectorsPartition}}{\text{budgetCycles} \times \text{HoursPerYear}}$$</h3></div>
