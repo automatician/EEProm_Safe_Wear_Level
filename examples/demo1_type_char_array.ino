@@ -1,7 +1,7 @@
 // #############################################
 // ######## Demo1: Datatype char array #########
 // #############################################
-// EEProm_Safe_Wear_Level Library v25.10.5
+// EEProm_Safe_Wear_Level Library v25.10.x
 // #############################################
 // Creates a string in an array and then stores 
 // it in EEPROM. When the Arduino restarts, the
