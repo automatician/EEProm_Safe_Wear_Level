@@ -81,6 +81,19 @@ EEProm_Safe_Wear_Level::EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t s
       _bucketStartAddr = EEPROM.length() - 9; 
       for (uint8_t i = 0; i < 8; i++) { 
 	    _buckPerm[i] = e_r(_bucketStartAddr+i);
+
+            // i need the hamming distance for error
+            // correction of the original stored values
+            uint8_t c1 = 0;
+            uint8_t n = _buckPerm[i];
+            while (n > 0) {
+                n &= (n - 1); 
+                c1++;   //1-bits
+            }
+            uint8_t c0 = 8 - c1;   //0-bits
+
+            // &128 indicates a total failure of the cell
+	    _buckPerm[i] = _buckPerm[i]&128 == 128 ? 64 : c0 < c1 ? 127 : 0;
             _budgetCycles[i] = 0;
       }
 }
@@ -526,8 +539,10 @@ void EEProm_Safe_Wear_Level::updateBuckets() {
 
   for (uint8_t i = 0; i < 8; i++) { 
        if (_buckPerm[i] < 255) _buckPerm[i]++;
-       if (e_r(_bucketStartAddr+i) != ((_buckPerm[i] < 64) ? 0 : 127)) {
-               e_w(_bucketStartAddr+i, (_buckPerm[i] < 64) ? 0 : 127);
+       uint8_t value = e_r(_bucketStartAddr+i);
+       uint8_t stat = (_buckPerm[i] < 62) ? 0 : (_buckPerm[i] > 64) ? 127: value;
+       if (value != stat ) {
+               e_w(_bucketStartAddr+i, stat);
                e_c;
        }
   }
@@ -537,7 +552,7 @@ void EEProm_Safe_Wear_Level::updateBuckets() {
 // ----------------------------------------------------------------------------------------------------
 
 bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) {
-    _curLgcCnt = margin>0 ? (-1) : 0; _nextPhSec = 0;  bool success = false;
+    _curLgcCnt = margin > 0 ? (-1) : 0; _nextPhSec = 0;  bool success = false;
 
     // Search all sectors
     // i MUST be uint16_t to support > 255 sectors (e.g., with 2KB EEPROM)
@@ -690,8 +705,7 @@ bool EEProm_Safe_Wear_Level::_start(uint8_t handle) {
 }
 
 void EEProm_Safe_Wear_Level::_end() {
-    _checksum = chkSum(); 
-	sei();
+    _checksum = chkSum(); sei();
 }
 
 // ----------------------------------------------------------------------------------------------------
