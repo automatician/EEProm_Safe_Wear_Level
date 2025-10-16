@@ -20,6 +20,12 @@ it into a quantifiable, actively managed parameter.
 
 ---
 
+Used extern standard libraries:
+
+EEPROM.h, Arduino.h, stddef.h, string.h, stdint.h
+
+---
+
 ## Key Features & Robustness
 The library implements a complete data management subsystem designed for high functional
 safety and reliability (inspired by IEC 61508 / ISO 26262 principles).
