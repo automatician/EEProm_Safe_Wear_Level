@@ -1,7 +1,7 @@
 # Industrial Data Integrity with Log and Write Load Management
 ## EEProm_Safe_Wear_Level 
 
-**Library Version: v25.10.5**
+**Library Version: v25.10.5 - v25.10.6**
 
 This library provides a reliable and permanent storage solution for critical data on Arduino-compatible μCs. It covers the entire application spectrum, from simple EEPROM storage in the μC to the verifiable data logging required at the commercial level. This library was developed to combine wear leveling with the security of data integrity and an operational guarantee. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a quantifiable guarantee. Premature failures are replaced by planning in the software design and active management of the planned parameters.
 
@@ -56,7 +56,7 @@ This is the library's short-term, reactive protection mechanism, which is trigge
 
 ---
 
-## Key Features of v25.10.5
+## Key Features of v25.10.5 - v25.10.6
 
 | Feature | Benefit | References |
 | :--- | :--- | :--- |
