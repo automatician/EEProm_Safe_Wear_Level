@@ -1,5 +1,5 @@
 /*****************************************************************************************************
- * EEProm_Safe_Wear_Level Library v25.10.5
+ * EEProm_Safe_Wear_Level Library v25.10.5 - v25.10.6
  * Copyright (C) 2025, Torsten Frieser / automatician
  *
  * This library is free software: you can redistribute it and/or modify
@@ -263,3 +263,4 @@ bool EEProm_Safe_Wear_Level::read(uint8_t ReadMode, T& value, uint8_t handle, si
 
 #endif // EEPROM_WEAR_LEVEL_H
 // END OF CODE
+
