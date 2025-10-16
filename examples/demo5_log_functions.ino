@@ -1,7 +1,7 @@
 // #############################################
 // ########### Demo5: log functions ############
 // #############################################
-// EEProm_Safe_Wear_Level Library v25.10.5
+// EEProm_Safe_Wear_Level Library v25.10.x
 // #############################################
 // 
 // This demo demonstrates the use of the logging functionality. 
