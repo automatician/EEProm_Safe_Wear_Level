@@ -21,9 +21,9 @@ The **Log Management Functions** can be found under point **4. Advanced function
 ## Security, Integrity and Partial Reformatting
 The library implements a three-level security policy to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.
 * Library Compatibility (Magic ID)
-  * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format was changed.
+  * The stored Magic ID (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.
 * Overwrite Counter
-  * Indicates how many times a partition has been formatted. Once the logical counter has reached its limit, it can be reset by formatting. The write cycles can be calculated as follows: **Total write cycles = (Overwrite counter × Logical counter capacity) + Logical counter**. Logical counter capacity is the maximum value (e.g., 255 or 65535) that the logical counter can reach.
+  * Indicates how many times a partition has been formatted. If the logical counter is lower, it can be reset by formatting. The write cycles can be calculated as follows: **Total write cycles = (Overwrite counter Ã— Logical counter capacity) + Logical counter**. Logical counter capacity is the maximum value (e.g., 255 or 65535) that the logical counter can reach before overflow forces the system to move to the next physical sector.
 * Configuration Integrity (Control Hash)
   * The 1-byte Control Hash (CRC-8) checks the physical properties of this specific partition.
 ### Automatic Reformatting and Partial Advantage
@@ -33,7 +33,7 @@ If any of the three previously mentioned checks fail, the automatic partial refo
   
 ## 1. Initialization and Configuration
 ### EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds)
-Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for control information. A time specification for the tick interval for write budgeting.
+Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information. A time specification for the tick interval for write budgeting.
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | ramHandlePtr |uint8_t* | Pointer to the beginning of the RAM buffer/cache. The required size is determined by PayloadSize and internal metadata.|
@@ -62,7 +62,7 @@ It is the library's short-term, reactive protection mechanism that is only activ
    
 The following functions provide the necessary time base to maintain the Write Load Management for the entire system. One of the two functions must be called in your software.
 ### oneTickPassed()
-Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
+Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for precise timekeeping and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (â‰¥3600 s). You use this function as **an alternative to the idle()** function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. <br>
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
 | no | void | no return value |
@@ -77,7 +77,7 @@ Description: This is an **alternative function to oneTickPassed()**, which shoul
 ## 1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)
 If you intentionally omit the calls to *oneTickPassed()* or *idle()*: the system operates in a **Fixed Budget Mode**.
 
-The WLM does not save the current reduced state of the Write Credit Bucket in the EEPROM during runtime if you do not call the above functions.
+The WLM does not save the current, reduced state of the Write Credit Bucket to EEPROM during runtime.
 Upon every system reboot, the Write Credit Bucket is fully reset and initialized with an initial credit calculated from the config() parameter.
 
 ### Initial Budget Calculation:
@@ -115,7 +115,7 @@ The Write Load is the time frequency (or rate) of write operations exerted on th
 
 The EEProm_Safe_Wear_Level library introduces Write Load Management (WLM) to solve this Write Load problem. 
  * Goal: To actively control the system's write frequency per hour/day and map it to the planned product lifespan.
- * Mechanism: It uses a Write Budgeting (credit system) that throttles write operations (Write Shedding) based on a fixed budgetCycles (cycles per hour).
+ * Mechanism: It uses a Write Budgeting (credit system) that throttles write operations (WriteÂ Shedding) based on a fixed budgetCycles (cycles per hour).
  * Result: WLM ensures that the temporal wear aligns with the planned lifespan (5 years, 10 years, etc.), providing protection against excessive Write Load in addition to physical distribution. Furthermore, WLM can be used to comfortably and effectively throttle excessive user inputs in interactive or menu-driven systems, preventing uncontrolled writes to the EEPROM. It offers a convenient way to utilize the advantages of a non-volatile memory while simultaneously protecting it from rapid exhaustion.
 
 **Development Cycle Safety & Controlled Risk**
@@ -236,7 +236,7 @@ Description: Loads the payload and control data of a specific physical EEPROM se
 |handle|uint8_t|Partition handle.|
 |Return|uint16_t| 0: error / >0: ok (reserved)|
 ## 4.3. Write Budgeting
-Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the sticky status byte in the partition control data (*getCtrlData()* function) after the **write()** command did not have a physical error. To query the exact statistical value of a partition's **write account balance**, use this function:
+Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values â€‹â€‹are communicated via the sticky status byte in the partition control data (*getCtrlData()* function) after the **write()** command did not have a physical error. To query the exact statistical value of a partition's **write account balance**, use this function:
 ### getWrtAccBalance(uint8_t handle)
 | Parameter | Type | Description |
 | :--- | :--- | :--- |
