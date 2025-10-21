@@ -1,5 +1,5 @@
 /******************************************************************************************************
- * EEProm_Safe_Wear_Level Library v25.10.5 - v25.10.6
+ * EEProm_Safe_Wear_Level Library v25.10.5
  * Copyright (C) 2025, Torsten Frieser / automatician
  *
  * This library is free software: you can redistribute it and/or modify
@@ -618,17 +618,17 @@ bool EEProm_Safe_Wear_Level::findMarginalSector(uint8_t handle, uint8_t margin) 
 // ----------------------------------------------------------------------------------------------------
 
 uint8_t EEProm_Safe_Wear_Level::calculateCRC(const uint8_t *data, size_t length) {
-    uint8_t crc = 0x00; // Initialwert 0 (Oft auch 0xFF, hier 0x00 für Einfachheit/Kompaktheit)
+    uint8_t crc = 0x00; // Initial value 0 (often also 0xFF, here 0x00 for simplicity/compactness)
 	
     for (size_t i = 0; i < length; i++) {
         if (data[i] > 0) _usedSector = 1;
-        crc ^= data[i]; // XOR mit dem nächsten Daten-Byte
+        crc ^= data[i]; // XOR with the next data byte
         for (uint8_t j = 0; j < 8; j++) {
-            if (crc & 0x80) { // Prüfen, ob das MSB gesetzt ist
+            if (crc & 0x80) { // Check if the MSB is set
                 // Shift und XOR mit dem Polynom
-                crc = (crc << 1) ^ 7; // Standard CRC-8 Polynom x^8 + x^2 + x^1 + 1 (0x07)
+                crc = (crc << 1) ^ 7; // Standard CRC-8 polynomial x^8 + x^2 + x^1 + 1 (0x07)
             } else {
-                // Nur Shift
+                // only Shift
                 crc <<= 1;
             }
         }
@@ -710,4 +710,3 @@ void EEProm_Safe_Wear_Level::_end() {
 
 // ----------------------------------------------------------------------------------------------------
 // END OF CODE
-

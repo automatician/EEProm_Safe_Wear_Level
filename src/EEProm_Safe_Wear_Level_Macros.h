@@ -1,5 +1,3 @@
-//v25.10.5 - v25.10.6
-
 #ifndef EEPROM_SAFE_WEAR_LEVEL_MACROS_H
 #define EEPROM_SAFE_WEAR_LEVEL_MACROS_H
 
@@ -63,4 +61,4 @@ typedef struct __attribute__((packed)) {
 // Other
 // -----------------------------------------------------------
 #define maxCapacity (uint32_t)(1UL << (_cntLen * 8)) - 1
-// END OF CODE
+
