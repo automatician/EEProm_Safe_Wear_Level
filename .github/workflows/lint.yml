@@ -1,0 +1,17 @@
+name: Arduino Library Linter Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Arduino Lint
+        uses: arduino/arduino-lint-action@v1
+        with:
+          args: --strict
