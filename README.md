@@ -6,7 +6,7 @@
 
 This library provides a reliable and permanent storage solution for critical data on Arduino-compatible &micro;Cs. It covers the entire application spectrum, from simple EEPROM storage in the &micro;C to the verifiable data logging required at the commercial level. This library was developed to combine wear leveling with the security of data integrity and an operational guarantee. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a quantifiable guarantee. Premature failures are replaced by planning in the software design and active management of the planned parameters.
 
-**<i>It is built upon the standard EEPROM.h to ensure maximum compatibility across all supported Arduino architectures.</i>**
+**<i>Since other architectures can in principle use EEPROM.h (ESP), the physical memory is accessed differently (this changes the functionality of EEPROM_Safe_Wear_Level at the hardware level: wear leveling is not achieved through the ring buffer). Therefore, the library version 25.10.7 is officially limited to AVR.</i>**
 
 ---
 
