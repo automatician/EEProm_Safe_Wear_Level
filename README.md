@@ -1,6 +1,6 @@
 # Industrial Data Integrity with Log and Write Load Management
 ## EEProm_Safe_Wear_Level 
-**[Download v25.10.7 ZIP (manual installation)](https://github.com/automatician/EEProm_Safe_Wear_Level/archive/refs/tags/V25.10.7.zip)**
+**[Download v25.10.7 ZIP (manual installation)](https://github.com/automatician/EEProm_Safe_Wear_Level/archive/refs/tags/v25.10.7.zip)**
 
 **Library Version: v25.10.7**
 
