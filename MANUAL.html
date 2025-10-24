@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Manual</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 900px; margin: auto; padding: 20px; }
+        h1, h2, h3, h4 { color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-top: 30px; }
+        h5 { color: green; border-bottom: 1px solid #eee; padding-bottom: 0px; margin-top: 30px; font-size: 1.35em; }
+        .readme-section h2 { border-bottom: 3px solid #007bff; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        .description-box { background-color: #f6f6f6; padding: 10px; border-left: 3px solid #28a745; margin: 10px 0; }
+        .warning { color: #dc3545; font-weight: bold; }
+        .center-text { text-align: center; margin: 10px 0; }
+        .code-box { background-color: #eee; padding: 10px; border-radius: 5px; font-family: monospace; overflow-x: auto; }
+        .indent { margin-left: 20px; }
+        .api-manual-start { margin-top: 50px; padding-top: 30px; border-top: 4px dashed #ccc; }
+        /* Stil für den internen Link im README */
+        .readme-link { font-weight: bold; color: #007bff; text-decoration: none; }
+        .readme-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="readme-section">
+        <h1>Industrial Data Integrity with Log and Write Load Management</h1>
+        <h2>EEProm_Safe_Wear_Level (v25.10.7)</h2>
+
+        <p>This library provides a <b>reliable and permanent storage solution</b> for critical data on Arduino-compatible &micro;Cs. It covers the entire application spectrum, from simple EEPROM storage in the &micro;C to the <b>verifiable data logging</b> required at the commercial level. This library was developed to combine wear leveling with the <b>security of data integrity</b> and an <b>operational guarantee</b>. Write management is a welcome feature and answers the question: "How long will my EEPROM last?" This uncertainty is eliminated by effectively transforming the question of longevity into a <b>quantifiable guarantee</b>. Premature failures are replaced by planning in the software design and <b>active management of the planned parameters</b>.</p>
+
+        <hr>
+
+        <h2>Get Started</h2>
+        <p>The complete manual with public functions, parameters, and return values can be found in the <a href="#eeprom_safe_wear_level_api_manual" class="readme-link"><b>API Manual</b></a>.</p>
+        <p>Jumpstart your project with detailed examples:</p>
+        <ul>
+            <li><a href="#examples">Demo1</a>: String in an array</li>
+            <li><a href="#examples">Demo2</a>: Store pure states or measured values (numbers, Booleans)</li>
+            <li><li><a href="#examples">Demo3</a>: Store logical grouping of different but related data in structures</li>
+            <li><a href="#examples">Demo4</a>: Multi-partition reading and writing</li>
+            <li><a href="#examples">Demo5</a>: Demonstrates iterative navigation and reading using <b>read()</b>, <b>findNewestData()</b> and <b>findOldestData()</b>.</li>
+            <li><a href="#examples">Demo6</a>: Demonstrates the migration of sectors to a second partition starting with a new logical counter.</li>
+            <li><a href="#examples">Demo7</a>: Shows the change in the write load account and the change in the resulting status to show when and why <b>Write Shedding</b> occurs</li>
+        </ul>
+        <p><a id="examples"></a></p>
+
+        <h3>Manual Installation Method:</h3>
+        <ol>
+            <li>Download the repository's release ZIP file.</li>
+            <li>Unzip the file (e.g., <code>EEProm_Safe_Wear_Level-vX.X.X</code>).</li>
+            <li>Rename the folder to <code>EEProm_Safe_Wear_Level</code>.</li>
+            <li>Copy the folder to your <b>Arduino Library Directory</b> (<code>Documents/Arduino/libraries/</code>).</li>
+            <li>Restart the Arduino IDE.</li>
+        </ol>
+
+        <hr>
+
+        <h2>Design Conformity with Industry Standards</h2>
+
+        <h3>IEC 61508 / ISO 26262 (Functional Safety Principles)</h3>
+        <p>The design ensures the safety of critical data through <b>comprehensive CRC validation</b> and <b>error reporting</b>. The entire wear-leveling logic is aimed at preventing hardware failure, which is a direct measure to increase system reliability and longevity.</p>
+
+        <h3>ISO/IEC 5055 (Reliability & Maintainability)</h3>
+        <p>The library achieves <b>maximum transparency and maintainability</b>. The internal encapsulation of complexity and the <b>clear separation of logical reading and error reporting</b> ensure maximum transparency, which are the cornerstones of this quality standard.</p>
+
+        <hr>
+
+        <h2>What It Is: Complete Data Management Subsystem</h2>
+
+        <p><code>EEProm_Safe_Wear_Level</code> is a <b>complete data management subsystem</b> with integrated error handling, multi-partition support, logging functionality, and comprehensive auditability. Its strategic goal is to <b>GUARANTEE data integrity</b> under critical conditions while maximizing the lifespan of the EEPROM (<b>WEAR-LEVELING</b>).</p>
+
+        <p>It meets the <b>high requirements for robustness and failure safety</b> needed in commercial or critical projects.</p>
+
+        <h2>Write Load Management</h2>
+        <p>The library implements an <b>innovative Write Load Management system</b> for protecting EEPROM lifespan, extending beyond conventional wear-leveling.</p>
+
+        <h3>Write Budgeting</h3>
+        <p>This is the library's <b>strategic function</b>. It describes the proactive approach to mapping the entire physical lifespan (Endurance) of the EEPROM to the planned product lifespan, and <b>time-based allocation of the write budget</b>.</p>
+
+        <h3>Write Shedding</h3>
+        <p>This is the library's <b>short-term, reactive protection mechanism</b>, which is triggered only when the write frequency is overloaded (analogous to Load Shedding in the power grid). It is the response to a worst-case scenario (such as a software bug) that would damage the EEPROM outside of your planning. Since this mechanism actively throttles write cycles by temporarily preventing them, your application software should evaluate its status and respond proactively.</p>
+
+        <hr>
+
+        <h2>Key Features</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Benefit</th>
+                    <th>References</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><b>WRITE LOAD MANAGEMENT</b></td>
+                    <td>Guaranteed longevity through <b>strategic write budgeting</b> (time-based allocation) and <b>Write Shedding</b> (protection against overload).</td>
+                    <td>The time base is provided via <a href="#onetickpassed">oneTickPassed()</a> or <a href="#idle">idle()</a>; the current credit balance can be queried using <a href="#getwrtaccbalanceuint8_t-handle">getWrtAccBalance()</a>.</td>
+                </tr>
+                <tr>
+                    <td><b>FAILURE SAFETY</b></td>
+                    <td>Each data record is secured with a checksum and is verified after saving. Corrupted sectors are reported (see Diagnostics).</td>
+                    <td>The status of the last operation is provided in the <a href="#getctrldataint-offs-int-handle">getCtrlData()</a> status flag for diagnostic purposes.</td>
+                </tr>
+                <tr>
+                    <td><b>CRC with High Detection Rate</b></td>
+                    <td>Enhanced CRC checksums for <b>robust detection of data corruption</b> within the EEPROM itself.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>LOGGING FUNCTIONALITY</b></td>
+                    <td>Enables <b>secure chronological data logging</b> with API access to the newest/oldest entries and with record navigation.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>LONG LIFESPAN (Wear-Leveling)</b></td>
+                    <td>Utilizes a <b>Ring Buffer</b> to spread write cycles evenly, significantly increasing EEPROM endurance.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>TYPE-SAFE I/O</b></td>
+                    <td><b>Generic templates</b> for structs, all primitive types, and C-Strings via dedicated overloads.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>MULTI-PARTITION</b></td>
+                    <td>Independent management of multiple logical data areas (<b>Handles 0, 1, 2, ...</b>).</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>RAM Handle Protection</b></td>
+                    <td>Securing control data structures (<b>RAM Handle Structure</b>) against corruption.</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>CONFIGURABLE COUNTERS</b></td>
+                    <td>Adapt health functionality and control data overhead (between <b>2 and 5 bytes</b>).</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><b>DATA MIGRATION</b></td>
+                    <td>Memory-saving transfer of log entries to a second partition to prevent log loss upon saturation.</td>
+                    <td>Controlled by <a href="#migratedatauint8_t-source-uint8_t-target-uint16_t-count">migrateData()</a>. Queries with <a href="#getoverwcounteruint8_t-handle">getOverwCounter()</a>, <a href="#healthcyclesuint8_t-handle">healthCycles()</a>, and <a href="#healthpercentuint32_t-cycles-uint8_t-handle">healthPercent()</a>.</td>
+                </tr>
+                <tr>
+                    <td><b>DIAGNOSTICS</b></td>
+                    <td>Detailed <b>8 Status Codes</b> (0x00 to 0x07) allow a targeted response to errors and log states.</td>
+                    <td>The status of Write Budget Management, Shedding active, Credit Status, and other fields of the status byte can be queried with <a href="#getctrldataint-offs-int-handle">getCtrlData()</a>. Health statistics: Cycles with <a href="#healthcyclesuint8_t-handle">healthCycles()</a> and percentages with <a href="#healthpercentuint32_t-cycles-uint8_t-handle">healthPercent()</a>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+
+        <h2>License and Copyright</h2>
+
+        <p><b>Conclusion:</b> If you are looking for a library that <b>guarantees data integrity</b> and <b>longevity</b> across the entire lifecycle of your embedded system, this is the <b>Gold Standard</b>.</p>
+
+        <ul>
+            <li>Copyright (C) 2025, Torsten Frieser / automatician</li>
+            <li>This library is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 2.1 of the License.</li>
+        </ul>
+    </div>
+    <div class="api-manual-start">
+        <h1 id="eeprom_safe_wear_level_api_manual">EEProm_Safe_Wear_Level - API Manual</h1>
+        <p>This document provides a concise reference for all public functions of the EEProm_Safe_Wear_Level library, which was developed to manage wear-leveling in EEPROM memory. The functions can be divided into five main categories, with the <b>Write Load Management (WLM)</b> logic being controlled by three functions: <b>constructor</b>, <b>config()</b>, <b>oneTickPassed()/idle()</b> and <b>getWrtAccBalance()</b>. </p>
+
+        <p>This functions are optional: <b>migrateData()</b>, <b>getCtrlData()</b>, <b>getWrtAccBalance()</b>, <b>oneTickPassed()</b>, <b>idle()</b>, <b>findNewestData()</b>, <b>findOldestData</b>.</p>
+        <div class="indent">
+            <ul>
+                <li>Zero Overhead for Basic Users: Users who only utilize the core functions do not pay a memory price for these advanced features.</li>
+                <li>Maximum Efficiency: Users requiring <b>advanced maintenance, backup strategies, or deep diagnostics</b> receive this complex logic without having to implement it themselves in an error-prone manner. This results in a "Zero Application Overhead" in the user's sketch for these functions.</li>
+            </ul>
+        </div>
+
+        <p>The <b>Log Management Functions</b> can be found under point <a href="#4-advanced-functions"><b>4. Advanced functions</b></a>.</p>
+
+        <hr>
+        <h2>Table of functions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>1. Initialization / configuration</th>
+                    <th>2. Reading & Writing</th>
+                    <th>3. Health & Statistics / WLM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="#eeprom_safe_wear_leveluint8_t-ramhandleptr-uint16_t-seconds">EEProm_Safe_Wear_Level(...)</a></td>
+                    <td><a href="#writeconst-t-value-uint8_t-handle">write(const T&amp; value, ...)</a></td>
+                    <td><a href="#getoverwcounteruint8_t-handle">getOverwCounter()</a></td>
+                </tr>
+                <tr>
+                    <td><a href="#configuint16_t-startaddress-uint16_t-totalbytesused-uint16_t-payloadsize-uint8_t-cntlengthbytes-uint8_t-budgetcycles-uint8_t-handle">config(...)</a></td>
+                    <td><a href="#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize">read(0, T&amp; value, ...)</a></td>
+                    <td><a href="#initializebool-forceformat-uint8_t-handle">initialize(...)</a></td>
+                </tr>
+                <tr>
+                    <td><a href="#onetickpassed">oneTickPassed()</a></td>
+                    <td><a href="#explicit-overloads-for-c-strings">write(const char* value, ...)</a></td>
+                    <td><a href="#healthcyclesuint8_t-handle">healthCycles()</a></td>
+                </tr>
+                <tr>
+                    <td><a href="#idle">idle()</a></td>
+                    <td><a href="#explicit-overloads-for-c-strings">read(readMode, char* value, ...)</a></td>
+                    <td><a href="#healthpercentuint32_t-cycles-uint8_t-handle">healthPercent()</a></td>
+                </tr>
+                <tr>
+                    <td><a href="#getwrtaccbalanceuint8_t-handle">getWrtAccBalance()</a></td>
+                    <td><a href="#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize-1">read(readMode, T&amp; value, ...)</a></td>
+                    <td><a href="#getctrldataint-offs-int-handle">getCtrlData()</a></td>
+                </tr>
+                <tr>
+                    <td><a href="#loadphyssectoruint16_t-physsector-uint8_t-handle">loadPhysSector()</a></td>
+                    <td><a href="#findoldestdatauint8_t-handle--findnewestdatauint8_t-handle">findNewestData() / findOldestData()</a></td>
+                    <td><a href="#migratedatauint8_t-source-uint8_t-target-uint16_t-count">migrateData()</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <h2 id="security-integrity-and-partial-reformatting">Security, Integrity and Partial Reformatting</h2>
+        <p>The library implements a <b>three-level security policy</b> to ensure the structural integrity of each partition and prevent unnoticed data corruption. It uses targeted (partial) reformatting without overwriting intact, compatible partitions. Each partition is checked during initialization based on the following criteria. If a check fails, the partition is automatically reformatted.</p>
+        <ul>
+            <li><b>Library Compatibility (Magic ID)</b>
+                <p class="indent">The stored <b>Magic ID</b> (1 byte) serves as a fingerprint of the internal library structure. If it differs, the sector management logic or the library's data format has been changed.</p>
+            </li>
+            <li><b>Overwrite Counter</b>
+                <p class="indent">Indicates how many times a partition has been formatted. If the logical counter is lower, it can be reset by formatting. The write cycles can be calculated as follows: <b>Total write cycles = (Overwrite counter &times; Logical counter capacity) + Logical counter</b>. Logical counter capacity is the maximum value (e.g., 255 or 65535) that the logical counter can reach before overflow forces the system to move to the next physical sector.</p>
+            </li>
+            <li><b>Configuration Integrity (Control Hash)</b>
+                <p class="indent">The 1-byte <b>Control Hash</b> (CRC-8) checks the physical properties of this specific partition.</p>
+            </li>
+        </ul>
+
+        <h3 id="automatic-reformatting-and-partial-advantage">Automatic Reformatting and Partial Advantage</h3>
+        <p>If any of the three previously mentioned checks fail, the <b>automatic partial reformat</b> is triggered.</p>
+        <ul>
+            <li>Corruption Prevention: The <b>CRC-8 control hash</b> ensures that any change to the partition's configuration parameters (made in the ino code) is detected. This prevents old data from conflicting with the incorrect, new structure.</li>
+            <li>Partial Advantage: Because each partition stores and verifies its own control hash and magic ID, a configuration change is limited to the affected partition. All other correctly configured partitions in the EEPROM remain unaffected and functional.</li>
+        </ul>
+
+        <hr>
+        <h2 id="1-initialization-and-configuration">1. Initialization and Configuration</h2>
+
+        <h5 id="eeprom_safe_wear_leveluint8_t-ramhandleptr-uint16_t-seconds">EEProm_Safe_Wear_Level(uint8_t* ramHandlePtr, uint16_t seconds)</h5>
+        <p class="description-box">Description: The standard constructor for the class. It requires a pointer to a pre-allocated RAM buffer (uint8_t*) that the library uses as its internal I/O cache for data and control information. A time specification for the tick interval for write budgeting.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ramHandlePtr</td>
+                    <td>uint8_t*</td>
+                    <td>Pointer to the beginning of the RAM buffer/cache. The required size is determined by <b>PayloadSize</b> and internal metadata.</td>
+                </tr>
+                <tr>
+                    <td>seconds</td>
+                    <td>uint16_t</td>
+                    <td>Seconds after which the <b>oneTickPassed()</b> function is called. <i>oneTickPassed()</i> is used for write budgeting.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="configuint16_t-startaddress-uint16_t-totalbytesused-uint16_t-payloadsize-uint8_t-cntlengthbytes-uint8_t-budgetcycles-uint8_t-handle">config(uint16_t startAddress, uint16_t totalBytesUsed, uint16_t PayloadSize, uint8_t cntLengthBytes, uint8_t budgetCycles, uint8_t handle)</h5>
+        <p class="description-box">Description: Initializes and configures the EEPROM wear-leveling partition. This function must be called when the microcontroller is rebooted to specify a partition. It formats the partition if the configuration data has changed. Write cycles per hour must be specified here because they are assigned per partition (the maximum value is 255).</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>startAddress</td>
+                    <td>uint16_t</td>
+                    <td>The <b>starting address</b> of the partition in the physical EEPROM.</td>
+                </tr>
+                <tr>
+                    <td>totalBytesUsed</td>
+                    <td>uint16_t</td>
+                    <td>The <b>total number of EEPROM bytes</b> allocated to this partition (must be large enough for at least two sectors).</td>
+                </tr>
+                <tr>
+                    <td>PayloadSize</td>
+                    <td>uint16_t</td>
+                    <td>The size (in bytes) of the actual payload data to be stored. This determines the overall sector size.</td>
+                </tr>
+                <tr>
+                    <td>cntLengthBytes</td>
+                    <td>uint8_t</td>
+                    <td>The number of bytes used for the wear-level counter (e.g., <b>4 for a 32-bit counter</b>, max 4).</td>
+                </tr>
+                <tr>
+                    <td>budgetCycles</td>
+                    <td>uint8_t</td>
+                    <td><b>Budget write cycles per hour</b>.</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint16_t</td>
+                    <td>Status code: =0 Error, >0 Partition Version / <b>Overwrite Counter 1 to 65535</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <h2 id="1-5-write-load-management-wlm">1.5 Write Load Management (WLM)</h2>
+        <p><b>Purpose</b>: It ensures that the EEPROM write cycles are not prematurely and unnoticed used up by a constantly too high average usage rate. </p>
+
+        <h3>Write Budgeting</h3>
+        <p>It is the <b>strategic function</b> of this library. It describes the proactive approach to mapping the entire physical lifespan of the EEPROM to the planned product lifespan.</p>
+
+        <h3>Write Shedding</h3>
+        <p>It is the library's <b>short-term, reactive protection mechanism</b> that is only activated when the write frequency is overloaded. It is the response to a worst-case scenario that would damage the EEPROM beyond your planning. Since this mechanism throttles write cycles by temporarily preventing them. Your application software should evaluate its status and respond proactively. </p>
+
+        <p>The following functions provide the necessary time base to maintain the <b>Write Load Management</b> for the entire system. One of the two functions must be called in your software.</p>
+
+        <h5 id="onetickpassed">oneTickPassed()</h5>
+        <p class="description-box">Description: This function must be called regularly by the external timer or interrupt handler at intervals (seconds, as configured in the constructor). It is designed for <b>precise timekeeping</b> and uses a logical counter and a remainder accumulator to ensure that not a single second is lost in the timekeeping, even in the event of large overflows (≥3600 s). You use this function as <b>an alternative to the idle()</b> function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it. </p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>no</td>
+                    <td>void</td>
+                    <td>no return value</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="warning"><b>Warning:</b> If this function is called uncontrollably outside of a fixed interval, the safety provided by budgeting is lost.</p>
+
+        <h5 id="idle">idle()</h5>
+        <p class="description-box">Description: This is an <b>alternative function to oneTickPassed()</b>, which should be called within the main loop when used. The frequency of the call is not critical, but should occur more than once per hour. For compatibility reasons, it uses the internal millis() timebase, so it is not hardware-dependent and does not consume valuable interrupts in your code. You use this function as an alternative to the <b>oneTickPassed()</b> function; sharing it is redundant and unnecessary. The compiler only integrates the function code if you use it.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>no</td>
+                    <td>void</td>
+                    <td>no return value</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <h2 id="1-5-1-operating-mode-fixed-budget-without-tick-functions">1.5.1 Operating Mode: Fixed Budget (Without Tick Functions)</h2>
+        <p>If you intentionally omit the calls to <i>oneTickPassed()</i> or <i>idle()</i>: the system operates in a <b>Fixed Budget Mode</b>.</p>
+        <p>The WLM does not save the current, reduced state of the Write Credit Bucket to EEPROM during runtime. Upon every system reboot, the Write Credit Bucket is fully reset and initialized with an initial credit calculated from the config() parameter.</p>
+
+        <h3>Initial Budget Calculation:</h3>
+        <p>The <b>maximum available write credit</b> in this mode is calculated by multiplying the <b>budgetCycles</b> value from <b>config()</b> with the initial internal bucket constant (143):</p>
+        <div class="center-text"><h4><i>Initial Budget = budgetCycles &times; 143</i></h4></div>
+        <p>BudgetCycles acts as a <b>multiplication factor</b> for the credit bucket upon initialization.</p>
+        <p>To set a desired maximum number of write operations (MaxWrites) after a reboot, you must pass the following calculated value to config():</p>
+        <div class="center-text"><h4><i>budgetCycles = MaxWrites &divide; 143</i></h4></div>
+        <p>Since the <b>budgetCycles</b> parameter is a <b>uint8_t</b> (max. 255), you should ensure that the result of the division does not exceed this value.</p>
+        <p><b><i>Advantage for Prototyping/Testing:</i></b> This guarantees a <b>fixed, high maximum number of write operations</b> upon every reset. This is ideal for testing where the Arduino is connected to a PC, providing an <b>automatic safeguard</b> against excessive EEPROM wear if the device writes frequently and is left running unattended.</p>
+        <p><b>Limitation:</b> This mode eliminates the continuous, time-based wear leveling control, making it <b>unsuitable for long-term production use</b> where consistent write rate control is required.</p>
+
+        <hr>
+        <h2 id="1-5-2-write-load-distinction">1.5.2 Write Load &mdash; Distinction</h2>
+        <p>The library's wear-leveling mechanism is controlled by the <b>config()</b> parameters and the regular execution of the tick functions. Correctly calculating these parameters is key to determining and ensuring the <b>overall product operating lifetime</b>.</p>
+
+        <h3>1. Classic Wear-Leveling (Physical Distribution)</h3>
+        <p>Most EEPROM libraries focus on <b>Classic Wear-Leveling</b>. </p>
+        <ul>
+            <li>Goal: To distribute the <b>TotalCycles</b> per EEPROM cell (e.g. 100.000 cycles per cell) evenly across all available sectors of a partition.</li>
+            <li>Mechanism: By using a <b>ring buffer</b> (Sectors of the partition) and a logical counter, it's ensured that each physical cell is only written to again after N write operations (where N=Sectors Partition).</li>
+            <li>Result: The lifespan is extended by the <b>Wear-Leveling Multiplier</b> (Sectors per Partition), but the write frequency (how often per second/minute data is written) remains uncontrolled.</li>
+        </ul>
+
+        <h3>2. Write Load</h3>
+        <p>The <b>Write Load</b> is the time frequency (or rate) of write operations exerted on the storage medium, regardless of spatial distribution. </p>
+        <ul>
+            <li>Definition: <b>Write Load</b> describes the <b>number of write() calls per unit of time</b> (e.g. cycles per hour).</li>
+            <li>Problem: An overly high Write Load can lead to the Classic Wear-Leveling functioning correctly, but the product's <b>overall lifespan (in years or month) still ending prematurely</b>. If you allow 100.000 cycles/hour, the memory will be exhausted after fewer hours, regardless of whether you use wear-leveling or not.</li>
+        </ul>
+
+        <h3>3. The next level: Write Load Management (WLM)</h3>
+        <p>The <b>EEProm_Safe_Wear_Level</b> library introduces <b>Write Load Management (WLM)</b> to solve this Write Load problem. </p>
+        <ul>
+            <li>Goal: To actively <b>control the system's write frequency</b> per hour/day and map it to the planned product lifespan.</li>
+            <li>Mechanism: It uses a <b>Write Budgeting</b> (credit system) that throttles write operations (<b>Write Shedding</b>) based on a fixed <b>budgetCycles</b> (cycles per hour).</li>
+            <li>Result: <b>WLM</b> ensures that the temporal wear aligns with the <b>planned lifespan</b> (5 years, 10 years, etc.), providing protection against excessive Write Load in addition to physical distribution. Furthermore, WLM can be used to comfortably and effectively throttle excessive user inputs in interactive or menu-driven systems, preventing uncontrolled writes to the EEPROM. It offers a convenient way to utilize the advantages of a non-volatile memory while simultaneously protecting it from rapid exhaustion.</li>
+        </ul>
+
+        <h3>Development Cycle Safety & Controlled Risk</h3>
+        <p>Every piece of software has a development cycle. When working with EEPROM, which only has a limited lifespan, errors during this phase can have fatal consequences. In the worst case, the memory can be destroyed within minutes or hours by uncontrolled write loops. To prevent this, you can calculate the intended write load and configure it via this library. <b>Write Shedding</b> will protect the EEPROM by rejecting writes exceeding the budget. With queryable parameters (via <b><i><a href="#getctrldataint-offs-int-handle">getCtrlData()</a></i></b> and <b><i><a href="#getwrtaccbalanceuint8_t-handle">getWrtAccBalance()</a></i></b>), write load can be actively controlled at runtime. The inherent limitation of EEPROM write cycles is thus transformed from a passive liability into an <b>actively controlled risk</b>.</p>
+
+        <hr>
+        <h2 id="1-5-3-calculation-for-wlm-and-lifetime-optimization">1.5.3 Calculation for WLM and Lifetime Optimization</h2>
+        <p>The <b>total operating lifetime</b> of the system depends on three critical, interdependent parameters. Correct configuration requires rearranging the original equation for the unknown quantity (usually <b>budgetCycles</b> or <b>SectorsPartition</b>). In addition to increasing the partition size (SectorsPartition), reducing the metadata overhead (header) is the most effective way to optimize memory usage and extend the lifespan of the EEPROM partition. The logical sector counter occupies most of the sector header. It can be between 1 and 4 bytes in size. The smaller this counter is, the more often a partition must be reset. You lose one write cycle of <b>TotalCyclesEEPROM</b> per reset. Each byte saved in the header is multiplied by the total number of sectors in the partition (<b>SectorsPartition</b>), thus contributing to the creation of new sectors.</p>
+        <p>The original equation for calculating the operating life in years is:</p>
+        <div class="center-text">
+            <h4><i>OperatingLifetime (Years) = (TotalCyclesEEPROM &times; SectorsPartition) &divide; (budgetCycles &times; HoursPerYear)</i></h4>
+        </div>
+
+        <h3>Calculating the required budgetCycles (WLM configuration)</h3>
+        <p>This conversion is required to find the minimum WLM parameter (<b>budgetCycles</b>) that ensures a planned lifetime (<b>OperatingLifetime</b>) for a given partition.</p>
+        <div class="center-text">
+            <h4><i>budgetCycles = (TotalCyclesEEPROM &times; SectorsPartition) &divide; (OperatingLifetime (Years) &times; HoursPerYear)</i></h4>
+        </div>
+
+        <h3>Calculating the required SectorsPartition (Wear-Leveling Multiplier)</h3>
+        <p>This conversion is required to find the minimum partition size (<b>SectorsPartition</b>) necessary to achieve the planned lifetime for a given write load (<b>budgetCycles</b>).</p>
+        <div class="center-text">
+            <h4><i>SectorsPartition = (budgetCycles &times; OperatingLifetime (Years) &times; HoursPerYear) &divide; TotalCyclesEEPROM</i></h4>
+        </div>
+
+        <h3>Calculation of the maximum permissible TotalCyclesEEPROM (datasheet check)</h3>
+        <p>This conversion is needed to verify which EEPROM specification (<b>Total Cycles</b>) is required to achieve the planned lifetime with a specified partition size and WLM setting.</p>
+        <div class="center-text">
+            <h4><i>TotalCyclesEEPROM = (budgetCycles &times; OperatingLifetime (Years) &times; HoursPerYear) &divide; SectorsPartition</i></h4>
+        </div>
+
+        <hr>
+        <h2 id="2-reading-and-writing-data-templated-functions">2. Reading and Writing Data (Templated Functions)</h2>
+        <p>These are the <b>primary functions</b> for interacting with the stored data. They use templates for maximum flexibility.</p>
+
+        <h5 id="writeconst-t-value-uint8_t-handle">write(const T&amp; value, uint8_t handle)</h5>
+        <p class="description-box">Description: Writes a <b>structured data type (T)</b> to the EEPROM. The wear-level counters are automatically incremented.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>value</td>
+                    <td>const T&amp;</td>
+                    <td>A reference to the data structure or variable to be stored. <b>sizeof(T)</b> must be less than or equal to the configured <b>PayloadSize</b>.</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>bool</td>
+                    <td><b><i>true</i></b> on success, <b><i>false</i></b> on error (e.g., logical counter limit reached, internal error).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize">read(uint8_t readMode, T&amp; value, uint8_t handle, size_t maxSize)</h5>
+        <p class="description-box">Description: Reads data into a variable or data structure (T). If the <b>readMode</b> parameter is set to the default value <b>0</b>, the function reads the data from the <b>currently valid sector (Current Sector)</b>. This mode is used for normal operation to always retrieve the last saved state of the current data from a partition.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>readMode</td>
+                    <td>uint8_t</td>
+                    <td><b>0</b>: reads data from the current sector</td>
+                </tr>
+                <tr>
+                    <td>value</td>
+                    <td>T&amp;</td>
+                    <td>A reference to the target variable or structure where the data will be loaded.</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>maxSize</td>
+                    <td>size_t</td>
+                    <td>To limit the number of bytes read. Can be used to read partial data. <b>Recommended for correct reading of character strings</b></td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>bool</td>
+                    <td><b><i>true</i></b> if valid data was successfully read and loaded, otherwise <b><i>false</i></b> (e.g., if the IO-Buffer is empty or invalid).</td>
+                </tr>
+            </tbody>
+        </table>
+        <h5 id="readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize-1">read(readMode, T&amp; value, uint8_t handle, size_t maxSize) (Extended Log Read Mode)</h5>
+        <p>This is the same function signature as above, but here to clarify the log reading functionality.</p>
+
+        <h3 id="explicit-overloads-for-c-strings">Explicit Overloads for C-Strings</h3>
+        <p>For character arrays (<b>char*</b>), specific, <b>non-templated overloads</b> are available to correctly handle null termination:</p>
+        <ul>
+            <li><b>bool write(const char* value, uint8_t handle)</b></li>
+            <li><b>bool read(uint8_t readMode, char* value, uint8_t handle, size_t maxSize)</b> //maxSize is necessary</li>
+        </ul>
+
+        <hr>
+        <h2 id="3-health-monitoring">3. Health Monitoring</h2>
+
+        <h5 id="getoverwcounteruint8_t-handle">getOverwCounter(uint8_t handle)</h5>
+        <p class="description-box">Description: Retrieves the <b>overwrite counter</b> stored in the partition.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint16_t</td>
+                    <td>The current overwrite counter <b>(0-65535)</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="initializebool-forceformat-uint8_t-handle">initialize(bool forceFormat, uint8_t handle)</h5>
+        <p class="description-box">Description: The partition will be formatted, if <b>forceFormat = 1</b> (all data will be lost) and the sector counters will be set to 0. Otherwise, the function checks the format or version of the partitions and only formats them if there are deviations to ensure the data structure.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>forceFormat</td>
+                    <td>bool</td>
+                    <td> <b><i>1 / true</i></b> forces formatting of the partition specified by handle</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>bool</td>
+                    <td><b><i>true</i></b> = latest sector found / <b><i>false</i></b> = no latest sector found</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="healthcyclesuint8_t-handle">healthCycles(uint8_t handle)</h5>
+        <p class="description-box">Description: Calculates the number of <b>remaining write cycles</b> based on the maximum logical counter capacity (<b>_maxLgcCnt</b>) and the current counter value (<b>_curLgcCnt</b>) (is set in <i>config()</i>). This function returns the remaining write cycles. To achieve this, the counter width in bytes must be selected so that the logical sector number covers the entire lifetime of the EEPROM. You can interpret the value differently by limiting the logical sector number to fewer bytes (e.g., <b>1 byte or 2 bytes</b>) to reduce overhead. Three or four bytes are recommended to track the entire lifetime of the EEPROM. The maximum is four bytes.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint32_t</td>
+                    <td>The <b>estimated number of remaining write cycles</b>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="healthpercentuint32_t-cycles-uint8_t-handle">healthPercent(uint32_t cycles, uint8_t handle)</h5>
+        <p class="description-box">Description: Calculates the remaining EEPROM health as a <b>percentage</b>. Related to the entire lifetime.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>cycles</td>
+                    <td>uint32_t</td>
+                    <td>write cycles of the EEPROM specification (<b>e.g. 100000 at ATmega</b>).</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint8_t</td>
+                    <td>The <b>remaining health percentage (0-100)</b>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr>
+        <h2 id="4-advanced-functions">4. Advanced Functions</h2>
+        <h3>4.1 Log Management</h3>
+
+        <h5 id="readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize-2">read(uint8_t readMode, T&amp; value, uint8_t handle, size_t maxSize)</h5>
+        <p class="description-box">Description: Reads data into a variable or data structure (T). The function uses the <b>readMode</b> parameter to control the read destination within the ring buffer. While readMode = 0 always returns the most recent status (the default mode), modes 1, 2, 3, and 4 are used to read the data sequentially or from the beginning/end of the ring buffer. In this context, the wear leveling structure can be utilized as a cyclic, readable data logger. These extended readMode options allow you to use the wear leveling structure not only to store the latest state, but also to function as a fully <b>navigable log file data buffer</b>.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>readMode</td>
+                    <td>uint8_t</td>
+                    <td> <b>1:</b> reads data from the next sector <br> <b>2:</b> reads data from the previous sector <br> <b>3:</b> reads the oldest sector (log beginning) <br> <b>4:</b> reads the newest sector (log ending)</td>
+                </tr>
+                <tr>
+                    <td>value</td>
+                    <td>T&amp;</td>
+                    <td>A reference to the target variable or structure where the data will be loaded.</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>maxSize</td>
+                    <td>size_t</td>
+                    <td>To limit the number of bytes read. Can be used to read partial data. <b>Recommended for correct reading of character strings</b></td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>bool</td>
+                    <td><b><i>true</i></b> if valid data was successfully read and loaded, otherwise <b><i>false</i></b> (e.g., if the IO-Buffer is empty or invalid).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="findoldestdatauint8_t-handle--findnewestdatauint8_t-handle">findOldestData(uint8_t handle) / findNewestData(uint8_t handle)</h5>
+        <p class="description-box">These functions search for the <b>logically newest or oldest sector</b> available. Unlike <i><a href="#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize">read()</a></i>, the data is not loaded directly into the user code. However, the references to the current logical and physical sector are updated. This is important for reading data, but especially for writing data starting at a specific position. The data can then be read with <b><a href="#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize">read()</a></b> and new data can write with <b><a href="#writeconst-t-value-uint8_t-handle">write()</a></b>.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>bool</td>
+                    <td><b><i>true</i></b> or <b><i>false</i></b> if no sector is found.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h5 id="migratedatauint8_t-source-uint8_t-target-uint16_t-count">migrateData(uint8_t source, uint8_t target, uint16_t count)</h5>
+        <p class="description-box">The <b>migrateData()</b> function is a <b>special tool for data transfer and maintenance</b> between two separate storage areas (partitions) of your wear-leveling structure. It allows you to copy a specific amount of data from one defined partition (<b>source handle</b>) to another partition (<b>destination handle</b>). The main purpose of this function is to consolidate data and handle version updates in the EEPROM.</p>
+        <h4>Backup and Restore</h4>
+        <p>In more complex systems, this function could serve as the basis for a <b>manual backup routine</b>, copying the contents of a critical handle to a separate, less frequently used handle.</p>
+        <h4>Logically Exhausted Partitions</h4>
+        <p>The <i>migrateData()</i> function addresses the issue where a partition's logical counter has reached its maximum, making the partition <b>logically "full" or "exhausted"</b> from the wear-leveling algorithm's perspective, thus preventing further writes.</p>
+        <h4>Releasing the Partition</h4>
+        <p>The function works by reading the <b>last valid data records</b> from the logically exhausted partition (sourceHandle) and writing it to a empty partition (targetHandle). The destination partition must be formatted and identical in structure to the source partition. The destination partition must fit at least the sectors to be copied. <b>Make sure there's enough space!</b> After migration, the source partition can be formatted.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>source</td>
+                    <td>uint8_t</td>
+                    <td>Handle of the <b>source partition</b>.</td>
+                </tr>
+                <tr>
+                    <td>target</td>
+                    <td>uint8_t</td>
+                    <td>Handle of the <b>target partition</b>.</td>
+                </tr>
+                <tr>
+                    <td>count</td>
+                    <td>uint16_t</td>
+                    <td>The counter, how many last log entries (<b>newest sectors</b>) are transferred to the target partition.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="warning"><b>WARNING:</b> The <b>migrateData()</b> function does not automatically format the source partition (sourceHandle) upon successful migration, as this is a deliberate design choice to prevent the immediate deletion of data, thus supporting backup and data recovery strategies.</p>
+
+        <h3>4.2. Physical Sectors</h3>
+        <h5 id="loadphyssectoruint16_t-physsector-uint8_t-handle">loadPhysSector(uint16_t physSector, uint8_t handle)</h5>
+        <p class="description-box">Description: Loads the payload and control data of a specific physical EEPROM sector (identified by <b>physSector</b>) into the RAM cache. This function allows <b>direct access to any sector</b>, useful for reading historical data, for example. This function does not deliver the data directly to a user variable, but makes it accessible in the cache for subsequent internal operations (e.g., for checking the metadata or a subsequent read() operation).</p>
+        <ul>
+            <li>The <i>loadPhysSector()</i> function always requires the next physical sector to be written to derive the sector to be read. It achieves this by decrementing the passed sector index by 1.</li>
+            <li>The <i>loadPhysSector()</i> function checks the passed sector for an overflow and handles this overflow correctly, meaning the user does not have to deal with it.</li>
+            <li>If any arbitrary, freely determined physical sector must be read, it must be passed to the <i>loadPhysSector()</i> function <b>incremented by +1</b>.</li>
+            <li>The <i>loadPhysSector()</i> function calculates the correct value for the next sector to be written from the handed over sector number (taking sector overflow into account). This function can therefore also be used to restore the next sector to be written (<b>Ring Buffer</b>).</li>
+        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>physSector</td>
+                    <td>uint16_t</td>
+                    <td>The physical sector to be loaded <b>+ 1</b></td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint16_t</td>
+                    <td>0: error / >0: ok (reserved)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>4.3. Write Budgeting</h3>
+        <p>Write control management is deeply integrated into the library. Write shedding is controlled statistically using credit and balance. To allow your program to respond, the statistical values ​​are communicated via the sticky status byte in the partition control data (<b><i><a href="#getctrldataint-offs-int-handle">getCtrlData()</a></i></b> function) after the <b><a href="#writeconst-t-value-uint8_t-handle">write()</a></b> command did not have a physical error. To query the exact statistical value of a partition's <b>write account balance</b>, use this function:</p>
+        <h5 id="getwrtaccbalanceuint8_t-handle">getWrtAccBalance(uint8_t handle)</h5>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>handle</td>
+                    <td>uint8_t</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint8_t</td>
+                    <td><b>Write account balance.</b> (statistical value: 0 - 255)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>1. The Statistical Nature of the Write Account Balance</h3>
+        <ul>
+            <li><b>Based on Averages:</b> The WLM credit (Account Balance) is calculated based on the average value (<b>budgetCycles</b>) set in <i><a href="#configuint16_t-startaddress-uint16_t-totalbytesused-uint16_t-payloadsize-uint8_t-cntlengthbytes-uint8_t-budgetcycles-uint8_t-handle">config()</a></i> over an assumed period (one hour). It does not represent the currently available storage capacity (like bytes), but rather the <b>statistically permitted frequency</b> of write operations.</li>
+            <li><b>Represents Rate, Not State:</b> The value serves to <b>control the write rate</b> over the entire product lifespan. It is an indicator of whether the statistical usage is within the acceptable range, not a direct counter of actual EEPROM cycles.</li>
+            <li><b>Credited Over Time:</b> The credit is allocated over time (via the tick functions) and acts as a <b>statistical equalization mechanism</b>.</li>
+        </ul>
+
+        <hr>
+        <h2 id="5-controll-data-advanced">5. Controll Data (Advanced)</h2>
+        <h5 id="getctrldataint-offs-int-handle">getCtrlData(int offs, int handle)</h5>
+        <p class="description-box">Description: Reads a 32-bit value (<b>4 bytes</b>) from a specific offset within the <b>ControlData</b> structure of the currently loaded partition data.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>offs</td>
+                    <td>int</td>
+                    <td>The <b>byte offset</b> within the control data (<b>e.g., 0 for curLgcCnt</b>).</td>
+                </tr>
+                <tr>
+                    <td>handle</td>
+                    <td>int</td>
+                    <td>Partition handle.</td>
+                </tr>
+                <tr>
+                    <td>Return</td>
+                    <td>uint32_t</td>
+                    <td>The <b>32-bit value</b> at the specified offset.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Offset table</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Offset</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>4</td>
+                    <td>uint32_t</td>
+                    <td><b>ACT. LOGICAL SECTOR</b> (Dynamic)</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>2</td>
+                    <td>uint16_t</td>
+                    <td><b>NEXT PHYSICAL SECTOR</b> (Dynamic) FOR WRITING</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>2</td>
+                    <td>uint16_t</td>
+                    <td><b>THIS PARTITION START ADDRESS</b> IN EEPROM</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>2</td>
+                    <td>uint16_t</td>
+                    <td><b>NUMBER OF SECTORS</b> IN THIS PARTITION</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>1</td>
+                    <td>uint8_t</td>
+                    <td><b>PAYLOAD SIZE</b> IN BYTES</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>1</td>
+                    <td>uint8_t</td>
+                    <td><b>LOGICAL SECTOR COUNTER LENGTH</b> 1 to 4 (<b>e.g., 3 Bytes</b>)</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>2</td>
+                    <td>uint16_t</td>
+                    <td>for <b>internal use</b></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>1</td>
+                    <td>uint8_t</td>
+                    <td><b><i>STICKY STATUS Byte</i></b> (<b>0x00=OK</b>, etc. see next table)</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>1</td>
+                    <td>uint8_t</td>
+                    <td><b>CHECKSUM</b> (of this Control Block)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Sticky Status Byte at Offset 14</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Meaning</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td><b>OK</b> | All OK. Partition is valid and ready for operation.</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><b>CRC checksum</b> of the last read sector was invalid.</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Write attempt: The passed string is <b>&gt; payload size</b>.</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Write attempt rejected: <b>Maximum logical counter reached</b>.</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Partition formatted due to: <b>library version conflict</b>, partition format conflict, or forced formatting.</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><b>Critical error</b>: Control data corrupted (CRC fails).</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Write attempt: <b>missing <i>maxSize</i></b> for reading string.</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>The last read sector is <b>empty / not used</b>.</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>After write(). Budget manager: To excessive use, <b>Write Shedding is active</b>.</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>After write(). Budget manager: <b>Lost credit rating</b>. Fewer write cycles are necessary.</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>After write(). Budget manager: <b>Credit given</b>.</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>After write(). Budget manager: Credit still available (<b>normal condition</b>).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>The Sticky Status Byte (Offset 14): Independence and Control</h2>
+        <p>The <b>Status Byte</b> serves as the primary register for the result and state of the last executed operation (e.g. <a href="#readuint8_t-readmode-t-value-uint8_t-handle-size_t-maxsize">read()</a>, <a href="#writeconst-t-value-uint8_t-handle">write()</a>). Due to its placement and architectural design, it offers two key advantages for your application code:</p>
+
+        <h3>1. Direct Query (Efficiency)</h3>
+        <p>The Status Byte is located at Offset 14 within the Partition ControlData. You can query the current status via the <b><a href="#getctrldataint-offs-int-handle">getCtrlData(14, handle)</a></b> function. However, you can also query the Status Byte directly, which is faster and saves a function call.</p>
+
+        <h3>2. Manual Reset</h3>
+        <p>The Status Byte is <b>NOT</b> included in the calculation of the Control Hash. <br>
+        <b>Consequence:</b> You have <b>full control</b> over this value. Your code can set the Status Byte to 0 at any time or overwrite it with other values. The Status Byte is not a control byte for the library, but a pure <b>notification status</b> intended to assist you in controlling your code.</p>
+
+        <h3>Advantage for Programming (Atomic Check)</h3>
+        <p>If the Status Byte is not changed by your code, it will only be overwritten by the library with a new status if one is applicable, and otherwise left as is (behaving as a "<b>Sticky Status</b>").</p>
+
+        <h3>Note on use</h3>
+        <p>You generally <b>do not</b> need to change the sticky status code. This isn't necessary for normal functionality, because the API functions return an error status (as documented) that is either <b><i>true</i></b> or <b><i>false</i></b> if necessary. Depending on the situation, query the status byte for the code relevant to the last called function.</p>
+    </div>
+    </body>
+</html>
