@@ -45,8 +45,8 @@
 // |TOTAL| 16   |            |           |                                |
 // +-----+------+------------+-----------+--------------------------------+
 
-#include <EEProm_Safe_Wear_Level.h>
-#include <EEProm_Safe_Wear_Level_Macros.h>
+#include "EEProm_Safe_Wear_Level.h"
+#include "EEProm_Safe_Wear_Level_Macros.h"
 
 // ----------------------------------------------------------------------------------------------------
 // --- DEFINITION OF MACRO CONSTANTS ---
