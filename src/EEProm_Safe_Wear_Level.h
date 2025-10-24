@@ -33,7 +33,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <stdint.h>
-#include <EEProm_Safe_Wear_Level_Macros.h>
+#include "EEProm_Safe_Wear_Level_Macros.h"
 // ----------------------------------------------------------------------------------------------------
 // --- CLASS DEFINITION ---
 // ----------------------------------------------------------------------------------------------------
